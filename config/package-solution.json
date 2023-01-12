@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "sp-online-sp-fx-template-client-side-solution",
+    "id": "ab841792-b9de-416b-a8b5-19bcb4a1acb1",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.16.0"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "sp-online-sp-fx-template description"
+      },
+      "longDescription": {
+        "default": "sp-online-sp-fx-template description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "sp-online-sp-fx-template Feature",
+        "description": "The feature that activates elements of the sp-online-sp-fx-template solution.",
+        "id": "85564a10-d3ae-4925-88ed-3624e0173d3b",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/sp-online-sp-fx-template.sppkg"
+  }
+}
