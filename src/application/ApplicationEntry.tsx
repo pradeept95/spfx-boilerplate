@@ -12,6 +12,8 @@ import { useLoading } from "../common/hooks/useLoading";
 import { useAlert } from "../common/hooks/useAlert";
 import { PageNotFound } from "../common/components/PageNotFound";
 import { PeoplePicker, PrincipalType } from "../common/components/PeoplePicker";
+import { AdminLayout } from "./layouts/AdminLayout";
+import { AdminHome } from "./admin/AdminHome";
 // import { UserAccessService } from "../common/services/UserAccessService";
 
 const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
@@ -94,7 +96,7 @@ const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
                     placeholder="Enter Last Name, First Name to filter the user"
                     required={true}
                     showSecondaryText={false}
-                    personSelectionLimit={30}
+                    personSelectionLimit={1}
                     disabled={false}
                     readOnly={false}
                     onPeopleSelectChange={async (users) => {
@@ -114,6 +116,9 @@ const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
                 </>
               }
             />
+            <Route path="/admin/*" element={<AdminLayout />}>
+              <Route index element={<AdminHome />} />
+            </Route>
             <Route path="*" element={<PageNotFound />} />
           </Route>
           {/* <Route path="/admin" element={<AdminLayout />}>
