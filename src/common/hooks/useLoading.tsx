@@ -1,7 +1,36 @@
-/* eslint-disable */
-import { useContext } from "react"; 
-import LoadingContext from "../context/LoadingContext";
+/* eslint-disable */ 
+import { LoadingPros, useLoadingContext } from "../context/LoadingContext";
 
 export const useLoading = () => {
-  return useContext(LoadingContext);
+  (async () => {})();
+
+  const { setLoadingState } = useLoadingContext();
+
+  const showLoader = (loadingText?: string) => {
+    try {
+      setLoadingState({
+        loading: true,
+        loadingText: loadingText,
+      } as LoadingPros);
+    } catch (error) {
+      console.log("showLoader -> error", error);
+      throw error;
+    }
+  };
+
+  const hideLoader = () => {
+    try {
+      setLoadingState({
+        loading: false,
+      } as LoadingPros);
+    } catch (error) {
+      console.log("showLoader -> error", error);
+      throw error;
+    }
+  };
+
+  return {
+    showLoader,
+    hideLoader,
+  };
 };

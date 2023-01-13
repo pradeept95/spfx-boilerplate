@@ -1,11 +1,14 @@
 /* eslint-disable */
 import * as React from "react";
-import { createContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import AppContext from "../config/app-context.config";
-import { useAuth } from "../hooks/useAuth";
+import AppContext from "../config/app-context.config"; 
 
 export const AuthContext = createContext<any>({});
+
+export const useAuthContext = () => {
+  return useContext(AuthContext);
+};
 
 export const AuthProvider: React.FunctionComponent<{}> = ({ children }) => {
   const [auth, setAuth] = useState();
@@ -20,7 +23,7 @@ export const AuthProvider: React.FunctionComponent<{}> = ({ children }) => {
 export const RequireAuth: React.FunctionComponent<{
   allowedRoles: number[];
 }> = ({ allowedRoles }) => {
-  const { auth } = useAuth();
+  const { auth } = useAuthContext();
   const location = useLocation();
 
   const currentContext = AppContext.getInstance();

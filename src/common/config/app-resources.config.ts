@@ -18,7 +18,7 @@ export class ApplicationResources {
 
   addAppResourceItem(resource: ResourceItem, parentName: string = ""): void {
     if (!this.resources) {
-      throw "Applicaiton Resources is not Initialize, consider calling  ApplicationResources.getInstance().initializeResourceItem() at the top of the application";
+      throw "Applicaiton Resources is not Initialize, consider calling  ApplicationResources.getInstance().initializeResourceItem() at the entry of the application";
     }
     try {
     } catch (error) {
@@ -28,7 +28,7 @@ export class ApplicationResources {
 
   getAppResources() {
     if (!this.resources) {
-      throw "Applicaiton Resources is not Initialize, consider calling  ApplicationResources.getInstance().initializeResourceItem() at the top of the application";
+      throw "Applicaiton Resources is not Initialize, consider calling  ApplicationResources.getInstance().initializeResourceItem() at the entry of the application";
     }
     return this.resources;
   }

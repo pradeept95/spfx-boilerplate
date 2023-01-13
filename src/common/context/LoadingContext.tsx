@@ -1,9 +1,10 @@
 /* eslint-disable */
 import * as React from "react";
-import { createContext, useState } from "react"; 
+import { createContext, useContext, useState } from "react"; 
 import { LoadingSpinner } from "../components/LoadingSpinner";
 
 const LoadingContext = createContext<any>({});
+export default LoadingContext;
 
 export const LoadingProvider: React.FunctionComponent<{}> = ({ children }) => {
   const [loadingState, setLoadingState] = useState({
@@ -17,9 +18,11 @@ export const LoadingProvider: React.FunctionComponent<{}> = ({ children }) => {
       {children}
     </LoadingContext.Provider>
   );
-};
+}; 
 
-export default LoadingContext;
+export const useLoadingContext = () => {
+  return useContext(LoadingContext);
+};
 
 export interface LoadingPros {
   loading: boolean;

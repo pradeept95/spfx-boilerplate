@@ -2,19 +2,38 @@
 import * as React from "react";
 import { Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
-import { initializeIcons } from "@fluentui/react";
-import { setIconOptions } from "@fluentui/react/lib/Styling";
-import { useAuth } from "../common/hooks/useAuth";
+import { initializeIcons, IPersonaProps } from "@fluentui/react";
+import { setIconOptions } from "@fluentui/react/lib/Styling"; 
 import AppContext from "../common/config/app-context.config";
 import { ROLES } from "../common/types/auth.types";
-import { getSP } from "../common/config/pnpjs.config";
-import { toast } from "react-toastify";
+import { getSP } from "../common/config/pnpjs.config";  
+import { useAuthContext } from "../common/context/AuthContext";
+import { useLoading } from "../common/hooks/useLoading";
+import { useAlert } from "../common/hooks/useAlert";
+import { PageNotFound } from "../common/components/PageNotFound";
+import { PeoplePicker, PrincipalType } from "../common/components/PeoplePicker";
+// import { UserAccessService } from "../common/services/UserAccessService";
 
 const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
-  const { setAuth } = useAuth();
+  const { setAuth } = useAuthContext();
+  const { showLoader, hideLoader } = useLoading();
+  const { success, error, info, warning } = useAlert();
+  //  const { getUserProfile } = UserAccessService();
+  const [defaultUsers, setDefaultUser] = React.useState<IPersonaProps[]>([]);
 
-  const notify = () => toast("Wow so easy !");
+  const notify = () => {
+    success("Hello");
+    info("World");
+    warning("Some Warn");
+    error("Error");
+  };
 
+  function loading() {
+    showLoader("Hey, I am loading for 3 sec...");
+    setTimeout(() => {
+      hideLoader();
+    }, 3000);
+  }
 
   const callApi = async (): Promise<void> => {
     const sp = await getSP();
@@ -34,10 +53,18 @@ const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
   useEffect(() => {
     const currrentContext = AppContext.getInstance();
 
+    const user = currrentContext.context.pageContext.user;
+
     setAuth({
-      user: currrentContext.context.pageContext.user,
+      user: user,
       roles: [ROLES.User, ROLES.Admin],
     });
+
+    setDefaultUser([{
+      text : user.displayName,
+      secondaryText : user.email,
+      tertiaryText : user.loginName
+    } as IPersonaProps]);
 
     initializeIcons();
     // Suppress icon warnings.
@@ -58,13 +85,36 @@ const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
               index
               element={
                 <>
-                  {" "}
                   <button onClick={notify}>Notify !</button>
+                  <PeoplePicker
+                    label="Select User (Normal Type)"
+                    defaultSelectedUsers={defaultUsers}
+                    principalTypes={[PrincipalType.User]}
+                    peoplePickerType="Normal"
+                    placeholder="Enter Last Name, First Name to filter the user"
+                    required={true}
+                    showSecondaryText={false}
+                    personSelectionLimit={30}
+                    disabled={false}
+                    readOnly={false}
+                    onPeopleSelectChange={async (users) => {
+                      console.log(users);
+                    }}
+                  ></PeoplePicker>
                   Home
                 </>
               }
             />
-            <Route path="/test" element={<>Test</>} />
+            <Route
+              path="/test"
+              element={
+                <>
+                  <button onClick={loading}>Loading !</button>
+                  Test
+                </>
+              }
+            />
+            <Route path="*" element={<PageNotFound />} />
           </Route>
           {/* <Route path="/admin" element={<AdminLayout />}>
             <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>

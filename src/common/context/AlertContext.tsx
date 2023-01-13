@@ -6,7 +6,18 @@ import "react-toastify/dist/ReactToastify.css";
 export const AlertProvider: React.FunctionComponent<{}> = ({ children }) => {
   return (
     <>
-      <ToastContainer />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       {children}
     </>
   );

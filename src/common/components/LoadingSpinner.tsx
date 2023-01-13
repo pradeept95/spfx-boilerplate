@@ -7,8 +7,8 @@ import {
   SpinnerSize,
   Stack,
 } from "@fluentui/react";
-import * as React from "react"; 
-import { useLoading } from "../hooks/useLoading";
+import * as React from "react";  
+import { useLoadingContext } from "../context/LoadingContext";
 
 const theme = getTheme();
 const contentClass = mergeStyles([
@@ -26,7 +26,7 @@ const contentClass = mergeStyles([
 ]);
 
 export const LoadingSpinner: React.FunctionComponent<{}> = (props) => {
-  const { loadingState } = useLoading();
+  const { loadingState } = useLoadingContext();
 
   const content = (
     <div className={contentClass}>

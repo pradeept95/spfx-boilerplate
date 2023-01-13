@@ -50,8 +50,10 @@ export default class SpOnlineExampleWebPart extends BaseClientSideWebPart<ISpOnl
   }
 
   protected onInit(): Promise<void> {
-    const appContext = AppContext.getInstance();
-    appContext.initialize(this.context);
+    (async()=>{
+      const appContext = AppContext.getInstance();
+      await appContext.initialize(this.context);
+    })(); 
 
     return this._getEnvironmentMessage().then((message) => {
       this._environmentMessage = message;
