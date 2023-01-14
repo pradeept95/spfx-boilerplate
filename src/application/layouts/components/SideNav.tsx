@@ -17,8 +17,7 @@ const navStyles: Partial<INavStyles> = {
 };
 
 const minNavStyles: Partial<IOverflowSetStyles> = {
-  root: {
-    width: 100,
+  root: { 
     minHeight: '80vh',
     background: DefaultPalette.neutralLight,
     transition: '1s',

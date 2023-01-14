@@ -2,25 +2,24 @@
 import * as React from "react";
 import { Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
-import { initializeIcons, IPersonaProps } from "@fluentui/react";
-import { setIconOptions } from "@fluentui/react/lib/Styling"; 
+import { initializeIcons } from "@fluentui/react";
+import { setIconOptions } from "@fluentui/react/lib/Styling";
 import AppContext from "../common/config/app-context.config";
-import { ROLES } from "../common/types/auth.types"; 
-import { useAuthContext } from "../common/context/AuthContext";
-import { useLoading } from "../common/hooks/useLoading";
+import { ROLES } from "../common/types/auth.types";
+import { useAuthContext } from "../common/context/AuthContext"; 
 import { useAlert } from "../common/hooks/useAlert";
-import { PageNotFound } from "../common/components/PageNotFound";
-import { PeoplePicker, PrincipalType } from "../common/components/PeoplePicker";
+import { PageNotFound } from "../common/components/PageNotFound"; 
 import { AdminLayout } from "./layouts/AdminLayout";
 import { AdminHome } from "./admin/AdminHome";
+import ExampleEntryPage from "./examples/Index";
+import { AccessDenied } from "../common/components/AccessDenied";
 // import { UserAccessService } from "../common/services/UserAccessService";
 
 const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
   const { setAuth } = useAuthContext();
-  const { showLoader, hideLoader } = useLoading();
   const { success, error, info, warning } = useAlert();
   //  const { getUserProfile } = UserAccessService();
-  const [defaultUsers, setDefaultUser] = React.useState<IPersonaProps[]>([]);
+  
 
   const notify = () => {
     success("Hello");
@@ -29,12 +28,7 @@ const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
     error("Error");
   };
 
-  function loading() {
-    showLoader("Hey, I am loading for 3 sec...");
-    setTimeout(() => {
-      hideLoader();
-    }, 3000);
-  }
+
 
   const callApi = async (): Promise<void> => {
     // const sp = await getSP();
@@ -61,12 +55,6 @@ const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
       roles: [ROLES.User, ROLES.Admin],
     });
 
-    setDefaultUser([{
-      text : user.displayName,
-      secondaryText : user.email,
-      tertiaryText : user.loginName
-    } as IPersonaProps]);
-
     initializeIcons();
     // Suppress icon warnings.
     setIconOptions({
@@ -87,21 +75,7 @@ const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
               element={
                 <>
                   <button onClick={notify}>Notify !</button>
-                  <PeoplePicker
-                    label="Select User (Normal Type)"
-                    defaultSelectedUsers={defaultUsers}
-                    principalTypes={[PrincipalType.User]}
-                    peoplePickerType="Normal"
-                    placeholder="Enter Last Name, First Name to filter the user"
-                    required={true}
-                    showSecondaryText={false}
-                    personSelectionLimit={1}
-                    disabled={false}
-                    readOnly={false}
-                    onPeopleSelectChange={async (users) => {
-                      console.log(users);
-                    }}
-                  ></PeoplePicker>
+               
                   Home
                 </>
               }
@@ -110,7 +84,7 @@ const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
               path="/test"
               element={
                 <>
-                  <button onClick={loading}>Loading !</button>
+                  
                   Test
                 </>
               }
@@ -118,6 +92,9 @@ const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
             <Route path="/admin/*" element={<AdminLayout />}>
               <Route index element={<AdminHome />} />
             </Route>
+            <Route path="/examples/*" element={<ExampleEntryPage />} />
+            <Route path="/unauthorized" element={<AccessDenied />} />
+            <Route path='/page-not-found' element={<PageNotFound />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
           {/* <Route path="/admin" element={<AdminLayout />}>

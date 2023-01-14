@@ -37,7 +37,8 @@ const sideNavAreaStackStyle: IStackStyles = {
 
 const mainAreaStackStyle: IStackStyles = {
   root: {
-    marginTop: 10
+    marginTop: 10,
+    width : "100%"    
   },
 };
 
