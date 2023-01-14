@@ -5,8 +5,7 @@ import { useEffect } from "react";
 import { initializeIcons, IPersonaProps } from "@fluentui/react";
 import { setIconOptions } from "@fluentui/react/lib/Styling"; 
 import AppContext from "../common/config/app-context.config";
-import { ROLES } from "../common/types/auth.types";
-import { getSP } from "../common/config/pnpjs.config";  
+import { ROLES } from "../common/types/auth.types"; 
 import { useAuthContext } from "../common/context/AuthContext";
 import { useLoading } from "../common/hooks/useLoading";
 import { useAlert } from "../common/hooks/useAlert";
@@ -38,7 +37,7 @@ const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
   }
 
   const callApi = async (): Promise<void> => {
-    const sp = await getSP();
+    // const sp = await getSP();
 
     // Using RowLimit. Enables paging
     // await sp.web.lists.getByTitle("AwardType").getListItemChangesSinceToken({ RowLimit: '5' });
@@ -49,7 +48,7 @@ const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
     // await sp.web.lists.getByTitle("AwardType").getListItemChangesSinceToken({ QueryOptions: '<Paging ListItemCollectionPositionNext="Paged=TRUE&amp;p_ID=5" />' });
 
     // Get everything. Using null with ChangeToken gets everything
-    await sp.web.lists.getByTitle("AwardType").items();
+    // await sp.web.lists.getByTitle("AwardType").items();
   };
 
   useEffect(() => {

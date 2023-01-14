@@ -9,9 +9,7 @@ import { LoadingProvider } from "../../../common/context/LoadingContext";
 import { ISpOnlineExampleProps } from "./ISpOnlineExampleProps";
 
 export default class SpOnlineExample extends React.Component<ISpOnlineExampleProps, {}> {
-
-   
-  
+ 
   public render(): React.ReactElement<ISpOnlineExampleProps> {
 
     const appContext = AppContext.getInstance();
