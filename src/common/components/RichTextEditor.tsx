@@ -3,7 +3,7 @@ import { IInputProps, IRenderFunction, ITextFieldProps } from "@fluentui/react";
 import * as React from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"; 
-import "./editor.css";
+// import "./editor.css";
 import { renderFieldDescription, renderFieldErrorMessage, renderFieldLabelWithHelp } from "./FormElement";
 
 const modules = {

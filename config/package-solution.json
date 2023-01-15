@@ -3,7 +3,7 @@
   "solution": {
     "name": "sp-online-sp-fx-template-client-side-solution",
     "id": "ab841792-b9de-416b-a8b5-19bcb4a1acb1",
-    "version": "1.0.0.0",
+    "version": "1.0.0.2",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,

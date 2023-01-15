@@ -1,8 +1,10 @@
 /* eslint-disable */
 import * as React from "react";
 import { Routes, Route } from "react-router-dom";
-import { AdminLayout } from "../layouts/AdminLayout";
+import { ExampleLayout } from "../layouts/ExampleLayout";
+import EditorExample from "./EditorExample";
 import LoadingExample from "./LoadingExample";
+import NotifyExample from "./NotifyExample";
 import PeoplePickerExample from "./PeolpePickerExample";
 
 const ExampleEntryPage: React.FunctionComponent<{}> = (props) => {
@@ -11,18 +13,12 @@ const ExampleEntryPage: React.FunctionComponent<{}> = (props) => {
     <>
       <section>
         <Routes>
-          <Route path="/" element={<AdminLayout />} >
+          <Route path="/" element={<ExampleLayout />} >
             <Route index element={<>Example Home</>} />
             <Route path="loading" element={<LoadingExample />} />
             <Route path="people" element={<PeoplePickerExample />} />
-            <Route
-              path="/test"
-              element={
-                <>
-                  Example Test
-                </>
-              }
-            />
+            <Route path="notify" element={<NotifyExample />} />
+            <Route path="editor" element={<EditorExample />} /> 
           </Route>
         </Routes>
       </section>

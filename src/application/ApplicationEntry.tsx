@@ -1,14 +1,13 @@
 /* eslint-disable */
 import * as React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, NavLink } from "react-router-dom";
 import { useEffect } from "react";
 import { initializeIcons } from "@fluentui/react";
 import { setIconOptions } from "@fluentui/react/lib/Styling";
 import AppContext from "../common/config/app-context.config";
 import { ROLES } from "../common/types/auth.types";
-import { useAuthContext } from "../common/context/AuthContext"; 
-import { useAlert } from "../common/hooks/useAlert";
-import { PageNotFound } from "../common/components/PageNotFound"; 
+import { useAuthContext } from "../common/context/AuthContext";
+import { PageNotFound } from "../common/components/PageNotFound";
 import { AdminLayout } from "./layouts/AdminLayout";
 import { AdminHome } from "./admin/AdminHome";
 import ExampleEntryPage from "./examples/Index";
@@ -17,18 +16,8 @@ import { AccessDenied } from "../common/components/AccessDenied";
 
 const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
   const { setAuth } = useAuthContext();
-  const { success, error, info, warning } = useAlert();
+
   //  const { getUserProfile } = UserAccessService();
-  
-
-  const notify = () => {
-    success("Hello");
-    info("World");
-    warning("Some Warn");
-    error("Error");
-  };
-
-
 
   const callApi = async (): Promise<void> => {
     // const sp = await getSP();
@@ -74,18 +63,15 @@ const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
               index
               element={
                 <>
-                  <button onClick={notify}>Notify !</button>
-               
-                  Home
-                </>
-              }
-            />
-            <Route
-              path="/test"
-              element={
-                <>
-                  
-                  Test
+                  <ul>
+                    <li>
+                      <NavLink to={"/admin"} >Go to Admin Layout</NavLink>
+                    </li>
+                    <li>
+                      <NavLink to={"/examples"} >Go to Example Layout</NavLink>
+                    </li>
+                    <li></li>
+                  </ul>
                 </>
               }
             />

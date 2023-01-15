@@ -139,6 +139,7 @@ export default class SpOnlineExampleWebPart extends BaseClientSideWebPart<ISpOnl
               groupFields: [
                 PropertyPaneTextField("siteName", {
                   label: "Site Name",
+                  description : "Name of the Site"
                 }),
                 PropertyPaneToggle("enableDebugMode", {
                   label: "Enable App Debug Mode",
