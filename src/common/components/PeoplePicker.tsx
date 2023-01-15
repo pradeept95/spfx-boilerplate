@@ -19,7 +19,7 @@ import { UserService } from "../services/UserService";
 import { renderFieldDescription, renderFieldErrorMessage, renderFieldLabelWithHelp } from "./FormElement";
 
 export enum PrincipalType {
-  User = 1,
+  User = 1, 
   DistributionList = 2,
   SecurityGroup = 4,
   SharePointGroup = 8,
@@ -195,7 +195,7 @@ export const PeoplePicker: React.FunctionComponent<PeoplePickerProps> = (
       ...(props as IInputProps),
       id: peoplePickerId,
       disabled: props?.disabled,
-      placeholder: props?.placeholder ?? "",
+      placeholder: props?.placeholder ?? "Enter Email or Username to Search User.",
       required: props?.required,
       className: mergeStyles([
         {
