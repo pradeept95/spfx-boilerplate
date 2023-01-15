@@ -53,6 +53,12 @@ const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
     callApi();
   }, []);
 
+  const openPropertyPane = ()=> { 
+    const currrentContext = AppContext.getInstance();
+    currrentContext.context.propertyPane.open();
+
+  }
+
   return (
     <>
       <section className="body">
@@ -69,6 +75,9 @@ const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
                     </li>
                     <li>
                       <NavLink to={"/examples"} >Go to Example Layout</NavLink>
+                    </li>
+                    <li>
+                      <button  onClick={openPropertyPane}>Open Setting</button>
                     </li>
                     <li></li>
                   </ul>
