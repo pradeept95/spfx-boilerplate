@@ -3,6 +3,7 @@ import * as React from "react";
 import { Routes, Route } from "react-router-dom";
 import { ExampleLayout } from "../layouts/ExampleLayout";
 import EditorExample from "./EditorExample";
+import ESignatureExample from "./ESignatureExample";
 import LoadingExample from "./LoadingExample";
 import NotifyExample from "./NotifyExample";
 import PeoplePickerExample from "./PeolpePickerExample";
@@ -19,6 +20,7 @@ const ExampleEntryPage: React.FunctionComponent<{}> = (props) => {
             <Route path="people" element={<PeoplePickerExample />} />
             <Route path="notify" element={<NotifyExample />} />
             <Route path="editor" element={<EditorExample />} /> 
+            <Route path="esignature" element={<ESignatureExample />} /> 
           </Route>
         </Routes>
       </section>

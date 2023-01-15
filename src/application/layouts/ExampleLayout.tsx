@@ -84,34 +84,10 @@ const navLinkGroups: INavLinkGroup[] = [
           url:  "#/examples/editor",
           icon: 'PeopleAdd',
         },
-      ],
-    }, 
-    {
-      name: "Components Example",
-      expandAriaLabel: "Show more Basic components",
-      links: [
         {
-          key: "Alert",
-          name: "Alert",
-          url: "#/examples/notify",
-          icon: 'WorkItemAlert'
-        },
-        {
-          key: "Loading",
-          name: "Loading",
-          url:  "#/examples/loading",
-          icon: 'BullseyeTarget',
-        },
-        {
-          key: "PeolpePicker",
-          name: "PeolpePicker",
-          url:  "#/examples/people",
-          icon: 'PeopleAdd',
-        },
-        {
-          key: "RichEditor",
-          name: "RichEditor",
-          url:  "#/examples/editor",
+          key: "ESignature",
+          name: "E-Signature",
+          url:  "#/examples/esignature",
           icon: 'PeopleAdd',
         },
       ],

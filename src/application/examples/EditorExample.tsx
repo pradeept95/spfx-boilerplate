@@ -1,6 +1,7 @@
 /* eslint-disable */
 import * as React from "react"; 
 import { RichTextEditor } from "../../common/components/RichTextEditor";
+import { RichTextViewer } from "../../common/components/RichTextViewer";
 
 const EditorExample: React.FunctionComponent<{}> = (props) => { 
 
@@ -14,8 +15,8 @@ const EditorExample: React.FunctionComponent<{}> = (props) => {
                     setValue(v);
                 }}/>
 
-                <br/>
-                <p dangerouslySetInnerHTML={{__html : value}}></p>
+                <br/> 
+                <RichTextViewer value={value}/>
             </section>
         </>
     );

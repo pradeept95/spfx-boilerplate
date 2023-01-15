@@ -47,6 +47,23 @@ const PeoplePickerExample: React.FunctionComponent<{}> = (props) => {
                     peoplePickerType="Normal"
                     placeholder="Enter Last Name, First Name to filter the user"
                     required={true}
+                    showSecondaryText={true}
+                    personSelectionLimit={1}
+                    disabled={false}
+                    readOnly={false}
+                    onPeopleSelectChange={async (users) => {
+                        console.log(users);
+                    }}
+                ></PeoplePicker>
+
+                  {/* With Secondary text */}
+                  <PeoplePicker
+                    label="People Picker (Compact Type, Default Value, with Secondary text)"
+                    principalTypes={[PrincipalType.User]}
+                    defaultSelectedUsers={defaultUsers}
+                    peoplePickerType="Compact"
+                    placeholder="Enter Email or Username to Search User."
+                    required={true}
                     showSecondaryText={false}
                     personSelectionLimit={1}
                     disabled={false}

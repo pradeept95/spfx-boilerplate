@@ -1,0 +1,9 @@
+.sig-canvas {
+    border: 2px dotted #CCCCCC;
+    border-radius: 15px;
+    cursor: crosshair;
+  }
+
+button {
+  margin-right: 0.6rem;
+} 
