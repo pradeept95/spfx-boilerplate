@@ -1,28 +1,13 @@
 /* eslint-disable */
 import * as React from "react";
-import { Nav, INavStyles, INavLinkGroup, INavLink } from "@fluentui/react/lib/Nav";
-import { CommandBarButton, DefaultPalette, DirectionalHint, IOverflowSetItemProps, IOverflowSetStyles, OverflowSet, TooltipHost } from "@fluentui/react";
+import { Nav, INavLinkGroup, INavLink, INavStyles } from "@fluentui/react/lib/Nav";
+import { CommandBarButton, DirectionalHint, IOverflowSetItemProps, OverflowSet, TooltipHost } from "@fluentui/react";
 import { useNavigate } from "react-router-dom"; 
+import * as sideNavStyles from "../styles/SideNavStyle.module.scss"
 
-const navStyles: Partial<INavStyles> = {
-  root: {
-    width: 220,
-    minHeight: '80vh',
-    background: DefaultPalette.neutralLight,
-    transition: '1s',
-    boxShadow: "3px 0px 6px #888888;"
-  },
+const navStyles: Partial<INavStyles> = { 
   groupContent: {
-    marginBottom: 10
-  }
-};
-
-const minNavStyles: Partial<IOverflowSetStyles> = {
-  root: {
-    minHeight: '80vh',
-    background: DefaultPalette.neutralLight,
-    transition: '1s',
-    boxShadow: "3px 0px 6px #888888;"
+    marginBottom: 4
   }
 };
 
@@ -122,7 +107,7 @@ const onRenderOverflowButton = (overflowItems: any[] | undefined): JSX.Element =
   );
 };
 
-export const SideNav: React.FunctionComponent<{ collapsed: boolean, navLinkGroups: INavLinkGroup[] }> = (props) => {
+export const SideNav: React.FunctionComponent<{ collapsed: boolean, navLinkGroups: INavLinkGroup[], selectedKey? : string }> = (props) => {
 
   const { collapsed, navLinkGroups } = props;
   const navigate = useNavigate()
@@ -130,7 +115,7 @@ export const SideNav: React.FunctionComponent<{ collapsed: boolean, navLinkGroup
   const [navLinks, setNavLinks] = React.useState<INavLinkGroup[]>([]);
   const [overflowLinks, setOverflowLinks] = React.useState<IOverflowSetItemProps[]>([]);
 
-  const [selectedKey, setSelectedKey] = React.useState<string>("ActivityItem")
+  const [selectedKey, setSelectedKey] = React.useState<string>(props.selectedKey ?? "Home")
 
   React.useEffect(() => {
     setNavLinks(navLinkGroups);
@@ -166,6 +151,7 @@ export const SideNav: React.FunctionComponent<{ collapsed: boolean, navLinkGroup
       {!collapsed ?
         <Nav
           styles={navStyles}
+          className={sideNavStyles.default.mainNavStyle} 
           selectedKey={selectedKey}
           ariaLabel="Site Side Navigation"
           groups={navLinks}
@@ -175,7 +161,7 @@ export const SideNav: React.FunctionComponent<{ collapsed: boolean, navLinkGroup
         />
         : <OverflowSet
           vertical
-          styles={minNavStyles}
+          className={sideNavStyles.default.minimizedSideNavStyles}
           items={overflowLinks?.length > 10? overflowLinks?.splice(0, 10) : overflowLinks}
           overflowItems={overflowLinks?.length > 10? overflowLinks?.splice(10) : []} 
           onRenderItem={onRenderItem} 

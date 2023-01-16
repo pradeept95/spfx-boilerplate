@@ -15,7 +15,13 @@ const ExampleEntryPage: React.FunctionComponent<{}> = (props) => {
       <section>
         <Routes>
           <Route path="/" element={<ExampleLayout />} >
-            <Route index element={<>Example Home</>} />
+            <Route index element={<>
+              <LoadingExample />
+              <PeoplePickerExample />
+              <NotifyExample />
+              <EditorExample />
+              <ESignatureExample />
+            </>} />
             <Route path="loading" element={<LoadingExample />} />
             <Route path="people" element={<PeoplePickerExample />} />
             <Route path="notify" element={<NotifyExample />} />

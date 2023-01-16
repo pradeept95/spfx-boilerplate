@@ -1,0 +1,18 @@
+@import '~@fluentui/react/dist/sass/References.scss';
+
+.minimizedSideNavStyles {
+    min-height: 80vh;
+    height: 100%;
+    background-color: "[theme: neutralLight, default: gray]";
+    transition: 1s;
+    box-shadow: 3px 0px 6px "[theme: neutralSecondary, default: #888888]";
+}
+
+.mainNavStyle {
+    width: 220px;
+    min-height: 80vh;
+    height: 100%;
+    background-color: "[theme: neutralLight, default: gray]";
+    transition: 1s;
+    box-shadow: 3px 0px 6px "[theme: neutralSecondary, default: #888888]";
+}

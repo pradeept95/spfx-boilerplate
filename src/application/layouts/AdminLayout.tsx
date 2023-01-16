@@ -3,9 +3,9 @@ import { DefaultPalette, INavLinkGroup, IStackStyles, Stack } from "@fluentui/re
 import * as React from "react";
 import { Outlet } from "react-router-dom";
 import useWindowDimensions from "../../common/hooks/useWindowsSize";
-import { Footer } from "./components/Footer";
-import { SideNav } from "./components/SideNav";
-import { TopNav } from "./components/TopNav";
+import { Footer } from "../../common/layout/components/Footer";
+import { SideNav } from "../../common/layout/components/SideNav";
+import { TopNav } from "../../common/layout/components/TopNav";
 
 const verticalStackStyle: IStackStyles = {
   root: {
@@ -156,7 +156,7 @@ export const AdminLayout: React.FunctionComponent = () => {
           </Stack>
         </Stack>
         <Stack styles={footerStackStyle}>
-          <Footer/>
+          <Footer collapsed={collapsed}/>
         </Stack>
       </Stack>
     </main>

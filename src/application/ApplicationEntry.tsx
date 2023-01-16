@@ -12,6 +12,7 @@ import { AdminLayout } from "./layouts/AdminLayout";
 import { AdminHome } from "./admin/AdminHome";
 import ExampleEntryPage from "./examples/Index";
 import { AccessDenied } from "../common/components/AccessDenied";
+import SiteAdminEntryPage from "../common/site-admin";
 // import { UserAccessService } from "../common/services/UserAccessService";
 
 const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
@@ -88,6 +89,7 @@ const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
               <Route index element={<AdminHome />} />
             </Route>
             <Route path="/examples/*" element={<ExampleEntryPage />} />
+            <Route path="/s-admin/*" element={<SiteAdminEntryPage />} />
             <Route path="/unauthorized" element={<AccessDenied />} />
             <Route path='/page-not-found' element={<PageNotFound />} />
             <Route path="*" element={<PageNotFound />} />

@@ -1,11 +1,11 @@
 /* eslint-disable */
 import { DefaultPalette, INavLinkGroup, IStackStyles, Stack } from "@fluentui/react";
 import * as React from "react";
-import { Outlet } from "react-router-dom";
-import useWindowDimensions from "../../common/hooks/useWindowsSize";
-import { Footer } from "../../common/layout/components/Footer";
-import { SideNav } from "../../common/layout/components/SideNav";
-import { TopNav } from "../../common/layout/components/TopNav";
+import { Outlet } from "react-router-dom"; 
+import useWindowDimensions from "../../hooks/useWindowsSize";
+import { Footer } from "../../layout/components/Footer";
+import { SideNav } from "../../layout/components/SideNav";
+import { TopNav } from "../../layout/components/TopNav";
 
 const verticalStackStyle: IStackStyles = {
   root: {
@@ -49,49 +49,46 @@ const mainAreaStackStyle: IStackStyles = {
   },
 };
 
-
 const navLinkGroups: INavLinkGroup[] = [
     {
-      name: "Components Example",
-      expandAriaLabel: "Show more Basic components",
+        links: [
+            {
+                key: "AdminHome",
+                name: "Dashboard",
+                url: "#/s-admin/home",
+                icon: 'Home'
+            }
+        ]
+    },
+    {
+      name: "App Configuration",
+      expandAriaLabel: "Show more App Configuration",
       links: [
         {
-          key: "Alert",
-          name: "Alert",
-          url: "#/examples/notify",
+          key: "SiteSettings",
+          name: "Site Settings",
+          url: "#/s-admin/settings",
           icon: 'WorkItemAlert'
-        },
+        }, 
         {
-          key: "Loading",
-          name: "Loading",
-          url:  "#/examples/loading",
-          icon: 'BullseyeTarget',
-        },
+          key: "AppResources",
+          name: "App Resources",
+          url: "#/s-admin/manage-resources",
+          icon: 'WorkItemAlert'
+        }, 
         {
-          key: "PeolpePicker",
-          name: "PeolpePicker",
-          url:  "#/examples/people",
-          icon: 'PeopleAdd',
-        },
-        {
-          key: "RichEditor",
-          name: "RichEditor",
-          url:  "#/examples/editor",
-          icon: 'PeopleAdd',
-        },
-        {
-          key: "ESignature",
-          name: "E-Signature",
-          url:  "#/examples/esignature",
-          icon: 'PeopleAdd',
-        },
+          key: "AccessRoles",
+          name: "User Access Roles",
+          url: "#/s-admin/manage-roles",
+          icon: 'WorkItemAlert'
+        }, 
       ],
     } 
   ];
 
 const BREAKPOINT : number = 1025;
   
-export const ExampleLayout: React.FunctionComponent = () => {
+export const SiteAdminLayout: React.FunctionComponent = () => {
   const isCollapsed = sessionStorage.getItem("isCollapsed") == 'true'? true : false;
   const { width } = useWindowDimensions();
   const [collapsed, setCollapsed] = React.useState<boolean>(isCollapsed || width < BREAKPOINT);
@@ -126,7 +123,7 @@ export const ExampleLayout: React.FunctionComponent = () => {
         </Stack>
         <Stack enableScopedSelectors horizontal styles={horizontalStackStyle}>
           <Stack.Item grow={3} styles={sideNavAreaStackStyle} disableShrink>
-            <SideNav  collapsed={collapsed} navLinkGroups={navLinkGroups}/>
+            <SideNav  collapsed={collapsed} navLinkGroups={navLinkGroups} selectedKey="AdminHome"/>
           </Stack.Item>
           <Stack.Item  grow={3} styles={mainAreaStackStyle}>
             <Outlet />
