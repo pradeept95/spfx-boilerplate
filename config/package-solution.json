@@ -1,14 +1,14 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "name": "sp-online-sp-fx-template-client-side-solution",
-    "id": "ab841792-b9de-416b-a8b5-19bcb4a1acb1",
-    "version": "1.0.0.0",
+    "name": "SPFx SP Online Boilerplate Example",
+    "id": "3f2379bc-9e9c-4e05-9748-40a391c144d7",
+    "version": "1.0.0.5",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
     "developer": {
-      "name": "",
+      "name": "PRT",
       "websiteUrl": "",
       "privacyUrl": "",
       "termsOfUseUrl": "",

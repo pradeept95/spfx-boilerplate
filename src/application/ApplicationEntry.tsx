@@ -1,44 +1,27 @@
 /* eslint-disable */
 import * as React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, NavLink } from "react-router-dom";
 import { useEffect } from "react";
-import { initializeIcons, IPersonaProps } from "@fluentui/react";
-import { setIconOptions } from "@fluentui/react/lib/Styling"; 
+import { initializeIcons } from "@fluentui/react";
+import { setIconOptions } from "@fluentui/react/lib/Styling";
 import AppContext from "../common/config/app-context.config";
 import { ROLES } from "../common/types/auth.types";
-import { getSP } from "../common/config/pnpjs.config";  
 import { useAuthContext } from "../common/context/AuthContext";
-import { useLoading } from "../common/hooks/useLoading";
-import { useAlert } from "../common/hooks/useAlert";
 import { PageNotFound } from "../common/components/PageNotFound";
-import { PeoplePicker, PrincipalType } from "../common/components/PeoplePicker";
-import { AdminLayout } from "./layouts/AdminLayout";
-import { AdminHome } from "./admin/AdminHome";
+import { AdminLayout } from "./admin/layout/AdminLayout";
+import { AdminHome } from "./admin/pages/AdminHome";
+import ExampleEntryPage from "./examples/Index";
+import { AccessDenied } from "../common/components/AccessDenied";
+import SiteAdminEntryPage from "../common/site-admin";
 // import { UserAccessService } from "../common/services/UserAccessService";
 
 const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
   const { setAuth } = useAuthContext();
-  const { showLoader, hideLoader } = useLoading();
-  const { success, error, info, warning } = useAlert();
+
   //  const { getUserProfile } = UserAccessService();
-  const [defaultUsers, setDefaultUser] = React.useState<IPersonaProps[]>([]);
-
-  const notify = () => {
-    success("Hello");
-    info("World");
-    warning("Some Warn");
-    error("Error");
-  };
-
-  function loading() {
-    showLoader("Hey, I am loading for 3 sec...");
-    setTimeout(() => {
-      hideLoader();
-    }, 3000);
-  }
 
   const callApi = async (): Promise<void> => {
-    const sp = await getSP();
+    // const sp = await getSP();
 
     // Using RowLimit. Enables paging
     // await sp.web.lists.getByTitle("AwardType").getListItemChangesSinceToken({ RowLimit: '5' });
@@ -49,7 +32,7 @@ const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
     // await sp.web.lists.getByTitle("AwardType").getListItemChangesSinceToken({ QueryOptions: '<Paging ListItemCollectionPositionNext="Paged=TRUE&amp;p_ID=5" />' });
 
     // Get everything. Using null with ChangeToken gets everything
-    await sp.web.lists.getByTitle("AwardType").items();
+    // await sp.web.lists.getByTitle("AwardType").items();
   };
 
   useEffect(() => {
@@ -62,12 +45,6 @@ const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
       roles: [ROLES.User, ROLES.Admin],
     });
 
-    setDefaultUser([{
-      text : user.displayName,
-      secondaryText : user.email,
-      tertiaryText : user.loginName
-    } as IPersonaProps]);
-
     initializeIcons();
     // Suppress icon warnings.
     setIconOptions({
@@ -76,6 +53,12 @@ const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
 
     callApi();
   }, []);
+
+  const openPropertyPane = ()=> { 
+    const currrentContext = AppContext.getInstance();
+    currrentContext.context.propertyPane.openDetails();
+    currrentContext.context.propertyPane.open(); 
+  }
 
   return (
     <>
@@ -87,38 +70,28 @@ const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
               index
               element={
                 <>
-                  <button onClick={notify}>Notify !</button>
-                  <PeoplePicker
-                    label="Select User (Normal Type)"
-                    defaultSelectedUsers={defaultUsers}
-                    principalTypes={[PrincipalType.User]}
-                    peoplePickerType="Normal"
-                    placeholder="Enter Last Name, First Name to filter the user"
-                    required={true}
-                    showSecondaryText={false}
-                    personSelectionLimit={1}
-                    disabled={false}
-                    readOnly={false}
-                    onPeopleSelectChange={async (users) => {
-                      console.log(users);
-                    }}
-                  ></PeoplePicker>
-                  Home
-                </>
-              }
-            />
-            <Route
-              path="/test"
-              element={
-                <>
-                  <button onClick={loading}>Loading !</button>
-                  Test
+                  <ul>
+                    <li>
+                      <NavLink to={"/admin"} >Go to Admin Layout</NavLink>
+                    </li>
+                    <li>
+                      <NavLink to={"/examples"} >Go to Example Layout</NavLink>
+                    </li>
+                    <li>
+                      <button  onClick={openPropertyPane}>Open Setting</button>
+                    </li>
+                    <li></li>
+                  </ul>
                 </>
               }
             />
             <Route path="/admin/*" element={<AdminLayout />}>
               <Route index element={<AdminHome />} />
             </Route>
+            <Route path="/examples/*" element={<ExampleEntryPage />} />
+            <Route path="/s-admin/*" element={<SiteAdminEntryPage />} />
+            <Route path="/unauthorized" element={<AccessDenied />} />
+            <Route path='/page-not-found' element={<PageNotFound />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
           {/* <Route path="/admin" element={<AdminLayout />}>

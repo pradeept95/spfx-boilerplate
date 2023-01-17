@@ -12,15 +12,14 @@ import {
   PeoplePickerItem,
   IPeoplePickerProps,
   IInputProps,
-} from "@fluentui/react/lib/Pickers";
-// import { getSP } from "../../config/pnpjs.config";
+} from "@fluentui/react/lib/Pickers"; 
 import { useId } from "@fluentui/react-hooks";
-import { IRenderFunction, ITextFieldProps, mergeStyles } from "@fluentui/react"; 
-import { UserAccessService } from "../services/UserAccessService";
+import { IRenderFunction, ITextFieldProps, mergeStyles } from "@fluentui/react";
+import { UserService } from "../services/UserService";
 import { renderFieldDescription, renderFieldErrorMessage, renderFieldLabelWithHelp } from "./FormElement";
 
 export enum PrincipalType {
-  User = 1,
+  User = 1, 
   DistributionList = 2,
   SecurityGroup = 4,
   SharePointGroup = 8,
@@ -75,39 +74,67 @@ const personaStyles: Partial<IPersonaStyles> = {
   },
 };
 
+function getTextFromItem(persona: IPersonaProps): string {
+  return (persona.text as string) || (persona.secondaryText as string);
+}
+
+function validateInput(input: string): ValidationState {
+  if (input.indexOf("@") !== -1) {
+    return ValidationState.valid;
+  } else if (input.length > 1) {
+    return ValidationState.warning;
+  } else {
+    return ValidationState.invalid;
+  }
+}
+
 export const PeoplePicker: React.FunctionComponent<PeoplePickerProps> = (
   props
 ) => {
   const { peoplePickerType, onPeopleSelectChange } = props;
   const picker = React.useRef(null);
-  const peoplePickerId = useId("peoplePicker");  
-  const { searchUsers, ensureUser } = UserAccessService();
+  const peoplePickerId = useId("peoplePicker");
+  const { searchUsers, ensureUser } = UserService();
+
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   const [selectedPeople, setSelectedPeople] = React.useState<IPersonaProps[]>(
     []
   );
 
+  //check for default user
   React.useEffect(() => {
     if (props.defaultSelectedUsers?.length) {
       const newUserList = [...selectedPeople, ...props.defaultSelectedUsers];
       setSelectedPeople(newUserList);
       onUsersSelect(newUserList);
     }
+
   }, [props.defaultSelectedUsers]);
+
+  //check for error message
+  React.useEffect(() => {
+    if (props.errorMessage?.length) {
+      setErrorMessage(props?.errorMessage)
+    }
+  }, [props.errorMessage]);
 
   const onUsersSelect = async (peoples: IPersonaProps[]) => {
     try {
       for (let i = 0; i < peoples?.length; i++) {
         if (peoples?.[i] && !peoples?.[i]?.id) {
-          const userDetails = await ensureUser(peoples?.[i]?.tertiaryText);
-          //console.log(userDetails);
+          const userDetails = await ensureUser(peoples?.[i]?.tertiaryText); 
           peoples[i].id = `${userDetails?.data?.Id}`;
         }
       }
       setSelectedPeople(peoples);
       onPeopleSelectChange(peoples);
     } catch (error) {
-      alert("User can to be selected. Account is not active.");
+      setErrorMessage("Invalid Selection or User Account is not Active. Try Again!");
+
+      setTimeout(() => {
+        setErrorMessage("")
+      }, 4000);
     }
   };
 
@@ -168,7 +195,7 @@ export const PeoplePicker: React.FunctionComponent<PeoplePickerProps> = (
       ...(props as IInputProps),
       id: peoplePickerId,
       disabled: props?.disabled,
-      placeholder: props?.placeholder ?? "",
+      placeholder: props?.placeholder ?? "Enter Email or Username to Search User.",
       required: props?.required,
       className: mergeStyles([
         {
@@ -178,7 +205,7 @@ export const PeoplePicker: React.FunctionComponent<PeoplePickerProps> = (
     },
     componentRef: picker,
     resolveDelay: props?.resolveDelay ?? 300,
-    itemLimit: props?.personSelectionLimit ?? 10,
+    itemLimit: props?.personSelectionLimit ?? 1,
     selectedItems: selectedPeople, //props?.defaultSelectedUsers ?? [],
     disabled: props?.disabled,
 
@@ -218,24 +245,10 @@ export const PeoplePicker: React.FunctionComponent<PeoplePickerProps> = (
       {peoplePickerType === "List"
         ? listPeoplePicker
         : peoplePickerType === "Normal"
-        ? normalPeoplePicker
-        : compactPeopelPicker}
+          ? normalPeoplePicker
+          : compactPeopelPicker}
       {props?.description && renderFieldDescription(textFieldPros)}
-      {props?.errorMessage ? renderFieldErrorMessage(props?.errorMessage) : ""}
+      {errorMessage ? renderFieldErrorMessage(errorMessage) : ""}
     </>
   );
 };
-
-function getTextFromItem(persona: IPersonaProps): string {
-  return (persona.text as string) || (persona.secondaryText as string);
-}
-
-function validateInput(input: string): ValidationState {
-  if (input.indexOf("@") !== -1) {
-    return ValidationState.valid;
-  } else if (input.length > 1) {
-    return ValidationState.warning;
-  } else {
-    return ValidationState.invalid;
-  }
-}

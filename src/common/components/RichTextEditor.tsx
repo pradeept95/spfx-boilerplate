@@ -2,33 +2,35 @@
 import { IInputProps, IRenderFunction, ITextFieldProps } from "@fluentui/react";
 import * as React from "react";
 import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css"; 
-import "./editor.css";
+import "react-quill/dist/quill.snow.css";
+import "./styles/rich-editor.style.css";
 import { renderFieldDescription, renderFieldErrorMessage, renderFieldLabelWithHelp } from "./FormElement";
 
 const modules = {
   toolbar: [
     // [{ font: [] }],
+    [{ header: [1, 2, 3, 4, 5, 6, false] }],
     ["bold", "italic", "underline", "strike"], // toggled buttons
     [{ list: "ordered" }, { list: "bullet" }],
-    // [{ color: [] }, { background : [] }], // dropdown with defaults from theme
+    [{ color: [] }, { background : [] }], // dropdown with defaults from theme
     [{ align: [] }],
     // [{ script: "sub" }, { script: "super" }], // superscript/subscript
     [{ direction: "rtl" }], // text direction
     // [{ size: ["small", false, "large", "huge"] }], // custom dropdown
-    [{ header: [1, 2, 3, 4, 5, 6, false] }],
     // [{ header: 1 }, { header: 2 }], // custom button values
     // [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
-    // ["link", "image", "video"],
-    // ["blockquote", "code-block"],
+    ["link", "image", "video"],
+    ["blockquote", "code-block"],
     ["clean"], // remove formatting button
   ] as const,
 };
 
+
+
 interface RichTextEditorProps extends IInputProps {
   label?: string;
   onRenderLabel?: IRenderFunction<ITextFieldProps>;
-  onChange: (event: any) => any;
+  onChange?: (event: any) => any;
   required?: boolean;
   resolveDelay?: number;
   placeholder?: string;
@@ -94,3 +96,5 @@ export const RichTextEditor: React.FunctionComponent<RichTextEditorProps> = (
     </div>
   );
 };
+
+

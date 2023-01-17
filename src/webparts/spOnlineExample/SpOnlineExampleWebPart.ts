@@ -129,6 +129,15 @@ export default class SpOnlineExampleWebPart extends BaseClientSideWebPart<ISpOnl
     return Version.parse("1.0");
   }
 
+  protected get disableReactivePropertyChanges(): boolean {
+    return true;
+  }
+
+  protected onAfterPropertyPaneChangesApplied(): void {
+    ReactDom.unmountComponentAtNode(this.domElement);
+    this.render();
+  }
+
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
@@ -139,6 +148,7 @@ export default class SpOnlineExampleWebPart extends BaseClientSideWebPart<ISpOnl
               groupFields: [
                 PropertyPaneTextField("siteName", {
                   label: "Site Name",
+                  description : "Name of the Site"
                 }),
                 PropertyPaneToggle("enableDebugMode", {
                   label: "Enable App Debug Mode",

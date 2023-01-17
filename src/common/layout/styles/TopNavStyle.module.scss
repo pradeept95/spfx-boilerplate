@@ -1,0 +1,15 @@
+@import '~@fluentui/react/dist/sass/References.scss';
+
+.navMain {
+    background-color: "[theme: themePrimary, default: blue]";
+    color: "[theme: white, default: white]";
+    display: "inline";
+    min-height: 50px;
+}
+
+.toggleIcon{
+    background-color: "[theme: themePrimary, default: blue]";
+    color: "[theme: white, default: white]";
+    margin-top: 10px;
+    margin-left: 10px;
+}
