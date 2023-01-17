@@ -1,8 +1,8 @@
 /* eslint-disable */
 import { IconButton, IIconProps, Stack } from '@fluentui/react';
 import * as React from 'react';
-import * as topNavStyle from "../styles/TopNavStyle.module.scss"
 import AppContext from '../../config/app-context.config';
+import * as topNavStyle from "../styles/TopNavStyle.module.scss"
 
 const expandedIcon: IIconProps = { iconName: 'DoubleChevronLeft12' };
 const collapsedIcon: IIconProps = { iconName: 'DoubleChevronRight12' };
