@@ -12,6 +12,7 @@ const navLinkGroups: INavLinkGroup[] = [
         key: "ActivityItem",
         name: "ActivityItem",
         url: "#/examples/activityitem",
+        isExpanded : true
       },
       {
         key: "Breadcrumb",
