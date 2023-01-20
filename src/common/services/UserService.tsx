@@ -46,10 +46,10 @@ export const UserService = () => {
           })
           .filter(
             (user) => selecteUserEmails?.indexOf(user.secondaryText) === -1
-          ); 
+          );
         resolve(mappedUsers);
       } catch (error) {
-        reject(error)
+        reject(error);
       }
     });
   }
@@ -84,9 +84,45 @@ export const UserService = () => {
     });
   };
 
+  const mapUserFromSPList = async (user: any): Promise<IPersonaProps> => {
+    return new Promise((resolve, reject) => {
+      try {
+        const mappedUser = {
+          text: user.DisplayName,
+          secondaryText: user.EMail,
+          tertiaryText: user.Username,
+        } as IPersonaProps;
+        resolve(mappedUser);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  };
+
+  const mapUsersFromSPList = async (users: any[]): Promise<IPersonaProps[]> => {
+    let mappedUsers: IPersonaProps[] = [];
+    return new Promise((resolve, reject) => {
+      try {
+        users?.map((user) => {
+          mappedUsers.push({
+            text: user?.DisplayName,
+            secondaryText: user?.EMail,
+            tertiaryText: user?.Username,
+          } as IPersonaProps);
+        });
+
+        resolve(mappedUsers);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  };
+
   return {
     searchUsers,
     ensureUser,
     getUserProfile,
+    mapUserFromSPList,
+    mapUsersFromSPList,
   };
 };

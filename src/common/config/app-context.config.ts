@@ -1,5 +1,7 @@
 /* eslint-disable */
 import { WebPartContext } from "@microsoft/sp-webpart-base"; 
+import { AccessGroupUsers } from "../types/access-group.type";
+import { ROLES } from "../types/auth.types";
 import { SiteSettings } from "../types/site-settings.types";
 import { getGraphFi, getSP } from "./pnpjs.config";
 
@@ -9,6 +11,8 @@ class AppContext {
   public isDarkTheme: boolean = false;
   public context: WebPartContext;
   public siteSettings?: SiteSettings;
+  public accessGroupUsers?: Partial<AccessGroupUsers>;
+  public currentUserRoles?: number[];
 
   private constructor() {}
 
@@ -38,10 +42,22 @@ class AppContext {
       const commandBar = document.getElementById("spCommandBar");
       if (commandBar) {
         commandBar.style.display = "none";
-      } else {
-        commandBar.style.display = "block";
       }
     }
+  }
+
+  public async setAccessGroupUsers(
+    accessGroupUsers: Partial<AccessGroupUsers>
+  ) {
+    this.accessGroupUsers = accessGroupUsers;
+  }
+
+  public async setCurrentUserRoles(roles: number[]) {
+    this.currentUserRoles = roles;
+  }
+
+  public async getAccessGrouUsersByRoles(roleKey: keyof typeof ROLES) {
+    return this.accessGroupUsers;
   }
 }
 

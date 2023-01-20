@@ -138,6 +138,12 @@ export const PeoplePicker: React.FunctionComponent<PeoplePickerProps> = (
     }
   };
 
+  const resetSelectedUsers = async () => {
+    setSelectedPeople([])
+  }
+
+  console.log(resetSelectedUsers)
+
   const onRenderSuggestionItem = (
     personaProps: IPersonaProps,
     suggestionsProps: IBasePickerSuggestionsProps

@@ -1,8 +1,9 @@
 /* eslint-disable */
-import { DefaultPalette, INavLinkGroup, IStackStyles, Stack } from "@fluentui/react";
+import { INavLinkGroup, IStackStyles, Stack } from "@fluentui/react";
 import * as React from "react";
 import { Outlet } from "react-router-dom";
 import useWindowDimensions from "../../../common/hooks/useWindowsSize";
+import { BREAKPOINT } from "../../../common/layout";
 import { Footer } from "../../../common/layout/components/Footer";
 import { SideNav } from "../../../common/layout/components/SideNav";
 import { TopNav } from "../../../common/layout/components/TopNav";
@@ -50,51 +51,61 @@ const mainAreaStackStyle: IStackStyles = {
 }; 
 
 const navLinkGroups: INavLinkGroup[] = [
-    {
-      name: "Components Example",
-      expandAriaLabel: "Show more Basic components",
-      links: [
-        {
-          key: "Alert",
-          name: "Alert",
-          url: "#/examples/notify",
-          icon: 'WorkItemAlert'
-        },
-        {
-          key: "Loading",
-          name: "Loading",
-          url:  "#/examples/loading",
-          icon: 'BullseyeTarget',
-        },
-        {
-          key: "PeolpePicker",
-          name: "PeolpePicker",
-          url:  "#/examples/people",
-          icon: 'PeopleAdd',
-        },
-        {
-          key: "RichEditor",
-          name: "RichEditor",
-          url:  "#/examples/editor",
-          icon: 'PeopleAdd',
-        },
-        {
-          key: "ESignature",
-          name: "E-Signature",
-          url:  "#/examples/esignature",
-          icon: 'PeopleAdd',
-        },
-        {
-          key: "DataTable",
-          name: "Data Table",
-          url:  "#/examples/datatable",
-          icon: 'PeopleAdd',
-        },
-      ],
-    } 
-  ];
-
-const BREAKPOINT : number = 1025;
+  {
+    name: "Components Example",
+    expandAriaLabel: "Show more Basic components",
+    links: [
+      {
+        key: "Alert",
+        name: "Alert",
+        url: "#/examples/notify",
+        icon: "WorkItemAlert",
+      },
+      {
+        key: "Loading",
+        name: "Loading",
+        url: "#/examples/loading",
+        icon: "BullseyeTarget",
+      },
+      {
+        key: "PeolpePicker",
+        name: "PeolpePicker",
+        url: "#/examples/people",
+        icon: "PeopleAdd",
+      },
+      {
+        key: "RichEditor",
+        name: "RichEditor",
+        url: "#/examples/editor",
+        icon: "PeopleAdd",
+      },
+      {
+        key: "ESignature",
+        name: "E-Signature",
+        url: "#/examples/esignature",
+        icon: "PeopleAdd",
+      },
+    ],
+  },
+  {
+    name: "Advanced Example",
+    expandAriaLabel: "Advance Form Example",
+    links: [
+      {
+        key: "Form",
+        name: "Form",
+        url: "#/examples/form",
+        icon: "FabricFormLibrary",
+      },
+      {
+        key: "DataTable",
+        name: "Data Table",
+        url: "#/examples/datatable",
+        icon: "FiveTileGrid",
+      },
+    ],
+  },
+]; 
   
 export const ExampleLayout: React.FunctionComponent = () => {
   const isCollapsed = sessionStorage.getItem("isCollapsed") == 'true'? true : false;
@@ -116,10 +127,8 @@ export const ExampleLayout: React.FunctionComponent = () => {
       left : 0,
       bottom: width < BREAKPOINT ? 48 : 0,
       width : "100%",
-      minHeight : 40,
-      background: DefaultPalette.neutralLight ,
-      transition: '1s',
-      boxShadow: "3px 0px 6px #888888;"
+      minHeight : 44, 
+      transition: '1s', 
     },
   };
 

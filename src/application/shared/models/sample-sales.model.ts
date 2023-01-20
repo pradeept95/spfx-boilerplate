@@ -1,4 +1,5 @@
 export type SampleSales = {
+    id : number,
     region : string,
     city : string,
     category : string,

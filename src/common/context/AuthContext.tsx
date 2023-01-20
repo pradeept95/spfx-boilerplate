@@ -3,7 +3,9 @@ import * as React from "react";
 import { createContext, useContext, useState } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import AppContext from "../config/app-context.config"; 
+import { RouteRoleType } from "../types/route-role.type";
 
+const currentContext = AppContext.getInstance();
 export const AuthContext = createContext<any>({});
 
 export const useAuthContext = () => {
@@ -19,22 +21,32 @@ export const AuthProvider: React.FunctionComponent<{}> = ({ children }) => {
     </AuthContext.Provider>
   );
 }; 
-
-export const RequireAuth: React.FunctionComponent<{
-  allowedRoles: number[];
-}> = ({ allowedRoles }) => {
+ 
+export const RequireAuth: React.FunctionComponent<RouteRoleType> = ({
+  requiredRoles,
+  requiredAll,
+}) => {
+  const [allowAccess, setAllowAccess] = useState<boolean>(false);
+  const [waitResolve, setWaitResolve] = useState<boolean>(true);
   const { auth } = useAuthContext();
   const location = useLocation();
 
-  const currentContext = AppContext.getInstance();
   const user = currentContext.context.pageContext.user;
 
-  const waitResolve = !auth;
+  React.useEffect(() => {
+    const isAllowAccess = !requiredAll
+      ? auth?.roles?.some((role: number) => requiredRoles?.indexOf(role) > -1)
+      : auth?.roles?.every((role: number) => requiredRoles?.indexOf(role) > -1);
+
+    // set allowed access 
+    setAllowAccess(isAllowAccess);
+    setWaitResolve(false); 
+  }, [auth]); 
 
   return waitResolve ? (
-    // <PageLoading /> 
+    // <PageLoading />
     <h1>User Access Verifying</h1>
-  ) : auth?.roles?.some((role: number) => allowedRoles?.indexOf(role) > -1) ? (
+  ) : allowAccess ? (
     <Outlet />
   ) : user ? (
     <Navigate to="/unauthorized" state={{ from: location }} replace />

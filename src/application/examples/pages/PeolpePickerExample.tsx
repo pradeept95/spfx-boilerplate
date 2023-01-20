@@ -15,9 +15,7 @@ const PeoplePickerExample: React.FunctionComponent<{}> = (props) => {
             text: user.displayName,
             secondaryText: user.email,
             tertiaryText: user.loginName
-        } as IPersonaProps]);
-
-
+        } as IPersonaProps]); 
     }, []);
 
     return (

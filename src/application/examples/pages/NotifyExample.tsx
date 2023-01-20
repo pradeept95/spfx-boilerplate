@@ -1,10 +1,16 @@
 /* eslint-disable */
 import * as React from "react"; 
+import AppContext from "../../../common/config/app-context.config";
 import { useAlert } from "../../../common/hooks/useAlert";
+
+const currentContext = AppContext.getInstance();
 
 const NotifyExample: React.FunctionComponent<{}> = (props) => {
 
     const { success, error, info, warning } = useAlert();
+    
+    const admins = currentContext.accessGroupUsers?.SomeOtherRole1;  
+    console.log(admins);
 
     const notify = () => {
         success("Hello, I am Success");
