@@ -85,6 +85,12 @@ const navLinkGroups: INavLinkGroup[] = [
           url:  "#/examples/esignature",
           icon: 'PeopleAdd',
         },
+        {
+          key: "DataTable",
+          name: "Data Table",
+          url:  "#/examples/datatable",
+          icon: 'PeopleAdd',
+        },
       ],
     } 
   ];

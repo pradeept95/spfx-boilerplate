@@ -2,6 +2,7 @@
 import * as React from "react";
 import { Routes, Route } from "react-router-dom";
 import { ExampleLayout } from "../layouts/ExampleLayout";
+import DataTableExamplePage from "./DataTableExample";
 import EditorExample from "./EditorExample";
 import ESignatureExample from "./ESignatureExample";
 import LoadingExample from "./LoadingExample";
@@ -27,6 +28,7 @@ const ExampleEntryPage: React.FunctionComponent<{}> = (props) => {
             <Route path="notify" element={<NotifyExample />} />
             <Route path="editor" element={<EditorExample />} /> 
             <Route path="esignature" element={<ESignatureExample />} /> 
+            <Route path="datatable" element={<DataTableExamplePage />} /> 
           </Route>
         </Routes>
       </section>
