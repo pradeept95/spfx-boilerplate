@@ -1,8 +1,8 @@
 /* eslint-disable */
 import { IPersonaProps } from "@fluentui/react";
-import * as React from "react";
-import { PeoplePicker, PrincipalType } from "../../common/components/PeoplePicker";
-import AppContext from "../../common/config/app-context.config";
+import * as React from "react"; 
+import { PeoplePicker, PrincipalType } from "../../../common/components/PeoplePicker";
+import AppContext from "../../../common/config/app-context.config";
 
 const PeoplePickerExample: React.FunctionComponent<{}> = (props) => {
 

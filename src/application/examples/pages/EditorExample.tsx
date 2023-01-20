@@ -1,7 +1,7 @@
 /* eslint-disable */
 import * as React from "react"; 
-import { RichTextEditor } from "../../common/components/RichTextEditor";
-import { RichTextViewer } from "../../common/components/RichTextViewer";
+import { RichTextEditor } from "../../../common/components/RichTextEditor";
+import { RichTextViewer } from "../../../common/components/RichTextViewer";
 
 const EditorExample: React.FunctionComponent<{}> = (props) => { 
 

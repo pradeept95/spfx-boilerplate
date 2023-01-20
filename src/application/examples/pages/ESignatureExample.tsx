@@ -1,6 +1,6 @@
 /* eslint-disable */
-import * as React from "react";  
-import ESignature from "../../common/components/ESignature";
+import * as React from "react";   
+import ESignature from "../../../common/components/ESignature";
 
 const ESignatureExample: React.FunctionComponent<{}> = (props) => { 
 

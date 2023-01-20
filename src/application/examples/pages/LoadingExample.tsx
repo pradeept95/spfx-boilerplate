@@ -1,6 +1,6 @@
 /* eslint-disable */
-import * as React from "react";
-import { useLoading } from "../../common/hooks/useLoading";
+import * as React from "react"; 
+import { useLoading } from "../../../common/hooks/useLoading";
 
 const LoadingExample: React.FunctionComponent<{}> = (props) => {
 

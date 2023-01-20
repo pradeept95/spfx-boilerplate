@@ -129,7 +129,7 @@ export const SideNav: React.FunctionComponent<{ collapsed: boolean, navLinkGroup
         link : navLink.url?.replace("#", "")
       } as IOverflowSetItemProps)
     }))
-  }, navLinkGroups);
+  }, [navLinkGroups]);
 
   const onRenderItem = (item: IOverflowSetItemProps): JSX.Element => {    
     return (

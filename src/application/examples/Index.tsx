@@ -1,13 +1,13 @@
 /* eslint-disable */
 import * as React from "react";
-import { Routes, Route } from "react-router-dom";
-import { ExampleLayout } from "../layouts/ExampleLayout";
+import { Routes, Route } from "react-router-dom"; 
 import DataTableExamplePage from "./DataTableExample";
-import EditorExample from "./EditorExample";
-import ESignatureExample from "./ESignatureExample";
-import LoadingExample from "./LoadingExample";
-import NotifyExample from "./NotifyExample";
-import PeoplePickerExample from "./PeolpePickerExample";
+import { ExampleLayout } from "./layout/ExampleLayout";
+import EditorExample from "./pages/EditorExample";
+import ESignatureExample from "./pages/ESignatureExample";
+import LoadingExample from "./pages/LoadingExample";
+import NotifyExample from "./pages/NotifyExample";
+import PeoplePickerExample from "./pages/PeolpePickerExample";
 
 const ExampleEntryPage: React.FunctionComponent<{}> = (props) => {
 

@@ -8,8 +8,8 @@ import AppContext from "../common/config/app-context.config";
 import { ROLES } from "../common/types/auth.types";
 import { useAuthContext } from "../common/context/AuthContext";
 import { PageNotFound } from "../common/components/PageNotFound";
-import { AdminLayout } from "./layouts/AdminLayout";
-import { AdminHome } from "./admin/AdminHome";
+import { AdminLayout } from "./admin/layout/AdminLayout";
+import { AdminHome } from "./admin/pages/AdminHome";
 import ExampleEntryPage from "./examples/Index";
 import { AccessDenied } from "../common/components/AccessDenied";
 import SiteAdminEntryPage from "../common/site-admin";
@@ -56,8 +56,8 @@ const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
 
   const openPropertyPane = ()=> { 
     const currrentContext = AppContext.getInstance();
-    currrentContext.context.propertyPane.open();
-
+    currrentContext.context.propertyPane.openDetails();
+    currrentContext.context.propertyPane.open(); 
   }
 
   return (

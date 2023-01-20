@@ -2,10 +2,10 @@
 import { DefaultPalette, INavLinkGroup, IStackStyles, Stack } from "@fluentui/react";
 import * as React from "react";
 import { Outlet } from "react-router-dom";
-import useWindowDimensions from "../../common/hooks/useWindowsSize";
-import { Footer } from "../../common/layout/components/Footer";
-import { SideNav } from "../../common/layout/components/SideNav";
-import { TopNav } from "../../common/layout/components/TopNav";
+import useWindowDimensions from "../../../common/hooks/useWindowsSize";
+import { Footer } from "../../../common/layout/components/Footer";
+import { SideNav } from "../../../common/layout/components/SideNav";
+import { TopNav } from "../../../common/layout/components/TopNav";
 
 const verticalStackStyle: IStackStyles = {
   root: {
@@ -47,8 +47,7 @@ const mainAreaStackStyle: IStackStyles = {
     width : "100%",   
     alignSelf : "stretch" 
   },
-};
-
+}; 
 
 const navLinkGroups: INavLinkGroup[] = [
     {
@@ -117,7 +116,7 @@ export const ExampleLayout: React.FunctionComponent = () => {
       left : 0,
       bottom: width < BREAKPOINT ? 48 : 0,
       width : "100%",
-      height : 40,
+      minHeight : 40,
       background: DefaultPalette.neutralLight ,
       transition: '1s',
       boxShadow: "3px 0px 6px #888888;"

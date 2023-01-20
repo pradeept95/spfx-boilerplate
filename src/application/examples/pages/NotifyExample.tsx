@@ -1,6 +1,6 @@
 /* eslint-disable */
-import * as React from "react";
-import { useAlert } from "../../common/hooks/useAlert";
+import * as React from "react"; 
+import { useAlert } from "../../../common/hooks/useAlert";
 
 const NotifyExample: React.FunctionComponent<{}> = (props) => {
 
