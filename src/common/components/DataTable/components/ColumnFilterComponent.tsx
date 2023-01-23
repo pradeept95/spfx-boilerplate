@@ -1,7 +1,15 @@
 /* eslint-disable */
-import { Callout, FontWeights, IconButton, IIconProps, mergeStyleSets } from "@fluentui/react";
+import { Callout, DefaultButton, DirectionalHint, FontWeights, IconButton, IDetailsColumnProps, IStackTokens, mergeStyleSets, Stack } from "@fluentui/react";
 import { useBoolean, useId } from "@fluentui/react-hooks";
+import { PrimaryButton } from "office-ui-fabric-react";
 import * as React from "react";
+import { useDataTable } from "../hooks/useDataTable";
+import { useFiltering } from "../services/FilterGridService";
+import { clearFilterIcon, openFilterIcon } from "../types/DataTableConst";
+import { BasicExpression } from "../types/FilterExpression";
+import MultiselectColumnFilter from "./FilterTypeComponents/MultiselectColumnFilter";
+import TextFilterComponent from "./FilterTypeComponents/TextColumnFilter";
+
 
 const styles = mergeStyleSets({
   button: {
@@ -22,26 +30,48 @@ const styles = mergeStyleSets({
   },
 });
 
-const openFilterIcon: IIconProps = { iconName: "Filter" };
-// const clearFilterIcon: IIconProps = { iconName: "ClearFilter" };
 
-const ColumnFilterComponent: React.FunctionComponent<{}> = (props) => {
+// Tokens definition 
+const stackTokens: IStackTokens = {
+  childrenGap: 5,
+};
 
+const ColumnFilterComponent: React.FunctionComponent<{ columnProp: IDetailsColumnProps }> = (props) => {
+
+  const [filterType, _] = React.useState((props?.columnProp?.column as any)?.filterType ?? "text");
+
+  const { columnGridFilter, getExpressionForColumnIfExist } = useFiltering();
+  const { filterExpression } = useDataTable();
+  const buttonId = useId("filter-button");
   const [isFilterOpen, { toggle: toggleFilterColumn }] = useBoolean(false);
 
-  const buttonId = useId("filter-button");
+  const [colFilterExpression, setColFilterExpression] = React.useState<BasicExpression>();
 
-  // const handleOpenFilter = (e: any) => {
-  //   e.preventDefault();
-  //   console.log(e);
-  //   alert("Filter Clicked");
-  // };
+  const applyFilter = () => {
+    columnGridFilter(colFilterExpression);
+    toggleFilterColumn();
+  };
+
+  const resetFilter = (e: any) => {
+    columnGridFilter({
+      ...colFilterExpression,
+      value: ""
+    });
+    toggleFilterColumn();
+  };
+
+  React.useEffect(() => {
+    const filterExpressionForCurrentCol: BasicExpression = getExpressionForColumnIfExist(filterExpression, props.columnProp?.column?.fieldName);
+    if (filterExpressionForCurrentCol) {
+      setColFilterExpression(filterExpressionForCurrentCol);
+    }
+  }, [filterExpression])
 
   return (
     <>
       <IconButton
         id={buttonId}
-        iconProps={openFilterIcon}
+        iconProps={colFilterExpression ? clearFilterIcon : openFilterIcon}
         aria-label="Click to Open Filter"
         onClick={toggleFilterColumn}
       />
@@ -53,8 +83,38 @@ const ColumnFilterComponent: React.FunctionComponent<{}> = (props) => {
           gapSpace={0}
           target={`#${buttonId}`}
           onDismiss={toggleFilterColumn}
+          directionalHint={DirectionalHint.bottomCenter}
           setInitialFocus
-        ></Callout>
+        >
+
+          <Stack enableScopedSelectors tokens={stackTokens}>
+            <Stack.Item>
+              <h3>Filter by {props.columnProp?.column?.name}</h3>
+            </Stack.Item>
+            <Stack.Item>
+              {(filterType == "multiselect") &&
+                <MultiselectColumnFilter
+                  column={props.columnProp?.column}
+                  filterExpression={colFilterExpression}
+                  setFilterExpression={setColFilterExpression}
+                />}
+
+              {(filterType == "text") &&
+                <TextFilterComponent
+                  column={props.columnProp?.column}
+                  filterExpression={colFilterExpression}
+                  setFilterExpression={setColFilterExpression}
+                />
+              }
+            </Stack.Item>
+            <Stack.Item>
+              <Stack enableScopedSelectors horizontal horizontalAlign="space-between">
+                <PrimaryButton text="Apply" onClick={applyFilter} />
+                <DefaultButton text={!filterExpression ? "Close" : "Clear"} onClick={resetFilter} />
+              </Stack>
+            </Stack.Item>
+          </Stack>
+        </Callout>
       )}
     </>
   );

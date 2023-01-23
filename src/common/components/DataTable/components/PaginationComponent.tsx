@@ -11,16 +11,11 @@ import {
   Stack,
 } from "@fluentui/react";
 import * as React from "react";
+import { useDataTable } from "..//hooks/useDataTable";
+import { usePagination } from "../services/PaginationService";
 import * as gridStyle from '../styles/DataGrid.module.scss'
 import { DEFAULT_NUMBER_OF_PAGE_BTN, DEFAULT_PAGE_SIZE } from "../types/DataTableConst";
-
-export type PaginationComponentProps = {
-  totalCount: number;
-  pageSize: number;
-  currentPage: number;
-  onPageChange: (currentPage: number, pageSize: number) => void;
-};
-
+ 
 const range = (from: number, to: number, step: number = 1) =>
   [...Array(Math.floor((to - from) / step) + 1)]?.map((_, i) => from + i * step);
 
@@ -58,30 +53,31 @@ const pageSizeOptions: IDropdownOption[] = [
 
 const stackTokens: IStackTokens = { childrenGap: 10 };
 const stackStyles: IStackStyles = { root: { marginTop: 25 } };
-  
 
 const moveToFirstIcon: IIconProps = { iconName: "DoubleChevronLeft" };
 const moveToPreviousIcon: IIconProps = { iconName: "ChevronLeft" };
 const moveToNextIcon: IIconProps = { iconName: "ChevronRight" };
 const moveToLastIcon: IIconProps = { iconName: "DoubleChevronRight" };
 
-const PaginationComponent: React.FunctionComponent<PaginationComponentProps> = (
-  props
-) => {
+const PaginationComponent: React.FunctionComponent<{}> = () => {
   const [pageOptions, setPageOptions] = React.useState<number[]>([]);
-  const { totalCount, pageSize, currentPage, onPageChange } = props;
+  // const { totalCount, pageSize, currentPage } = props;
+
+ const { totalNumberOfPages, pageSize, currentPage }= useDataTable();
+
+  const { onPageChange, onPageSizeChange} = usePagination();
 
   React.useEffect(() => {
-    const totalPageCount = getLastPage();
+    const totalPageCount = totalNumberOfPages;
     const currentPageOptions = getPageNumbers(currentPage, totalPageCount);
     setPageOptions(currentPageOptions);
   }, []);
 
   React.useEffect(() => {
-    const totalPageCount = getLastPage();
+    const totalPageCount = totalNumberOfPages;
     const currentPageOptions = getPageNumbers(currentPage, totalPageCount);
     setPageOptions(currentPageOptions);
-  }, [currentPage, totalCount, pageSize]);
+  }, [currentPage, totalNumberOfPages, pageSize]);
 
   const handleGoToFirst = () => {
     // go to fist page
@@ -92,7 +88,7 @@ const PaginationComponent: React.FunctionComponent<PaginationComponentProps> = (
 
   const handleGoToLast = () => {
     // go to last page
-    const lastPage = getLastPage();
+    const lastPage = totalNumberOfPages;
     if (currentPage == lastPage) return;
 
     notifyPageChanged(lastPage);
@@ -112,7 +108,7 @@ const PaginationComponent: React.FunctionComponent<PaginationComponentProps> = (
 
   const handleGoToNextPage = () => {
     // go to next page
-    const lastPage = getLastPage();
+    const lastPage = totalNumberOfPages;
 
     if (currentPage >= lastPage) {
       // notifyPageChanged(lastPage);
@@ -127,17 +123,17 @@ const PaginationComponent: React.FunctionComponent<PaginationComponentProps> = (
   const handlePageSizeChange = (_: any, option: any) => {
     console.log(option.key);
     // set next page to initial page
-    onPageChange(1, option?.key);
+    onPageSizeChange(+option?.key);
   };
 
-  const getLastPage = (): number => {
-    const lastPage =
-      Math.floor(totalCount / pageSize) + (totalCount % pageSize > 0 ? 1 : 0);
-    return lastPage;
-  };
+  // const getLastPage = (): number => {
+  //   const lastPage =
+  //     Math.floor(totalCount / pageSize) + (totalCount % pageSize > 0 ? 1 : 0);
+  //   return lastPage;
+  // };
 
   const notifyPageChanged = (nextPage: number) => {
-    onPageChange(nextPage, pageSize);
+    onPageChange(nextPage);
   };
 
   return (
@@ -151,7 +147,7 @@ const PaginationComponent: React.FunctionComponent<PaginationComponentProps> = (
       >
         <Stack.Item>
           <div style={{ paddingTop: "5px" }}>
-            Showing Page {currentPage} of {getLastPage()}
+            Showing Page {currentPage} of {totalNumberOfPages}
           </div>
         </Stack.Item>
         <Stack.Item>
@@ -195,14 +191,14 @@ const PaginationComponent: React.FunctionComponent<PaginationComponentProps> = (
             aria-label="Next"
             onClick={handleGoToNextPage}
             className={gridStyle.default.dataGridPageIconBtn}
-            disabled={currentPage === getLastPage()}
+            disabled={currentPage === totalNumberOfPages}
           />
           <IconButton
             iconProps={moveToLastIcon}
             aria-label="Last"
             onClick={handleGoToLast}
             className={gridStyle.default.dataGridPageIconBtn}
-            disabled={currentPage === getLastPage()}
+            disabled={currentPage === totalNumberOfPages}
           />
         </Stack.Item>
         <Stack.Item>

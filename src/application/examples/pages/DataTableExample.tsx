@@ -1,13 +1,13 @@
-/* eslint-disable */
-import { IColumn } from "@fluentui/react";
+/* eslint-disable */ 
 import * as React from "react"; 
 import { DataTableGrid } from "../../../common/components/DataTable";
+import { IDataGridColumn } from "../../../common/components/DataTable/types/DataTableProps";
 import { SampleSales } from "../../shared/models/sample-sales.model";
 import { SampleSaleService } from "../../shared/services/SampleSaleService";
 
 const { getAllSalesData } = SampleSaleService();
 
-const columns: IColumn[] = [
+const columns: IDataGridColumn[] = [
   {
     key: "id",
     name: "id",
@@ -22,10 +22,8 @@ const columns: IColumn[] = [
     name: "Region", 
     fieldName: "region",
     minWidth: 30,
-    maxWidth: 100,
-    isSorted: false,
-    isSortedDescending: false,
-    showSortIconWhenUnsorted: true,
+    maxWidth: 100, 
+    filterType : "multiselect"
   },
   {
     key: "city",
@@ -35,13 +33,9 @@ const columns: IColumn[] = [
     maxWidth: 100,
     isRowHeader: true,
     isResizable: true,
-    isSorted: false,
-    isSortedDescending: false,
-    showSortIconWhenUnsorted: true,
     sortAscendingAriaLabel: "Sorted A to Z",
     sortDescendingAriaLabel: "Sorted Z to A",
     data: "string",
-    isPadded: true,
   },
   {
     key: "category",
@@ -51,10 +45,6 @@ const columns: IColumn[] = [
     maxWidth: 90,
     isResizable: true,
     data: "string",
-    isPadded: true,
-    isSorted: false,
-    isSortedDescending: false,
-    showSortIconWhenUnsorted: true,
   },
   {
     key: "product",
@@ -64,10 +54,6 @@ const columns: IColumn[] = [
     maxWidth: 90,
     isResizable: true,
     data: "string",
-    isPadded: true,
-    isSorted: false,
-    isSortedDescending: false,
-    showSortIconWhenUnsorted: true,
   },
   {
     key: "quantity",
@@ -78,10 +64,6 @@ const columns: IColumn[] = [
     isResizable: true,
     isCollapsible: true,
     data: "number",
-    isPadded: true,
-    isSorted: false,
-    isSortedDescending: false,
-    showSortIconWhenUnsorted: true,
   },
   {
     key: "unitPrice",
@@ -92,9 +74,6 @@ const columns: IColumn[] = [
     isResizable: true,
     isCollapsible: true,
     data: "number",
-    isSorted: false,
-    isSortedDescending: false,
-    showSortIconWhenUnsorted: true,
   },
   {
     key: "totalPrice",
@@ -105,13 +84,11 @@ const columns: IColumn[] = [
     isResizable: true,
     isCollapsible: true,
     data: "number",
-    isSorted: false,
-    isSortedDescending: false,
-    showSortIconWhenUnsorted: true,
+    filterType : "multiselect"
   },
 ];
 
-const DataTableExamplePage: React.FunctionComponent<{}> = (props) => {
+export const DataTableExamplePage1: React.FunctionComponent<{}> = (props) => {
 
   const [items, setItems] = React.useState<SampleSales[]>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -134,11 +111,53 @@ const DataTableExamplePage: React.FunctionComponent<{}> = (props) => {
 
   return (
     <>
-      <section>
-        <DataTableGrid loading={loading} items={items} columns={columns} />
+      <section> 
+        <DataTableGrid 
+          gridKeyField="id" 
+          loading={loading} 
+          items={items} 
+          columns={columns} 
+          pageSize={20}
+          onSelectionChanged={(selectedItems) => { console.log(selectedItems) }}
+        />
       </section>
     </>
   );
 };
 
-export default DataTableExamplePage;
+export const DataTableExamplePage2: React.FunctionComponent<{}> = (props) => {
+
+  const [items, setItems] = React.useState<SampleSales[]>([]);
+  const [loading, setLoading] = React.useState<boolean>(false);
+
+  const callApi = async () => {
+    try {
+      setLoading(true)
+      const items = await getAllSalesData();
+      setItems(items)
+    } finally {
+      setLoading(false)
+    }
+   
+  }
+
+  React.useEffect(() => {
+    callApi();
+  }, []);
+
+
+  return (
+    <>
+      <section> 
+        <DataTableGrid 
+          gridKeyField="id" 
+          loading={loading} 
+          items={items?.slice(0, 34)} 
+          columns={columns} 
+          pageSize={50}
+
+          />
+      </section>
+    </>
+  );
+};

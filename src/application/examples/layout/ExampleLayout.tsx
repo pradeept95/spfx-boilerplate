@@ -99,8 +99,14 @@ const navLinkGroups: INavLinkGroup[] = [
       },
       {
         key: "DataTable",
-        name: "Data Table",
-        url: "#/examples/datatable",
+        name: "Data Table 1",
+        url: "#/examples/datatable1",
+        icon: "FiveTileGrid",
+      },
+      {
+        key: "DataTable",
+        name: "Data Table 2",
+        url: "#/examples/datatable2",
         icon: "FiveTileGrid",
       },
     ],
