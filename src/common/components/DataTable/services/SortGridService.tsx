@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { IColumn } from "@fluentui/react";
 import { useDataTable } from "..//hooks/useDataTable";
+import { _getGroups } from "./GroupService";
 
 function _copyAndSort<T>(
   items: T[],
@@ -18,11 +19,10 @@ function _copyAndSort<T>(
  export const useSorting = () => {
   (async () => {})();
 
-  const { setColumns, setCurrentPage, setFilteredItems } = useDataTable();
+  const { setColumns, setCurrentPage, setFilteredItems, setGroups } = useDataTable();
 
   const sortDataGrid = (column : IColumn, columns : IColumn[], filteredItems : any[]) => {
-      
-     const filteredSortedItems = _copyAndSort(
+    const filteredSortedItems = _copyAndSort(
       filteredItems,
       column.fieldName!,
       column.isSortedDescending
@@ -30,7 +30,7 @@ function _copyAndSort<T>(
 
     // reset page to 1 on sort
     setCurrentPage(1);
- 
+
     // prepare and set new columns
     const newColumns = [...columns];
     newColumns.forEach((newCol: IColumn) => {
@@ -45,14 +45,16 @@ function _copyAndSort<T>(
       } else {
         newCol.isSorted = false;
         newCol.isSortedDescending = true;
-      } 
+      }
       newCol.showSortIconWhenUnsorted = true;
     });
     setColumns(newColumns);
 
+    // reset group on sort
+    setGroups(undefined);
+
     //set sorted filtered item to filtered item
-    setFilteredItems([...filteredSortedItems])
-    
+    setFilteredItems([...filteredSortedItems]);
   };  
 
   return {

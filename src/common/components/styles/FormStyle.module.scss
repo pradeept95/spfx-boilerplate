@@ -24,3 +24,10 @@
     width: "100%";
     min-width: "200px";
 }
+ 
+.formFieldDescriptionStyle {
+    color: "[theme: themePrimary, default: gray]";
+    font-weight: 600;
+    font-size: 0.8rem;
+    font-style: italic;
+}

@@ -1,12 +1,24 @@
 @import '~@fluentui/react/dist/sass/References.scss';
 
-.dataGridPageActionBtn{
-    border-radius: 0px;
+.dataGridPageActionBtn {
+    border-radius: 50%;
     padding: 5px;
-    margin: 0px;
-    min-width: 15px; 
+    margin: 2px;
+    min-width: 15px;
+    width: 28px;
+    height: 28px;
 }
 
-.dataGridPageIconBtn { 
-    width: 15px;  
+.dataGridPageIconBtn {
+    width: 28px;
+    height: 28px;
+    padding: 5px;
+    margin: 0px;
+    border-radius: 50%;
+}
+
+.topCommandActionMenu {
+    border-bottom: 1px;
+    border-style: none none solid none;
+    border-color: "[theme: themePrimary, default: gray]";
 }

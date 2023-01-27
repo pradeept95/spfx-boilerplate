@@ -23,24 +23,21 @@ function compareValues(a : any, b : any){
 const MultiselectColumnFilter: React.FunctionComponent<FilterTypeExpressionProps> = (props) => {
 
     const { column, filterExpression, setFilterExpression } = props;
-    const [filterOperation, _] = React.useState<FilterOperationType>("includes")
+        const [filterOptions, setFilterOptions] = React.useState<string[]>([]);
 
-    const [filterOptions, setFilterOptions] = React.useState<string[]>([])
+    const [filterOperation, _] = React.useState<FilterOperationType>("includes"); 
     const [filteredValues, setFilteredValues] = React.useState<string[]>([])    
 
     const { items } = useDataTable();
-    const onSelectionChange = (isChecked: boolean, currentValue: string) => {
 
+    const onSelectionChange = (isChecked: boolean, currentValue: string) => { 
         const existingFilterValue = filteredValues?.length ? filteredValues : []; 
-        const newSelected = isChecked ? [...existingFilterValue, currentValue] : [...existingFilterValue?.filter(f => f !== currentValue)]
-
+        const newSelected = isChecked ? [...existingFilterValue, currentValue] : [...existingFilterValue?.filter(f => f !== currentValue)]; 
         setFilterExpression({
             key: column.fieldName,
             operation: filterOperation,
-            value: newSelected
-
-        } as BasicExpression);
-
+            value: newSelected 
+        } as BasicExpression); 
         setFilteredValues(newSelected);
     }
 

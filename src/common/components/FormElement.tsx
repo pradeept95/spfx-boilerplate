@@ -1,9 +1,9 @@
 /* eslint-disable */
 import * as React from "react";
+import * as formStyle from "./styles/FormStyle.module.scss"
 import {
   Callout,
-  DefaultButton,
-  FontWeights,
+  DefaultButton, 
   getTheme,
   IButtonStyles,
   Icon,
@@ -11,10 +11,8 @@ import {
   IIconStyles,
   IStackStyles,
   IStackTokens,
-  ITextFieldProps,
-  ITheme,
-  Label,
-  memoizeFunction,
+  ITextFieldProps, 
+  Label, 
   Stack,
   Text,
 } from "@fluentui/react";
@@ -25,21 +23,11 @@ import { useBoolean, useId } from "@fluentui/react-hooks";
  */
 export const renderFieldDescription = (props: ITextFieldProps): JSX.Element => (
   <FieldDescription {...props} />
-);
-const getDescriptionStyles = memoizeFunction((theme: ITheme) => ({
-  root: {
-    color: theme.palette.tealDark,
-    fontWeight: FontWeights.bold,
-    fontSize: "12px",
-    fontStyle: "italic",
-  },
-}));
-const FieldDescription = (props: any): JSX.Element => {
-  const theme = getTheme();
-
+); 
+const FieldDescription = (props: any): JSX.Element => { 
   return (
     <>
-      <Text variant="small" styles={getDescriptionStyles(theme)}>
+      <Text variant="small" className={formStyle.default.formFieldDescriptionStyle}>
         {props.description}
       </Text>
     </>
@@ -49,17 +37,15 @@ const FieldDescription = (props: any): JSX.Element => {
 /**
  * on Render Label for textField
  */
-const stackTokens: IStackTokens = {
-  childrenGap: 4,
-  maxWidth: "100%",
-};
+const stackTokens: IStackTokens = { childrenGap: 4 };
+
 const labelCalloutStackStyles: Partial<IStackStyles> = {
-  root: { paddingLeft: 20, paddingRight: 20, paddingBottom: 10 },
+  root: { paddingLeft: 20, paddingRight: 20, paddingBottom: 10, width: '300px' },
 };
 const iconButtonStyles: Partial<IButtonStyles> = {
   root: { marginBottom: -3, fontSize: "12px" },
 };
-const iconProps = { iconName: "Info" };
+const helpIcon = { iconName: "Info" };
 
 export const renderFieldLabelWithHelp = (
   props: ITextFieldProps,
@@ -86,14 +72,14 @@ const CustomFieldLabel = (props: any): JSX.Element => {
 
   return (
     <>
-      <Stack horizontal verticalAlign="center" tokens={stackTokens}>
+      <Stack horizontal horizontalAlign="start" verticalAlign="center" tokens={stackTokens}>
         <Label id={labelId} htmlFor={labelId} required={required}>
           {label}
         </Label>
         {showHelp && (
           <IconButton
             id={iconButtonId}
-            iconProps={iconProps}
+            iconProps={helpIcon}
             title="Info"
             ariaLabel="Info"
             onClick={toggleIsCalloutVisible}

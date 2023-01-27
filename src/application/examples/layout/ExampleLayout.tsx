@@ -18,8 +18,7 @@ const horizontalStackStyle: IStackStyles = {
   root: {
     gap: 10,
     minHeight: "80vh",
-    height: "100%",  
-    justifyContent : "stretch"
+    height: "100%",   
   },
 };
 
@@ -98,15 +97,21 @@ const navLinkGroups: INavLinkGroup[] = [
         icon: "FabricFormLibrary",
       },
       {
-        key: "DataTable",
+        key: "DataTable1",
         name: "Data Table 1",
         url: "#/examples/datatable1",
         icon: "FiveTileGrid",
       },
       {
-        key: "DataTable",
+        key: "DataTable2",
         name: "Data Table 2",
         url: "#/examples/datatable2",
+        icon: "FiveTileGrid",
+      },
+      {
+        key: "DocuSign",
+        name: "DocuSign",
+        url: "#/examples/docusign",
         icon: "FiveTileGrid",
       },
     ],
@@ -145,10 +150,10 @@ export const ExampleLayout: React.FunctionComponent = () => {
           <TopNav  collapsed={collapsed} setCollapsed={setCollapsed}/>
         </Stack>
         <Stack enableScopedSelectors horizontal styles={horizontalStackStyle}>
-          <Stack.Item grow={3} styles={sideNavAreaStackStyle} disableShrink>
+          <Stack.Item styles={sideNavAreaStackStyle} disableShrink>
             <SideNav  collapsed={collapsed} navLinkGroups={navLinkGroups}/>
           </Stack.Item>
-          <Stack.Item  grow={3} styles={mainAreaStackStyle}>
+          <Stack.Item grow styles={mainAreaStackStyle}>
             <Outlet />
           </Stack.Item>
         </Stack>

@@ -2,6 +2,8 @@
     border: 2px dotted #CCCCCC;
     border-radius: 15px;
     cursor: crosshair;
+    height: 150px;
+    aspect-ratio:  2 / 1;
   }
 
 .signature-action-btn {

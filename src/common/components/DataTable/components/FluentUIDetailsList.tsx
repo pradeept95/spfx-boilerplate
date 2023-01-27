@@ -1,110 +1,124 @@
 /* eslint-disable */
-import { IColumn, IDetailsColumnProps, IDetailsListProps, IRenderFunction, IStackTokens, MarqueeSelection, Selection, ShimmeredDetailsList, Stack } from "@fluentui/react";
+import {
+  IColumn,
+  IDetailsColumnProps, 
+  IDetailsListProps,
+  IRenderFunction, 
+  ShimmeredDetailsList,
+} from "@fluentui/react";
 import * as React from "react";
 import { useState } from "react";
-import { useDataTable } from "..//hooks/useDataTable";
-import { useSorting } from "../services/SortGridService";
-import ColumnFilterComponent from "./ColumnFilterComponent";
+import { useDataTable } from "..//hooks/useDataTable"; 
+import { useFiltering } from "../services/FilterGridService";
+import GridColumnHeader from "./GridColumnHeader";
 
-const filterIconStyle: React.CSSProperties = {
-    alignItems: "center",
-    display: "flex",
-    justifyContent: "center",
-    width: 25,
-};
+export const FluentUIDetailsList: React.FunctionComponent<
+  IDetailsListProps & { loading: boolean }
+> = (props) => {
+  const { loading } = props;
 
-const headerAreaStyle: React.CSSProperties = {
-    alignItems: "center",
-    display: "flex",
-    justifyContent: "center",
-    cursor: "pointer"
-};
+  const [gridColumns, setGridColumns] = useState<IColumn[]>([]); 
+  //
+  const { filterExpression, pagedItems, filteredItems, columns, groups } =
+    useDataTable();
 
-const stackTokens: IStackTokens = { childrenGap: 5 };
+  const { getExpressionForColumnIfExist } = useFiltering();
 
-const _getKey = (item: any, index?: number): string => {
-    return item?.id;
-};
+  // const _selection = new Selection({
+  //   onSelectionChanged: () => {
+  //     console.log(_getSelectionDetails(), selectedItems);
+  //     const newSelectedItems = [...selectedItems, _selection.getSelection()];
+  //     setSelectedItems(newSelectedItems);
+  //   },
+  //   getKey: (item: any) => item?.id,
+  // });
 
-export const FluentUIDetailsList: React.FunctionComponent<IDetailsListProps & { loading: boolean }> = (props) => {
-    const { loading } = props;
+    // const _getSelectionDetails = (): string => {
+    //   const selectionCount = selection.getSelectedCount();
+    //   switch (selectionCount) {
+    //     case 0:
+    //       return "No items selected";
+    //     case 1:
+    //       return "1 item selected";
+    //     default:
+    //       return `${selectionCount} items selected`;
+    //   }
+    // }; 
+ 
 
-    const [gridColumns, setGridColumns] = useState<IColumn[]>([])
-    const { pagedItems, filteredItems, columns, selectedItems, setSelectedItems } = useDataTable()
-    const { sortDataGrid } = useSorting()
+  React.useEffect(() => {
+    const newColumns = [...columns];
 
-    const _selection = new Selection({
-        onSelectionChanged: () => {
-            console.log(_getSelectionDetails());
-            const newSelectedItems = [...selectedItems, _selection.getSelection()]
-            setSelectedItems(newSelectedItems)
-        },
-        getKey: _getKey,
+    newColumns.forEach((newCol: IColumn) => {
+      //newCol.onColumnClick = (e, c) => sortDataGrid(c, newColumns, filteredItems);
+
+      (newCol.onRenderHeader = (
+        colProps?: IDetailsColumnProps,
+        defaultRender?: IRenderFunction<IDetailsColumnProps>
+      ): JSX.Element | null => (
+        <>
+          <GridColumnHeader
+            columnProp={colProps}
+            defaultRender={defaultRender}
+          />
+        </>
+      )),
+        (newCol.showSortIconWhenUnsorted = false);
+
+        const filter = getExpressionForColumnIfExist(
+          filterExpression, newCol?.fieldName
+        );
+
+        if(filter && filter.value && (filter.value as any)?.length){
+          newCol.isFiltered = true;
+        }else {
+          newCol.isFiltered = false;
+        }
     });
 
-    const _getSelectionDetails = (): string => {
-        const selectionCount = _selection.getSelectedCount();
-        switch (selectionCount) {
-            case 0:
-                return "No items selected";
-            case 1:
-                return "1 item selected";
-            default:
-                return `${selectionCount} items selected`;
-        }
-    };
+    setGridColumns(columns);
+  }, [columns, filteredItems]);
 
-    React.useEffect(() => {
+  // const onRenderDetailsHeader = (
+  //   headerProps: IDetailsHeaderProps,
+  //   defaultRender: (props?: IDetailsHeaderProps) => JSX.Element | null
+  // ) => {
+  //   if (!headerProps || !defaultRender) {
+  //     //technically these may be undefined...
+  //     return null;
+  //   }  
 
-        const newColumns = [...columns];
+  //   return defaultRender({
+  //     ...headerProps,
+  //     styles: {
+  //       root: {
+  //         // selectors: {
+  //         //   ".ms-DetailsHeader-cell": {
+  //         //     whiteSpace: "normal",
+  //         //     textOverflow: "clip",
+  //         //     lineHeight: "normal",
+  //         //   },
+  //         //   ".ms-DetailsHeader-cellTitle": {
+  //         //     height: "100%",
+  //         //     alignItems: "center",
+  //         //   },
+  //         // },
+  //       },
+  //     },
+  //   });
+  // };
 
-        newColumns.forEach((newCol: IColumn) => {
-            //newCol.onColumnClick = (e, c) => sortDataGrid(c, newColumns, filteredItems);
-
-
-            newCol.onRenderHeader = (
-                colProps?: IDetailsColumnProps,
-                defaultRender?: IRenderFunction<IDetailsColumnProps>
-            ): JSX.Element | null => (
-                <>
-                    <Stack
-                        enableScopedSelectors
-                        horizontal
-                        horizontalAlign="space-around"
-                        tokens={stackTokens} >
-                        <span role={'button'}
-                            tabIndex={0}
-                            title={"Click to Sort Column"}
-                            style={headerAreaStyle}
-                            onClick={() => sortDataGrid(colProps.column, newColumns, filteredItems)}>
-                            {(defaultRender && defaultRender(colProps)) || <></>}
-                        </span>
-                        <span style={filterIconStyle}>
-                            <ColumnFilterComponent columnProp={colProps} />
-                        </span>
-                    </Stack>
-                </>
-            ),
-
-
-                newCol.showSortIconWhenUnsorted = false;
-        });
-
-        setGridColumns(columns);
-
-    }, [columns, filteredItems])
-
-
-    return (
-        <>
-            <MarqueeSelection selection={_selection}>
-                <ShimmeredDetailsList
-                    {...props}
-                    selection={_selection}
-                    items={pagedItems}
-                    columns={gridColumns}
-                    enableShimmer={loading} />
-            </MarqueeSelection>
-        </>
-    );
+  return (
+    <>
+      <ShimmeredDetailsList
+        {...props}
+        // onRenderDetailsHeader={onRenderDetailsHeader}
+        selection={props?.selection}
+        groups={groups}
+        items={pagedItems}
+        columns={gridColumns}
+        enableShimmer={loading}
+      />
+    </>
+  );
 };

@@ -1,6 +1,9 @@
 /* eslint-disable */
+import { IColumn } from "@fluentui/react";
 import { useDataTable } from "..//hooks/useDataTable";
+import { DEFAULT_PAGE_SIZE } from "../types/DataTableConst";
 import { BasicExpression, defaultAndExpression, Expression, FilterValueType, LogicalExpression } from "../types/FilterExpression";
+import { _getGroups } from "./GroupService";
 
 export function debounce<F extends (...params: any[]) => void>(fn: F, delay: number) {
     let timeoutID: number = null;
@@ -28,7 +31,7 @@ export function evaluateLogicalExpression(
 
 export function evaluateExpression(expression: BasicExpression, obj: any): boolean {
     const { key, operation, value } = expression;
-    const propValue = obj[key] as FilterValueType;
+    const propValue = (obj[key] as FilterValueType);
     switch (operation) {
         case "greater_than":
             return propValue > value;
@@ -40,7 +43,7 @@ export function evaluateExpression(expression: BasicExpression, obj: any): boole
             return new RegExp("^" + value + "").test(propValue + "");
 
         case "includes":
-            return Array.isArray(value) && (value as any)?.indexOf(propValue) > -1;
+            return Array.isArray(value) && (value.length == 0 || (value as any)?.indexOf(propValue) > -1);
 
         case "equal":
         default:
@@ -57,7 +60,7 @@ export function buildExpression(expression: LogicalExpression, currentExpession:
     else {
         console.log("Basic Expression")
         currentExpession = currentExpession as BasicExpression
-        const existingExpression = expression.expressions.filter((exp: BasicExpression) => exp.key == (currentExpession as BasicExpression).key)?.[0];
+        const existingExpression = expression?.expressions?.filter((exp: BasicExpression) => exp.key == (currentExpession as BasicExpression).key)?.[0];
 
         if (existingExpression) {
             (existingExpression as BasicExpression).value = currentExpession.value;
@@ -96,39 +99,65 @@ export function mapFilterType(type: any): string {
 export const useFiltering = () => {
     (async () => { })();
 
-    const { items, setCurrentPage, filterExpression, globalFilterText, setFilteredItems, setGlobalFilterText, setFilterExpression } = useDataTable();
+    const {
+      items,
+      columns,
+      setCurrentPage,
+      filterExpression,
+      globalFilterText,
+      setFilteredItems,
+      setGlobalFilterText,
+      setFilterExpression,
+      setPageSize,
+      setGroups,
+    } = useDataTable();
 
     const globalGridFilter = (searchTerm: string) => {
-
-        let currentFilteredItems = items?.filter(function (item: any) {
-            return Object.keys(item).some(function (k) {
-                return (
-                    (item as any)?.[k]
-                        ?.toString()
-                        ?.toLowerCase()
-                        ?.indexOf(`${searchTerm}`?.toLocaleLowerCase()) != -1
-                );
-            });
+      let currentFilteredItems = items?.filter(function (item: any) {
+        return Object.keys(item).some(function (k) {
+          return (
+            (item as any)?.[k]
+              ?.toString()
+              ?.toLowerCase()
+              ?.indexOf(`${searchTerm}`?.toLocaleLowerCase()) != -1
+          );
         });
+      });
 
-        if (filterExpression?.expressions?.length) {
-            currentFilteredItems = currentFilteredItems?.filter((item: any) => evaluateLogicalExpression(filterExpression, item));
-        }
+      if (filterExpression?.expressions?.length) {
+        currentFilteredItems = currentFilteredItems?.filter((item: any) =>
+          evaluateLogicalExpression(filterExpression, item)
+        );
+      }
 
-        // store filter text
-        setGlobalFilterText(searchTerm);
+      // check if has group
+      const groupedColumn: IColumn = columns?.filter(
+        (col: IColumn) => col.isGrouped
+      )?.[0];
 
-        // reset page to 1 on search start
-        setCurrentPage(1)
+      if (groupedColumn) {
+        const newGroups = _getGroups(currentFilteredItems, groupedColumn);
+        setGroups([...newGroups]);
+      }
 
-        //set sorted filtered item to filtered item
-        setFilteredItems(currentFilteredItems);
+      // store filter text
+      setGlobalFilterText(searchTerm);
+
+      // reset page to 1 on search start
+      setCurrentPage(1);
+
+      //set sorted filtered item to filtered item
+      setFilteredItems(currentFilteredItems);
     };
 
     const columnGridFilter = (operation: Expression) => {
 
-        console.log(operation);
-        const expression = buildExpression({ ...defaultAndExpression }, operation);
+        console.log(operation, filterExpression); 
+        const existingExpression = filterExpression ?? defaultAndExpression;
+        const expression = buildExpression(
+          { ...existingExpression },
+          operation
+        );
 
         let currentFilteredItems: any[] = items;
         if (globalFilterText?.length) {
@@ -146,6 +175,14 @@ export const useFiltering = () => {
 
         currentFilteredItems = currentFilteredItems?.filter((item: any) => evaluateLogicalExpression(expression, item));
 
+        // check if has group
+        const groupedColumn : IColumn = columns?.filter((col : IColumn) => col.isGrouped)?.[0];
+
+        if(groupedColumn){
+            const newGroups = _getGroups(currentFilteredItems, groupedColumn);
+            setGroups([...newGroups]);
+        } 
+
         // store filter expression
         setFilterExpression(expression)
 
@@ -157,21 +194,25 @@ export const useFiltering = () => {
     }
 
     const resetGridFilter = () => {
+      // reset expression
+      const expression = { ...defaultAndExpression };
+      expression.expressions = [];
 
-        // reset expression
-        const expression = { ...defaultAndExpression };
-        expression.expressions = [];
+      // reset global filter and all expression
+      setGlobalFilterText("");
+      setFilterExpression(expression);
+ 
+      // reset group
+      setGroups(undefined);
 
-        // reset global filter and all expression
-        setGlobalFilterText("");
-        setFilterExpression(expression);
+      // set pagesize to default
+       setPageSize(DEFAULT_PAGE_SIZE);
 
-        // reset page to 1 on search start
-        setCurrentPage(1)
+      // reset page to 1 on search start
+      setCurrentPage(1);
 
-        //set sorted filtered item to filtered item
-        setFilteredItems(items);
-
+      //set sorted filtered item to filtered item
+      setFilteredItems(items);
     }
 
     const getExpressionForColumnIfExist = (expression: LogicalExpression, fieldName: string) :  BasicExpression => {

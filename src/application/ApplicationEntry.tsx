@@ -1,34 +1,52 @@
 /* eslint-disable */
 import * as React from "react";
 import { Routes, Route, NavLink } from "react-router-dom";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import AppContext from "../common/config/app-context.config";
 import { PageNotFound } from "../common/components/PageNotFound";
 import ExampleEntryPage from "./examples/Index";
 import { AccessDenied } from "../common/components/AccessDenied";
 import SiteAdminEntryPage from "../common/site-admin";
-import { AwardTypeService } from "./shared/services/AwardTypeService";
+// import { AwardTypeService } from "./shared/services/AwardTypeService";
 import AdminEntryPage from "./admin";
 import { RequireAuth } from "../common/context/AuthContext";
-import { ROLES } from "../common/types/auth.types";
+import { ROLES } from "../common/types/auth.types"; 
+// import { DocuSignService } from "../common/services/DocuSignService";
+// import { DocuSignService } from "../common/services/DocuSignService";
+
+// const { getAllAwardTypes } = AwardTypeService();
+
+// export const useGetAllDropList = () => {
+//   const [s, setAwardType] = React.useState<AwardType[]>([]);
+//   const [f, setF] = React.useState<AwardType[]>([]);
+//   const [g, setG] = React.useState<AwardType[]>([]);
+
+//   const callApi = async (): Promise<void> => {
+//     const at = await getAllAwardTypes();
+//     setAwardType(at);
+//    // await getAwardTypesById(2);
+//   };
+
+//   useEffect(() => {
+//     callApi();
+//   }, []);
+
+//   return [s, f, g] as const;
+// };
 
 const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
-  const { getAllAwardTypes, getAwardTypesById } = AwardTypeService();
-
-  const callApi = async (): Promise<void> => {
-    await getAllAwardTypes();
-    await getAwardTypesById(2);
-  };
-
-  useEffect(() => {
-    callApi();
-  }, []);
+   
+  // const {authorizeApp} = DocuSignService();
 
   const openPropertyPane = () => {
     const currrentContext = AppContext.getInstance();
     currrentContext.context.propertyPane.openDetails();
     currrentContext.context.propertyPane.open();
   };
+
+  // React.useEffect(() => {
+  //   authorizeApp();
+  // }, []);
 
   return (
     <>
@@ -55,6 +73,9 @@ const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
                 </>
               }
             />
+            <Route element={<RequireAuth requiredRoles={[ROLES.Admin]} />}>
+              <Route path="/admin/*" element={<AdminEntryPage />} />
+            </Route>
             <Route element={<RequireAuth requiredRoles={[ROLES.Admin]} />}>
               <Route path="/admin/*" element={<AdminEntryPage />} />
             </Route>

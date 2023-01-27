@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import { PageNotFound } from "../../common/components/PageNotFound";
 import { ExampleLayout } from "./layout/ExampleLayout"; 
 import { DataTableExamplePage1, DataTableExamplePage2 } from "./pages/DataTableExample";
+import DocuSignExample from "./pages/DocuSignFlow";
 import EditorExample from "./pages/EditorExample";
 import ESignatureExample from "./pages/ESignatureExample";
 import FormExampleWithState from "./pages/FormExample";
@@ -36,8 +37,17 @@ const ExampleEntryPage: React.FunctionComponent<{}> = (props) => {
             <Route path="editor" element={<EditorExample />} />
             <Route path="esignature" element={<ESignatureExample />} />
             <Route path="form" element={<FormExampleWithState />} />
-            <Route path="datatable1" element={<DataTableExamplePage1 />} />
+            <Route
+              path="datatable1"
+              element={
+                <>
+                  <DataTableExamplePage1 />
+                  {/* <DataTableExamplePage2 /> */}
+                </>
+              }
+            />
             <Route path="datatable2" element={<DataTableExamplePage2 />} />
+            <Route path="docusign" element={<DocuSignExample />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
         </Routes>

@@ -29,8 +29,14 @@ const TextFilterComponent: React.FunctionComponent<FilterTypeExpressionProps> = 
     };
 
     React.useEffect(() => {
-        const searchValue = (filterExpression as BasicExpression)?.value as string ?? ""
-        setFilteredValues(searchValue);
+        if(filterExpression && filterExpression.value){
+            const searchValue = filterExpression?.value ?? "";
+            setFilteredValues(searchValue as string);
+        }else{
+            
+        }
+        
+        
         console.log("Filter Expression", filterExpression)
     }, [filterExpression])
 

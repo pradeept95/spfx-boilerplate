@@ -11,6 +11,5 @@ export const ROLES = {
   User: 4,
   Member: 5, 
   Admin: 3,
-  SomeOtherRole: 3,
-  SomeOtherRole1: 4,
+  Reviewers: 3
 }; 

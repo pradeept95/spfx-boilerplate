@@ -13,5 +13,5 @@ interface DataGridProps<T> {
 
 export type IDatagridType<T> = DataGridProps<T> & IDetailsListProps;
 export type IDataGridColumn = IColumn & {
-  filterType? : "text" | "multiselect"
+  filterType? : "text" | "multiselect" 
 };

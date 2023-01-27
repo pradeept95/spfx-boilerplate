@@ -1,12 +1,14 @@
 /* eslint-disable */
-import { IColumn } from "@fluentui/react";
+import { IColumn, IGroup } from "@fluentui/react";
 import * as React from "react";
 import { createContext, useState } from "react"; 
 import { DEFAULT_PAGE_SIZE } from "../types/DataTableConst";
+import { DataTableContextType } from "../types/DataTableContextType";
 import { IDatagridType } from "../types/DataTableProps";
 import { LogicalExpression } from "../types/FilterExpression";
+ 
 
-const DataTableContext = createContext<any>({});
+const DataTableContext = createContext<Partial<DataTableContextType>>({});
 export default DataTableContext;
 
 export const DataTableContextProvider: React.FunctionComponent<IDatagridType<any>> = (props) => {
@@ -29,6 +31,8 @@ export const DataTableContextProvider: React.FunctionComponent<IDatagridType<any
   const [filterExpression, setFilterExpression] = React.useState<LogicalExpression>();
   const [globalFilterText, setGlobalFilterText] = React.useState<string>();
 
+  const [groups, setGroups] = React.useState<IGroup[]>(undefined);
+
   React.useEffect(() => {
 
     const startIndex = (currentPage - 1) * pageSize;
@@ -49,24 +53,40 @@ export const DataTableContextProvider: React.FunctionComponent<IDatagridType<any
   React.useEffect(() => {
     setItems(props?.items);
     setFilteredItems(props?.items);
+    setGroups(undefined);
   }, [props?.items]);
 
   return (
-    <DataTableContext.Provider value={{
-      items, setItems,
-      filteredItems, setFilteredItems,
-      pagedItems, setPagedItems,
-      selectedItems, setSelectedItems,
+    <DataTableContext.Provider
+      value={{
+        items,
+        setItems,
+        filteredItems,
+        setFilteredItems,
+        pagedItems,
+        setPagedItems,
+        selectedItems,
+        setSelectedItems,
 
-      pageSize, setPageSize,
-      currentPage, setCurrentPage,
-      totalNumberOfPages, setNumberOfPages,
+        pageSize,
+        setPageSize,
+        currentPage,
+        setCurrentPage,
+        totalNumberOfPages,
+        setNumberOfPages,
 
-      columns, setColumns,
+        columns,
+        setColumns,
 
-      globalFilterText, setGlobalFilterText,
-      filterExpression, setFilterExpression
-    }}>
+        globalFilterText,
+        setGlobalFilterText,
+        filterExpression,
+        setFilterExpression,
+
+        groups,
+        setGroups,
+      }}
+    >
       {props.children}
     </DataTableContext.Provider>
   );

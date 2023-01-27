@@ -135,6 +135,13 @@ export default class SpOnlineExampleWebPart extends BaseClientSideWebPart<ISpOnl
 
   protected onAfterPropertyPaneChangesApplied(): void {
     ReactDom.unmountComponentAtNode(this.domElement);
+
+    // find the save btn and click
+    const saveBtn = document.querySelector(
+      'button[name="Save"]'
+    ) as HTMLElement;
+    if (saveBtn) saveBtn?.click();
+    
     this.render();
   }
 

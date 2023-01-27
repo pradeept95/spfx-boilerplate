@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { DefaultButton, PrimaryButton } from "@fluentui/react";
 import * as React from "react";
 import { useEffect, useRef } from "react";
 import "./styles/e-signature.style.css";
@@ -129,17 +130,17 @@ const ESignature: React.FunctionComponent<{ onUseSignature : (signatureData : st
         }
     };
 
-    const handleSave = () => {
-        const url = canvasRef.current.toDataURL("image/png");
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", "image_name.png");
-        document.body.appendChild(link);
-        link.click();
+    // const handleSave = () => {
+    //     const url = canvasRef.current.toDataURL("image/png");
+    //     const link = document.createElement("a");
+    //     link.href = url;
+    //     link.setAttribute("download", "image_name.png");
+    //     document.body.appendChild(link);
+    //     link.click();
 
-        // Clean up and remove the link
-        link.parentNode.removeChild(link);
-    };
+    //     // Clean up and remove the link
+    //     link.parentNode.removeChild(link);
+    // };
 
     const handleUseSignature = () => {
         const url = canvasRef.current.toDataURL();
@@ -153,12 +154,26 @@ const ESignature: React.FunctionComponent<{ onUseSignature : (signatureData : st
     };
 
     return (
-        <>
-            <canvas className="sig-canvas" style={{minWidth : "300px", width: "100%", height: "160px"}} ref={canvasRef} />
-            <button className="signature-action-btn" onClick={handleSave}>Save as image</button>
-            <button className="signature-action-btn" onClick={handleUseSignature}>Use Signature</button>
-            <button className="signature-action-btn" onClick={handleClear}>Clear</button>
-        </>
+      <>
+        <canvas
+          className="sig-canvas"
+          style={{ minWidth: "300px", width: "100%", height: "160px" }}
+          ref={canvasRef}
+        />
+        {/* <button className="signature-action-btn" onClick={handleSave}>
+          Save as image
+        </button> */}
+        <PrimaryButton
+          text="Use Signature"
+          className="signature-action-btn"
+          onClick={handleUseSignature}
+        /> 
+        <DefaultButton
+          text="Clear"
+          className="signature-action-btn"
+          onClick={handleClear}
+        />
+      </>
     );
 };
 
