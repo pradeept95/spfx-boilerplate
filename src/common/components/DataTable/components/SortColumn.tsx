@@ -1,9 +1,9 @@
 /* eslint-disable */
 import * as React from "react";
-import { ActionButton, IDetailsColumnProps, IIconProps } from "@fluentui/react";
-import { useSorting } from "../services/SortGridService";
+import { ActionButton, IDetailsColumnProps, IIconProps } from "@fluentui/react"; 
 import { useDataTable } from "../hooks/useDataTable";
 import { Text } from "@fluentui/react/lib/Text";
+import { useGridService } from "../services/GridService";
 
 const sortAscending: IIconProps = { iconName: "SortDown" };
 const sortDescending: IIconProps = { iconName: "SortUp" };
@@ -15,7 +15,7 @@ export const SortColumn: React.FunctionComponent<{
 }> = ({ columnProp }) => {
   const { column } = columnProp;
   const { columns, filteredItems } = useDataTable();
-  const { sortDataGrid } = useSorting();
+  const { sortDataGrid } = useGridService();
 
   return (
     <>

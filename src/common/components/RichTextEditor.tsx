@@ -55,6 +55,7 @@ export const RichTextEditor: React.FunctionComponent<RichTextEditorProps> = (
     description: props?.description,
     required: props?.required,
     disabled: props?.disabled,
+    
   };
 
   const _onChange = async (
@@ -80,13 +81,14 @@ export const RichTextEditor: React.FunctionComponent<RichTextEditorProps> = (
             theme="snow"
             value={value}
             onChange={_onChange}
-            onBlur={() => props?.onBlur}
+            onBlur={(event: any) => props?.onBlur && props?.onBlur(event)}
             readOnly={props?.readOnly}
             placeholder={props?.placeholder}
             modules={modules}
             style={{
               width: "100%",
               minHeight: "150px",
+              border: props?.errorMessage?.length > 0 ? "1px solid rgb(164, 38, 44)" : "none",
             }}
           />
         }

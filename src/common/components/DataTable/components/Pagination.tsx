@@ -1,10 +1,8 @@
 /* eslint-disable */
 import {
   DefaultButton,
-  Dropdown, 
-  IconButton,
-  IDropdownOption,
-  IIconProps,
+  Dropdown,
+  IconButton, 
   IStackStyles,
   IStackTokens,
   PrimaryButton,
@@ -12,61 +10,23 @@ import {
 } from "@fluentui/react";
 import * as React from "react";
 import { useDataTable } from "../hooks/useDataTable";
-import { usePagination } from "../services/PaginationService";
-import * as gridStyle from '../styles/DataGrid.module.scss'
-import { DEFAULT_NUMBER_OF_PAGE_BTN, DEFAULT_PAGE_SIZE } from "../types/DataTableConst";
- 
-const range = (from: number, to: number, step: number = 1) =>
-  [...Array(Math.floor((to - from) / step) + 1)]?.map((_, i) => from + i * step);
-
-const getPageNumbers = (
-  currentPage: number,
-  totalPageCount: number
-): number[] => {
-  let start = currentPage - Math.floor(DEFAULT_NUMBER_OF_PAGE_BTN / 2);
-  let end = currentPage + Math.floor(DEFAULT_NUMBER_OF_PAGE_BTN / 2);
-
-  if (start < 1) {
-    start = 1;
-    end =
-      totalPageCount > DEFAULT_NUMBER_OF_PAGE_BTN
-        ? DEFAULT_NUMBER_OF_PAGE_BTN
-        : totalPageCount;
-  } else if (end > totalPageCount) {
-    const possibleStart =
-      totalPageCount - DEFAULT_NUMBER_OF_PAGE_BTN + 1;
-    start = possibleStart < 1 ? 1 : possibleStart;
-    end = totalPageCount;
-  }
-
-  const currentPageOptions: number[] = end - start >=0 ? range(start, end) : [];
-  return currentPageOptions;
-};
-
-const pageSizeOptions: IDropdownOption[] = [
-  { key: 10, text: "10" },
-  { key: 20, text: "20" },
-  { key: 50, text: "50" },
-  { key: 100, text: "100" },
-  { key: 200, text: "200" },
-  { key: 10000, text: "All" },
-];
-
+import { useGridService } from "../services/GridService";
+import * as gridStyle from "../styles/DataGrid.module.scss";
+import { 
+  DEFAULT_PAGE_SIZE, moveToFirstIcon, moveToLastIcon, moveToNextIcon, moveToPreviousIcon,
+} from "../types/DataTableConst";
+import { pageSizeOptions } from "../types/PageSizeOptions";
+import { getPageNumbers } from "../utils/GridHelpers";
+  
 const stackTokens: IStackTokens = { childrenGap: 10 };
-const stackStyles: IStackStyles = { root: { marginTop: 25 } };
-
-const moveToFirstIcon: IIconProps = { iconName: "DoubleChevronLeft" };
-const moveToPreviousIcon: IIconProps = { iconName: "ChevronLeft" };
-const moveToNextIcon: IIconProps = { iconName: "ChevronRight" };
-const moveToLastIcon: IIconProps = { iconName: "DoubleChevronRight" };
+const stackStyles: IStackStyles = { root: { marginTop: 25 } }; 
 
 export const Pagination: React.FunctionComponent<{}> = () => {
   const [pageOptions, setPageOptions] = React.useState<number[]>([]);
   // const { totalCount, pageSize, currentPage } = props;
 
- const { totalNumberOfPages, pageSize, currentPage }= useDataTable();
-
-  const { onPageChange, onPageSizeChange} = usePagination();
+  const { totalNumberOfPages, pageSize, currentPage } = useDataTable();
+  const { onPageChange, onPageSizeChange } = useGridService();
 
   React.useEffect(() => {
     const totalPageCount = totalNumberOfPages;
@@ -121,8 +81,7 @@ export const Pagination: React.FunctionComponent<{}> = () => {
     notifyPageChanged(nextPage);
   };
 
-  const handlePageSizeChange = (_: any, option: any) => {
-    console.log(option.key);
+  const handlePageSizeChange = (_: any, option: any) => { 
     // set next page to initial page
     onPageSizeChange(+option?.key);
   };
@@ -148,7 +107,8 @@ export const Pagination: React.FunctionComponent<{}> = () => {
       >
         <Stack.Item>
           <div style={{ paddingTop: "5px" }}>
-            Showing Page {currentPage} of {totalNumberOfPages}
+            Showing Page {currentPage} of{" "}
+            {totalNumberOfPages == 0 ? 1 : totalNumberOfPages}
           </div>
         </Stack.Item>
         <Stack.Item>
@@ -172,8 +132,9 @@ export const Pagination: React.FunctionComponent<{}> = () => {
                 page === currentPage ? (
                   <PrimaryButton
                     text={`${page}`}
+                    type={"button"}
                     ariaLabel={`Show Page ${page}`}
-                    onClick={() => notifyPageChanged(page)}
+                    // onClick={() => notifyPageChanged(page)}
                     allowDisabledFocus
                     className={gridStyle.default.dataGridPageActionBtn}
                   />
@@ -193,14 +154,14 @@ export const Pagination: React.FunctionComponent<{}> = () => {
               aria-label="Next"
               onClick={handleGoToNextPage}
               className={gridStyle.default.dataGridPageIconBtn}
-              disabled={currentPage === totalNumberOfPages}
+              disabled={currentPage >= totalNumberOfPages}
             />
             <IconButton
               iconProps={moveToLastIcon}
               aria-label="Last"
               onClick={handleGoToLast}
               className={gridStyle.default.dataGridPageIconBtn}
-              disabled={currentPage === totalNumberOfPages}
+              disabled={currentPage >= totalNumberOfPages}
             />
           </Stack>
         </Stack.Item>
@@ -216,4 +177,4 @@ export const Pagination: React.FunctionComponent<{}> = () => {
       </Stack>
     </>
   );
-}; 
+};

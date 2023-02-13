@@ -1,16 +1,47 @@
-/* eslint-disable */ 
-import { PrimaryButton } from "@fluentui/react";
+/* eslint-disable */
+import { PrimaryButton, TextField } from "@fluentui/react";
 import * as React from "react";
+import { toast } from "react-toastify";
 import { PeoplePicker } from "../../../common/components/PeoplePicker";
 import { useAlert } from "../../../common/hooks/useAlert";
 import { DocuSignService } from "../../../common/services/DocuSignService";
 const { authorizeApp, createEnvelope } = DocuSignService();
 
 export const useDocuSign = () => {
+  const submitForSign = async (envelope: any): Promise<void> => {
+    const id = toast.loading("Please wait. Authorizing...", {
+      theme: "dark",
+    });
 
-  const submitForSign = async (envelope : any): Promise<void> => {
-    const response = await authorizeApp(); 
-    await createEnvelope(response?.access_token, envelope);
+    const response = await authorizeApp();
+
+    toast.update(id, {
+      render: "Please wait. Sending Envelope...",
+      isLoading: true,
+      theme: "dark",
+    });
+
+    const envDetails = await createEnvelope(response?.access_token, envelope);
+    console.log(envDetails);
+    if (envDetails?.envelopeId) {
+      toast.update(id, {
+        render: "Documents are sent for signature.",
+        type: "success",
+        isLoading: false,
+        theme: "dark",
+        closeOnClick: true,
+        autoClose: 5000,
+      });
+    } else {
+      toast.update(id, {
+        render: "Something went wrong. Please try again",
+        type: "error",
+        isLoading: false,
+        theme: "dark",
+        closeOnClick: true,
+        autoClose: 5000,
+      });
+    }
   };
 
   return [submitForSign] as const;
@@ -18,7 +49,7 @@ export const useDocuSign = () => {
 
 const DocuSignExample: React.FunctionComponent<{}> = (props) => {
   const [submitForSign] = useDocuSign();
-  const { success, error} = useAlert();
+  const { error } = useAlert();
   console.log(submitForSign);
 
   const [signer, setSigner] = React.useState<any[]>([]);
@@ -38,7 +69,7 @@ const DocuSignExample: React.FunctionComponent<{}> = (props) => {
       const fileName = files[i].name;
       console.log(fileName);
       documents.push({
-        documentBase64: (await getBase64(files[i])),//?.replace( "data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,", ""),
+        documentBase64: await getBase64(files[i]), //?.replace( "data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,", ""),
         documentId: 123456789,
         fileExtension: fileName?.split(".")?.[1],
         name: fileName,
@@ -53,7 +84,9 @@ const DocuSignExample: React.FunctionComponent<{}> = (props) => {
       reader.readAsDataURL(file);
       reader.onload = function () {
         console.log(reader.result);
-        const base64StringOnly = (reader.result as string)?.replace("data:", "").replace(/^.+,/, "");
+        const base64StringOnly = (reader.result as string)
+          ?.replace("data:", "")
+          .replace(/^.+,/, "");
         resolve(base64StringOnly);
       };
       reader.onerror = function (error) {
@@ -63,8 +96,8 @@ const DocuSignExample: React.FunctionComponent<{}> = (props) => {
     });
   };
 
-  const sendForSignature =async () => {
-    if(!signer.length){
+  const sendForSignature = async () => {
+    if (!signer.length) {
       error("At least one signer is required");
       return;
     }
@@ -83,10 +116,8 @@ const DocuSignExample: React.FunctionComponent<{}> = (props) => {
       status: "sent",
     };
 
-    submitForSign(envelope);
-
-    success("Documents are sent for signature.")
-  }
+    await submitForSign(envelope);
+  };
 
   return (
     <>
@@ -106,10 +137,17 @@ const DocuSignExample: React.FunctionComponent<{}> = (props) => {
             setSigner(newSigners);
           }}
         ></PeoplePicker>
+        <TextField label="OR Enter E-Mail" onChange={(e, newValue) => {
+           const newSigner = {
+             ...signer?.[0],
+             email: newValue, 
+           };
+           setSigner([newSigner])
+        }} />
         <input
           type="file"
           name="upload"
-          accept="application/pdf,application/msword"
+          accept=".pdf, .doc, .docx"
           multiple={true}
           onChange={(event) => {
             handleFileChange(event);
@@ -119,8 +157,10 @@ const DocuSignExample: React.FunctionComponent<{}> = (props) => {
             setFiles([]);
           }}
         />
-
-        <PrimaryButton text="Send for Signature" onClick={() => sendForSignature()} />
+        <PrimaryButton
+          text="Send for Signature"
+          onClick={() => sendForSignature()}
+        />
       </section>
     </>
   );

@@ -11,6 +11,7 @@ import SiteAdminEntryPage from "../common/site-admin";
 import AdminEntryPage from "./admin";
 import { RequireAuth } from "../common/context/AuthContext";
 import { ROLES } from "../common/types/auth.types"; 
+import MyNINDSEntryPage from "./myninds";
 // import { DocuSignService } from "../common/services/DocuSignService";
 // import { DocuSignService } from "../common/services/DocuSignService";
 
@@ -75,6 +76,9 @@ const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
             />
             <Route element={<RequireAuth requiredRoles={[ROLES.Admin]} />}>
               <Route path="/admin/*" element={<AdminEntryPage />} />
+            </Route>
+            <Route element={<RequireAuth requiredRoles={[ROLES.User]} />}>
+              <Route path="/myninds/*" element={<MyNINDSEntryPage />} />
             </Route>
             <Route element={<RequireAuth requiredRoles={[ROLES.Admin]} />}>
               <Route path="/admin/*" element={<AdminEntryPage />} />

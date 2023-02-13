@@ -1,6 +1,7 @@
 /* eslint-disable */
-import { IColumn, IGroup } from "@fluentui/react";
-import { LogicalExpression } from "./FilterExpression";
+import {  IGroup } from "@fluentui/react";
+import { IDataGridColumn } from "./DataTableProps";
+// import { LogicalExpression } from "./FilterExpression";
 
 export type DataTableContextType = {
   items: any[];
@@ -21,12 +22,12 @@ export type DataTableContextType = {
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   setNumberOfPages: React.Dispatch<React.SetStateAction<number>>;
 
-  columns: IColumn[];
-  setColumns: React.Dispatch<React.SetStateAction<IColumn[]>>;
+  columns: IDataGridColumn[];
+  setColumns: React.Dispatch<React.SetStateAction<IDataGridColumn[]>>;
 
-  filterExpression: LogicalExpression;
+  // filterExpression: LogicalExpression;
   globalFilterText: string;
-  setFilterExpression: React.Dispatch<React.SetStateAction<LogicalExpression>>;
+  // setFilterExpression: React.Dispatch<React.SetStateAction<LogicalExpression>>;
   setGlobalFilterText: React.Dispatch<React.SetStateAction<string>>;
 
   groups: IGroup[];

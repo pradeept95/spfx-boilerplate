@@ -1,70 +1,116 @@
 /* eslint-disable */
-import { Checkbox,  IStackTokens, Stack } from "@fluentui/react";
+import { Checkbox, IStackTokens, Stack } from "@fluentui/react";
 import * as React from "react";
-import { useDataTable } from "../..//hooks/useDataTable";
-import { BasicExpression, FilterOperationType } from "../../types/FilterExpression";
+import { useDataTable } from "../../hooks/useDataTable";
+import {
+  BasicExpression,
+  LogicalExpression,
+} from "../../types/FilterExpression";
 import { FilterTypeExpressionProps } from "../../types/FilterTypeOptions";
+import { compareValues } from "../../utils/GridHelpers";
 
-// Tokens definition 
+// Tokens definition
 const stackTokens: IStackTokens = {
-    childrenGap: 5,
+  childrenGap: 5,
 };
 
 function onlyUnique(value: any, index: number, self: any) {
-    return self.indexOf(value) === index;
+  return self.indexOf(value) === index;
 } 
 
-function compareValues(a : any, b : any){
-    if(a.firstname < b.firstname) { return -1; }
-    if(a.firstname > b.firstname) { return 1; }
-    return 0;
-}
+const MultiselectColumnFilter: React.FunctionComponent<
+  FilterTypeExpressionProps
+> = (props) => {
+  const { column, setFilterExpression } = props;
+  const [filterOptions, setFilterOptions] = React.useState<string[]>([]);
 
-const MultiselectColumnFilter: React.FunctionComponent<FilterTypeExpressionProps> = (props) => {
+  const [multiSelectFilterExpression, setMultiSelectFilterExpression] =
+    React.useState<LogicalExpression>();
 
-    const { column, filterExpression, setFilterExpression } = props;
-        const [filterOptions, setFilterOptions] = React.useState<string[]>([]);
+  const { items } = useDataTable();
 
-    const [filterOperation, _] = React.useState<FilterOperationType>("includes"); 
-    const [filteredValues, setFilteredValues] = React.useState<string[]>([])    
+  const onSelectionChange = (isChecked: boolean, currentValue: string) => {
+    const selectedOptions = (
+      multiSelectFilterExpression?.expressions?.[0] as BasicExpression
+    )?.value as string[];
 
-    const { items } = useDataTable();
+    const existingFilterValue = selectedOptions?.length ? selectedOptions : [];
+    const newSelected = isChecked
+      ? [...existingFilterValue, currentValue]
+      : [...existingFilterValue?.filter((f) => f !== currentValue)];
 
-    const onSelectionChange = (isChecked: boolean, currentValue: string) => { 
-        const existingFilterValue = filteredValues?.length ? filteredValues : []; 
-        const newSelected = isChecked ? [...existingFilterValue, currentValue] : [...existingFilterValue?.filter(f => f !== currentValue)]; 
-        setFilterExpression({
-            key: column.fieldName,
-            operation: filterOperation,
-            value: newSelected 
-        } as BasicExpression); 
-        setFilteredValues(newSelected);
-    }
+    const newMultiselectFilterExpression = {
+      condition: "or",
+      expressions: [
+        {
+          key: column.fieldName,
+          operation: "includes",
+          value: newSelected,
+        },
+      ],
+    } as LogicalExpression;
+    setFilterExpression(newMultiselectFilterExpression);
+    setMultiSelectFilterExpression(newMultiselectFilterExpression);
+  };
 
-    React.useEffect(() => {
-        const selectionOptions = items?.map((item: any) => item?.[column?.fieldName]);
-        let uniqueOptions = selectionOptions.filter(onlyUnique).sort(compareValues);
-        setFilterOptions(uniqueOptions);
-    }, [items])
+  React.useEffect(() => {
+    if (!items?.length || !column) return;
 
-    React.useEffect(() => {  
-        setFilteredValues((filterExpression as BasicExpression)?.value as string[]);
-        console.log("Filter Expression", filterExpression)
-    }, [filterExpression])
-
-
-    return (
-        <>
-            <Stack tokens={stackTokens} styles={{root : { maxHeight : '300px', overflowY: 'scroll' }}}>
-                {
-                    filterOptions?.map(option => <Checkbox
-                        label={option}
-                        checked={filteredValues?.indexOf(option) > -1}
-                        onChange={(_, isChecked) => onSelectionChange(isChecked, option)} />)
-                }
-            </Stack>
-        </>
+    const selectionOptions = items?.map(
+      (item: any) => item?.[column?.fieldName]
     );
+    let uniqueOptions = selectionOptions
+      .filter(onlyUnique)
+      .sort((a, b) => compareValues(a, b, false));
+    setFilterOptions([...uniqueOptions]);
+  }, [items, column]);
+
+  React.useEffect(() => {
+    // if no column defination, return;
+    if (!column) return;
+
+    // otherwise calculate current filter expression
+    const filterExpression = column?.filterExpression;
+    if (filterExpression) {
+      setMultiSelectFilterExpression(filterExpression);
+    } else {
+      const defaultMultiselectFilterExpression = {
+        condition: "or",
+        expressions: [
+          {
+            key: column.fieldName,
+            operation: "includes",
+            value: [],
+          },
+        ],
+      } as LogicalExpression;
+      setFilterExpression(defaultMultiselectFilterExpression);
+      setMultiSelectFilterExpression(defaultMultiselectFilterExpression);
+    } 
+  }, [column]);
+
+  const isChecked = (option): boolean =>
+    (
+      (multiSelectFilterExpression?.expressions?.[0] as BasicExpression)
+        ?.value as string[]
+    )?.indexOf(option) > -1;
+
+  return (
+    <>
+      <Stack
+        tokens={stackTokens}
+        styles={{ root: { maxHeight: "300px", overflowY: "scroll" } }}
+      >
+        {filterOptions?.map((option) => (
+          <Checkbox
+            label={option}
+            checked={isChecked(option)}
+            onChange={(_, isChecked) => onSelectionChange(isChecked, option)}
+          />
+        ))}
+      </Stack>
+    </>
+  );
 };
 
 export default MultiselectColumnFilter;

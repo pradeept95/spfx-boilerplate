@@ -1,7 +1,16 @@
 import { IDropdownOption } from "@fluentui/react";
 
 export type FilterValueType = string | number | Date | string[] | number[] | Date[]
-export type FilterOperationType = "greater_than" | "less_than" | "equal" | "starts_with" | "contains" | "includes";
+export type FilterOperationType =
+  | "greater_than"
+  | "less_than"
+  | "equal"
+  | "starts_with"
+  | "contains"
+  | "includes"
+  | "date_equal"
+  | "date_greater_than"
+  | "date_less_than";
 
 export type BasicExpression = {
     key: string;
@@ -64,3 +73,33 @@ export const FilterTypeOptions : IDropdownOption<string>[] = [
     text : "Less than"
   } 
 ]
+
+export const NumberFilterTypeOptions: IDropdownOption<string>[] = [ 
+  {
+    key: "equal",
+    text: "Equal",
+  }, 
+  {
+    key: "greater_than",
+    text: "Greater than",
+  },
+  {
+    key: "less_than",
+    text: "Less than",
+  },
+];
+
+export const DateFilterTypeOptions: IDropdownOption<string>[] = [
+  {
+    key: "date_equal",
+    text: "Equal",
+  },
+  {
+    key: "date_greater_than",
+    text: "Greater than",
+  },
+  {
+    key: "date_less_than",
+    text: "Less than",
+  },
+];

@@ -6,5 +6,7 @@ export type SampleSales = {
     product : string,
     quantity : number,
     unitPrice : number,
-    totalPrice : number
+    totalPrice : number,
+    created : Date,
+    updated : Date,
 }

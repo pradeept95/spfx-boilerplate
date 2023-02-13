@@ -5,8 +5,8 @@ import { DataTableGridWrapper } from "./components/DataTableWrapper";
 import { DataTableContextProvider } from "./context/DataTableContext";
 import { IDatagridType } from "./types/DataTableProps";
 
-export const DataTableGrid: React.FunctionComponent<IDatagridType<any>> = (
-  props
+export const DataTableGrid: React.FunctionComponent<IDatagridType<any>> = React.forwardRef((
+  props, ref
 ) => {
   // const { width } = useWindowDimensions();
 
@@ -16,11 +16,13 @@ export const DataTableGrid: React.FunctionComponent<IDatagridType<any>> = (
   //   },
   // };
 
+  
+
   return (
     <Stack>
       <DataTableContextProvider {...props}>
-        <DataTableGridWrapper {...props} />
+        <DataTableGridWrapper {...props}/>
       </DataTableContextProvider>
     </Stack>
   );
-};
+});

@@ -4,114 +4,73 @@ import {
   IDetailsListProps,
   IStyle,
   Stack,
-  mergeStyles,
-  IDetailsRowProps,
-  IRenderFunction,
+  mergeStyles, 
   DefaultButton,
   ConstrainMode,
   CommandBar,
+  Selection,
+  IStackStyles,
+  FontIcon,
+  IButtonProps,
   ICommandBarItemProps,
-  Selection, 
 } from "@fluentui/react";
 import * as React from "react";
 import { useDataTable } from "../hooks/useDataTable";
-import { useFiltering } from "../services/FilterGridService";
 import { clearFilterIcon } from "../types/DataTableConst";
 import { IDatagridType } from "../types/DataTableProps";
 import { FluentUIDetailsList } from "./FluentUIDetailsList";
 import { Pagination } from "./Pagination";
 import * as grdiStyle from "../styles/DataGrid.module.scss";
+import { useGridService } from "../services/GridService";
 
 const dataGridContainerStyle: IStyle = {
   minHeight: "60vh",
 };
 
-const _items: ICommandBarItemProps[] = [
-  {
-    key: "newItem",
-    text: "New",
-    cacheKey: "myCacheKey", // changing this key will invalidate this item's cache
-    iconProps: { iconName: "Add" },
-    subMenuProps: {
-      items: [
-        {
-          key: "emailMessage",
-          text: "Email message",
-          iconProps: { iconName: "Mail" },
-          ["data-automation-id"]: "newEmailButton", // optional
-        },
-        {
-          key: "calendarEvent",
-          text: "Calendar event",
-          iconProps: { iconName: "Calendar" },
-        },
-      ],
-    },
+const emptyMsgIconClass = mergeStyles({
+  fontSize: 50,
+  height: 50,
+  width: 50,
+  margin: "0 25px",
+  padding: 20,
+});
+
+const dataGridEmptyMsgStyle: IStackStyles = {
+  root: {
+    display: "flex",
+    flexDirection: "column",
+    minHeight: "10vh",
+    textAlign: "center",
+    alignItems: "center",
+    justifyContent: "center",
+    fontWeight: 700,
+    border: "1px solid rgb(240 240 240)",
+    paddingBottom: 30,
+    marginTop: "-1rem",
   },
-  {
-    key: "upload",
-    text: "Upload",
-    iconProps: { iconName: "Upload" },
-    subMenuProps: {
-      items: [
-        {
-          key: "uploadfile",
-          text: "File",
-        },
-        {
-          key: "uploadfolder",
-          text: "Folder",
-        },
-      ],
-    },
-  },
-  {
-    key: "share",
-    text: "Share",
-    iconProps: { iconName: "Share" },
-    onClick: () => console.log("Share"),
-  },
-  {
-    key: "download",
-    text: "Download",
-    iconProps: { iconName: "Download" },
-    onClick: () => console.log("Download"),
-  },
-];
+};
+
+const overflowProps: IButtonProps = { ariaLabel: "More commands" };
 
 export const DataTableGridWrapper: React.FunctionComponent<
   IDatagridType<any>
 > = (props) => {
-  const { globalFilterText, pagedItems, selectedItems, setSelectedItems } =
-    useDataTable();
+  const { globalFilterText, pagedItems } = useDataTable();
+   const { filterDataGrid, resetGridFilter } = useGridService();
 
-  function createSelection(newSelectedItems: any[]) {
-    console.log("New Selection", newSelectedItems);
-    const selection = new Selection({
-      onSelectionChanged: () => {
-        console.log("Selection Changed", [
-          ...newSelectedItems,
-          selection.getSelection(),
-        ]);
-        setSelectedItems([...newSelectedItems, selection.getSelection()]);
-      },
-      getKey: (item: any) => item.key,
-    });
-
-    for (const newSelectedItem of newSelectedItems) {
-      const index: number = (pagedItems as any[])?.findIndex(
-        (pagedItem) => newSelectedItem?.id == pagedItem?.id
-      );
-      selection.setIndexSelected(index, true, false);
-    }
-    return selection;
-  }
-
-  const { globalGridFilter, resetGridFilter } = useFiltering();
-
-  const [selection, setSelection] = React.useState(createSelection([]));
-
+  const [contextMenuItems, setContextMenuItems] = React.useState<ICommandBarItemProps[]>([]); 
+  const [contextOverflowMenuItems, setContextOverflowMenuItems] = React.useState<ICommandBarItemProps[]>([]); 
+  const [contextFarMenuItems, setContextFarMenuItems] = React.useState<ICommandBarItemProps[]>([]); 
   const [filterValue, setFilterValue] = React.useState<string>("");
+  const [selectedItems, setSelectedItems] = React.useState<any[]>([]);
+  const [selection] = React.useState(
+    new Selection({
+      onSelectionChanged: () => {
+        const newSelectedItems = selection.getSelection();
+        setSelectedItems(newSelectedItems);
+      },
+    })
+  );
 
   const dataTableProps: IDetailsListProps = {
     ...props,
@@ -119,28 +78,29 @@ export const DataTableGridWrapper: React.FunctionComponent<
     ariaLabelForSelectionColumn: "Toggle selection",
     ariaLabelForSelectAllCheckbox: "Toggle selection for all items",
     checkButtonAriaLabel: "select row",
-    onRenderRow: (
-      props: IDetailsRowProps,
-      defaultRender?: IRenderFunction<IDetailsRowProps>
-    ): JSX.Element => {
-      return (
-        <div data-selection-toggle="true">
-          {defaultRender && defaultRender(props)}
-        </div>
-      );
-    },
   };
-
-  // callback if selected item change
-  React.useEffect(() => {
-    props?.onSelectionChanged && props.onSelectionChanged(selectedItems);
-    setSelection(createSelection(selectedItems));
-  }, [selectedItems]);
 
   // callback to reset filter
   React.useEffect(() => {
     setFilterValue(globalFilterText ?? "");
   }, [globalFilterText]);
+
+  React.useEffect(() => {
+    console.log(selectedItems);
+
+    if (props?.onGetContextMenuItem) {
+      const contextMenuItems = [...props?.onGetContextMenuItem(selectedItems)];
+      setContextMenuItems(contextMenuItems);
+      setContextOverflowMenuItems([]);
+      setContextFarMenuItems([
+        {
+          key: "selectionCount",
+          text: `${selectedItems?.length} Items Selected`,
+        },
+      ]);
+    }
+    
+  }, [selectedItems]);
 
   return (
     <>
@@ -149,28 +109,33 @@ export const DataTableGridWrapper: React.FunctionComponent<
           <Stack enableScopedSelectors>
             <Stack.Item className={grdiStyle.default.topCommandActionMenu}>
               <Stack horizontal horizontalAlign="space-between">
-                <Stack.Item>
-                  <Stack horizontal horizontalAlign="start">
-                    <CommandBar
-                      items={_items}
-                      //overflowItems={_overflowItems}
-                      //overflowButtonProps={overflowProps}
-                      //farItems={_farItems}
-                      ariaLabel="Inbox actions"
-                      primaryGroupAriaLabel="Email actions"
-                      farItemsGroupAriaLabel="More actions"
-                    />
+                <Stack.Item grow={3} styles={{ root: { width: "100%" } }}>
+                  <Stack
+                    horizontal
+                    horizontalAlign="start"
+                    styles={{ root: { width: "100%" } }}
+                  >
+                    {
+                      <CommandBar
+                        items={contextMenuItems}
+                        overflowItems={contextOverflowMenuItems}
+                        farItems={contextFarMenuItems}
+                        overflowButtonProps={overflowProps}
+                        ariaLabel="Grid Actions"
+                        styles={{ root: { width: "100%" } }}
+                      />
+                    }
                   </Stack>
                 </Stack.Item>
                 <Stack.Item>
                   <Stack horizontal horizontalAlign="end">
                     <SearchBox
-                      styles={{ root: { width: 250 } }}
-                      placeholder="Search"
+                      styles={{ root: { width: 350 } }}
+                      placeholder="Search Keywords"
                       value={filterValue}
                       onChange={(_, searchTerm: string) => {
                         setFilterValue(searchTerm);
-                        globalGridFilter(searchTerm);
+                        filterDataGrid(true, null, searchTerm);
                       }}
                     />
                     <DefaultButton
@@ -191,6 +156,33 @@ export const DataTableGridWrapper: React.FunctionComponent<
                 loading={props?.loading}
               />
             </Stack.Item>
+            {!props?.loading && !props?.items?.length ? (
+              <Stack.Item styles={dataGridEmptyMsgStyle}>
+                <FontIcon
+                  role={"img"}
+                  aria-label="No Items"
+                  iconName="WebComponents"
+                  className={emptyMsgIconClass}
+                />
+                {props?.emptyItemsMessage ?? "No Items to show"}
+              </Stack.Item>
+            ) : (
+              <></>
+            )}
+            {!props?.loading && props?.items?.length && !pagedItems?.length ? (
+              <Stack.Item styles={dataGridEmptyMsgStyle}>
+                <FontIcon
+                  role={"img"}
+                  aria-label="No Items"
+                  iconName="SearchAndApps"
+                  className={emptyMsgIconClass}
+                />
+                {props?.emptyFilterResultMessage ??
+                  "No Item found that matches search term"}
+              </Stack.Item>
+            ) : (
+              <></>
+            )}
             <Stack.Item>
               <Pagination />
             </Stack.Item>

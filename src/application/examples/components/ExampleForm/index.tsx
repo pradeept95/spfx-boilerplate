@@ -116,6 +116,7 @@ const FormExample: React.FunctionComponent<{}> = (props) => {
             <RichTextEditor
               label="Some Comment"
               placeholder="Comment Placeholder ..."
+              required={true}
               value={formik?.values?.someComment}
               errorMessage={formik?.errors?.someComment}
               showHelp={true}

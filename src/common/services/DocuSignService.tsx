@@ -54,25 +54,27 @@ export const DocuSignService = () => {
   };
 
     const createEnvelope = async (userToken: string, envelope: any) => {
-      const httpClientOptions: IHttpClientOptions = {
-        headers: new Headers({
-          "Content-Type": "application/json",
-        }),
-        body: JSON.stringify(envelope),
-      };
+      return new Promise<any>(async (resolve, reject) => {
+        try {
+          const httpClientOptions: IHttpClientOptions = {
+            headers: new Headers({
+              "Content-Type": "application/json",
+              "x-token": `${userToken}`,
+            }),
+            body: JSON.stringify(envelope),
+          };
 
-      currrentContext.context.httpClient
-        .post(
-          `https://docusignfunctions.azurewebsites.net/api/CreateEnvelope?code=jLIPmCsp5lnVyvdhkMdK9ckNL0qMZI9R8pKqaAmM7LWPAzFui7GZGA==&token=${userToken}`,
-          HttpClient.configurations.v1,
-          httpClientOptions
-        )
-        .then((res: HttpClientResponse): Promise<any> => {
-          return res.json();
-        })
-        .then((response: any): void => {
-          console.log("Users ", response);
-        });
+          const response = await currrentContext.context.httpClient.post(
+            `https://docusignfunctions.azurewebsites.net/api/CreateEnvelope?code=jLIPmCsp5lnVyvdhkMdK9ckNL0qMZI9R8pKqaAmM7LWPAzFui7GZGA==&token=${userToken}`,
+            HttpClient.configurations.v1,
+            httpClientOptions
+          );
+
+          resolve(response.json());
+        } catch (error) {
+          reject(error);
+        }
+      });
     };
 
   return {

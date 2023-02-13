@@ -2,8 +2,8 @@
 import * as React from "react";
 import { ActionButton, IDetailsColumnProps, IIconProps } from "@fluentui/react"; 
 import { useDataTable } from "../hooks/useDataTable";
-import { Text } from "@fluentui/react/lib/Text"; 
-import { useGrouping } from "../services/GroupService";
+import { Text } from "@fluentui/react/lib/Text";  
+import { useGridService } from "../services/GridService";
 
 const groupAscending: IIconProps = { iconName: "GroupedAscending" };
 
@@ -12,7 +12,7 @@ export const GroupColumn: React.FunctionComponent<{
 }> = ({ columnProp }) => {
   const { column } = columnProp;
   const { columns, filteredItems } = useDataTable();
-  const { groupAllItemsByColumn, resetColumnGroup } = useGrouping();
+  const { groupAllItemsByColumn, resetColumnGroup } = useGridService();
 
   return (
     <>

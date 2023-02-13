@@ -1,7 +1,7 @@
 /* eslint-disable */
 import * as React from "react";
 import { Nav, INavLinkGroup, INavLink, INavStyles } from "@fluentui/react/lib/Nav";
-import { CommandBarButton, DirectionalHint, IOverflowSetItemProps, OverflowSet, TooltipHost } from "@fluentui/react";
+import { CommandBarButton, DirectionalHint, IButtonStyles, IOverflowSetItemProps, OverflowSet, TooltipHost } from "@fluentui/react";
 import { useNavigate } from "react-router-dom"; 
 import * as sideNavStyles from "../styles/SideNavStyle.module.scss"
 
@@ -11,82 +11,12 @@ const navStyles: Partial<INavStyles> = {
   }
 };
 
-// const overflowLinkGroups: IOverflowSetItemProps[]  = [
-//   {
-//     key: "",
-//     name: "Basic components",
-//     expandAriaLabel: "Show more Basic components",
-//     isExpanded: true,
-//     links: [
-//       {
-//         key: "ActivityItem",
-//         name: "ActivityItem",
-//         url: "#/admin",
-//         icon: 'News',
-//         isExpanded: true
-//       },
-//       {
-//         key: "Breadcrumb",
-//         name: "Breadcrumb",
-//         url: "#/admin",
-//         icon: 'News',
-//       },
-//       {
-//         key: "Button",
-//         name: "Button",
-//         url: "#/admin",
-//         icon: 'News',
-//       },
-//     ],
-//   },
-//   {
-//     key: "",
-//     name: "Extended components",
-//     expandAriaLabel: "Show more Extended components",
-//     links: [
-//       {
-//         key: "ColorPicker",
-//         name: "ColorPicker",
-//         url: "#/admin",
-//       },
-//       {
-//         key: "ExtendedPeoplePicker",
-//         name: "ExtendedPeoplePicker",
-//         url: "#/admin",
-//       },
-//       {
-//         key: "GroupedList",
-//         name: "GroupedList",
-//         url: "#/admin",
-//       },
-//     ],
-//   },
-//   { 
-//     key: "",
-//     name: "Utilities",
-//     expandAriaLabel: "Show more Utilities",
-//     links: [
-//       {
-//         key: "FocusTrapZone",
-//         name: "FocusTrapZone",
-//         url: "#/admin/focustrapzone",
-//       },
-//       {
-//         key: "FocusZone",
-//         name: "FocusZone",
-//         url: "#/admin/focuszone",
-//       },
-//       {
-//         key: "MarqueeSelection",
-//         name: "MarqueeSelection",
-//         url: "#/admin/marqueeselection",
-//       },
-//     ],
-//   },
-// ];
-
-const onRenderItemStyles = {
-  root: { padding: '10px' },
+const onRenderItemStyles: IButtonStyles = {
+  root: {
+    padding: "10px",
+    background: "transparent",
+    backgroundColor: "transparent",
+  },
 };
 
 const onRenderOverflowButtonStyles = {

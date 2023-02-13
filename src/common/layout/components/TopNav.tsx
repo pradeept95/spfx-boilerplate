@@ -4,33 +4,14 @@ import * as React from 'react';
 import AppContext from '../../config/app-context.config';
 import * as topNavStyle from "../styles/TopNavStyle.module.scss"
 
-const expandedIcon: IIconProps = { iconName: 'DoubleChevronLeft12' };
-const collapsedIcon: IIconProps = { iconName: 'DoubleChevronRight12' };
-// const cogIcon: IIconProps = { iconName: 'Settings' };
-// const overflowProps: IButtonProps = { ariaLabel: 'More commands' };
+const expandedIcon: IIconProps = { iconName: "GlobalNavButton" };
+const collapsedIcon: IIconProps = { iconName: "GlobalNavButtonActive" }; 
 
-const appContext = AppContext.getInstance();
-
+const appContext = AppContext.getInstance(); 
 export const TopNav: React.FunctionComponent<{ collapsed: boolean, setCollapsed: React.Dispatch<React.SetStateAction<boolean>> }> = (props) => {
 
   const { collapsed, setCollapsed } = props; 
-  const siteName = appContext.siteSettings.siteName;
-
-  // const _farItems: ICommandBarItemProps[] = [
-  //   {
-  //     key: 'Settings',
-  //     text: 'Settings',
-  //     ariaLabel: 'Settings',
-  //     iconOnly: true,
-  //     iconProps: { iconName: 'Settings' },
-  //     onClick: () => openPropertyPane()
-  //   }
-  // ];
-
-  // const openPropertyPane = () => {
-  //   appContext.context.propertyPane.open();
-  // }
-
+  const siteName = appContext.siteSettings.siteName; 
   return (
     <>
       <nav className={topNavStyle.default.navMain}>
@@ -57,22 +38,7 @@ export const TopNav: React.FunctionComponent<{ collapsed: boolean, setCollapsed:
             <h3>{siteName}</h3>
           </Stack.Item>
           <Stack.Item grow>
-            {/* <CommandBar
-              items={_items}
-              overflowItems={_overflowItems}
-              overflowButtonProps={overflowProps}
-              farItems={_farItems}
-              ariaLabel="Inbox actions"
-              primaryGroupAriaLabel="Email actions"
-              farItemsGroupAriaLabel="More actions" 
-            /> */}
-            {/* <IconButton
-              className={topNavStyle.toggleIcon}
-              iconProps={cogIcon}
-              onClick={() => {
-                openPropertyPane();
-              }}
-            /> */}
+            
           </Stack.Item>
         </Stack>
       </nav>

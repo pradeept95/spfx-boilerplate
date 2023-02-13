@@ -39,8 +39,7 @@ interface PeoplePickerProps extends IInputProps {
   onPeopleSelectChange: (items: IPersonaProps[]) => any;
   defaultSelectedUsers?: IPersonaProps[];
   personSelectionLimit?: number;
-  required?: boolean;
-  resolveDelay?: number;
+  required?: boolean; 
   placeholder?: string;
   errorMessage?: string;
   value?: any[];
@@ -51,13 +50,13 @@ interface PeoplePickerProps extends IInputProps {
 }
 
 const suggestionProps: IBasePickerSuggestionsProps = {
-  suggestionsHeaderText: "Suggested People",
-  mostRecentlyUsedHeaderText: "Suggested Contacts",
+  suggestionsHeaderText: "Select User",
+  mostRecentlyUsedHeaderText: "Select User",
   noResultsFoundText: "No results found",
   loadingText: "Loading",
   showRemoveButtons: true,
   suggestionsAvailableAlertText: "People Picker Suggestions available",
-  suggestionsContainerAriaLabel: "Suggested contacts",
+  suggestionsContainerAriaLabel: "Select User",
 };
 
 const personaStyles: Partial<IPersonaStyles> = {
@@ -164,6 +163,7 @@ export const PeoplePicker: React.FunctionComponent<PeoplePickerProps> = (
       return emailAddress[0].substring(1, emailAddress[0].length - 1);
     }
 
+    setErrorMessage("");
     return input;
   };
 
@@ -201,7 +201,8 @@ export const PeoplePicker: React.FunctionComponent<PeoplePickerProps> = (
       ...(props as IInputProps),
       id: peoplePickerId,
       disabled: props?.disabled,
-      placeholder: props?.placeholder ?? "Enter Email or Username to Search User.",
+      placeholder:
+        props?.placeholder ?? "Enter Email or Username to Search User.",
       required: props?.required,
       className: mergeStyles([
         {
@@ -209,14 +210,22 @@ export const PeoplePicker: React.FunctionComponent<PeoplePickerProps> = (
         },
       ]),
     },
+    styles: {
+      root: {
+        border: errorMessage?.length > 0 ? "1px solid rgb(164, 38, 44)" : "",
+      },
+      itemsWrapper: {
+        border: errorMessage?.length > 0 ? "1px solid rgb(164, 38, 44)" : "",
+      },
+    },
     componentRef: picker,
-    resolveDelay: props?.resolveDelay ?? 300,
     itemLimit: props?.personSelectionLimit ?? 1,
     selectedItems: selectedPeople, //props?.defaultSelectedUsers ?? [],
     disabled: props?.disabled,
 
-    onResolveSuggestions: (filterText) => searchUsers(filterText, selectedPeople), //onFilterChanged,
-    onEmptyInputFocus: () => searchUsers("tha", selectedPeople), //returnMostRecentlyUsed,
+    onResolveSuggestions: (filterText) =>
+      searchUsers(filterText, selectedPeople), //onFilterChanged,
+    // onEmptyInputFocus: () => searchUsers("tha", selectedPeople), //returnMostRecentlyUsed,
     getTextFromItem: getTextFromItem,
     onRenderSuggestionsItem: onRenderSuggestionItem,
     onInputChange: onInputChange,
