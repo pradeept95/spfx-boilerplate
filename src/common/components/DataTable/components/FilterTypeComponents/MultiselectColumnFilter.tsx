@@ -53,6 +53,23 @@ const MultiselectColumnFilter: React.FunctionComponent<
     setMultiSelectFilterExpression(newMultiselectFilterExpression);
   };
 
+    // const onSelectionAll = (isChecked: boolean) => { 
+
+    //   const newSelected = isChecked ? [...filterOptions] : []; 
+    //   const newMultiselectFilterExpression = {
+    //     condition: "or",
+    //     expressions: [
+    //       {
+    //         key: column.fieldName,
+    //         operation: "includes",
+    //         value: newSelected,
+    //       },
+    //     ],
+    //   } as LogicalExpression;
+    //   setFilterExpression(newMultiselectFilterExpression);
+    //   setMultiSelectFilterExpression(newMultiselectFilterExpression);
+    // };
+
   React.useEffect(() => {
     if (!items?.length || !column) return;
 
@@ -95,12 +112,29 @@ const MultiselectColumnFilter: React.FunctionComponent<
         ?.value as string[]
     )?.indexOf(option) > -1;
 
+  // const isIntermediate = () : boolean => {
+  //   const selectedLength = ((multiSelectFilterExpression?.expressions?.[0] as BasicExpression)?.value as string[])?.length; 
+  //   return selectedLength && selectedLength > 0 && selectedLength !== filterOptions?.length
+  // }
+
+  //   const isAllChecked = (): boolean => {
+  //     const selectedLength = (
+  //       (multiSelectFilterExpression?.expressions?.[0] as BasicExpression)
+  //         ?.value as string[]
+  //     )?.length;
+  //     return (
+  //       selectedLength &&
+  //       selectedLength > 0 &&
+  //       selectedLength == filterOptions?.length
+  //     );
+  //   };
+
   return (
     <>
       <Stack
         tokens={stackTokens}
         styles={{ root: { maxHeight: "300px", overflowY: "scroll" } }}
-      >
+      > 
         {filterOptions?.map((option) => (
           <Checkbox
             label={option}

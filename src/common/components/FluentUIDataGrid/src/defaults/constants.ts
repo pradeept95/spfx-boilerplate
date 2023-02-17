@@ -1,0 +1,3 @@
+export const DEFAULT_PAGE_SIZE = 10;
+export const DEFAULT_MAX_PAGE_SIZE = 100000000;
+export const DEFAULT_NUMBER_OF_PAGE_BTN = 5;

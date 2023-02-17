@@ -1,21 +1,22 @@
 /* eslint-disable */
-import * as React from "react"; 
+import { ICommandBarItemProps } from "@fluentui/react";
+import * as React from "react";
 import { DataTableGrid } from "../../../common/components/DataTable";
 import { IDataGridColumn } from "../../../common/components/DataTable/types/DataTableProps";
+import { FluentUIDataGrid } from "../../../common/components/FluentUIDataGrid";
+import { DataGridColumn } from "../../../common/components/FluentUIDataGrid/src/types/DataGridProps";
 import { SampleSales } from "../../shared/models/sample-sales.model";
 import { SampleSaleService } from "../../shared/services/SampleSaleService";
 
 const { getAllSalesData } = SampleSaleService();
 
-const columns2: IDataGridColumn[] = [
+const columns2: DataGridColumn<SampleSales>[] = [
   {
     key: "id",
     name: "id",
-    iconName: "Page",
     fieldName: "id",
-    isIconOnly: true,
-    minWidth: 30,
-    maxWidth: 30,
+    isSorted: true,
+    isSortedDescending: true,
     onRender: (item: any) => {
       return <>{item?.id}</>;
     },
@@ -24,69 +25,71 @@ const columns2: IDataGridColumn[] = [
     key: "region",
     name: "Region",
     fieldName: "region",
-    minWidth: 130,
-    maxWidth: 150,
-    isResizable: true,
-    filterType: "multiselect",
-    disableGrouping: true,
+    isGrouped: true,
+    groupOrderNumber: 1,
   },
   {
     key: "city",
     name: "City",
     fieldName: "city",
-    maxWidth: 150,
-    isResizable: true,
-    minWidth: 130,
-    data: "string",
-    disableFilter: true,
+    filterExpression: {
+      condition: "or",
+      expressions: [
+        {
+          key: "city",
+          operation: "contains",
+          value: "Los",
+        },
+        {
+          key: "city",
+          operation: "contains",
+          value: "New",
+        },
+      ],
+    },
+    // isGrouped: true,
+    // groupOrderNumber: 2,
   },
   {
     key: "category",
     name: "Category",
     fieldName: "category",
-    minWidth: 130,
-    maxWidth: 150,
-    isResizable: true,
-    data: "string",
-    disableSorting: true,
+    isGrouped: true,
+    groupOrderNumber: 3,
   },
   {
     key: "product",
     name: "Product",
     fieldName: "product",
-    minWidth: 130,
-    maxWidth: 150,
-    isResizable: true,
-    data: "string",
+    // isGrouped: true,
+    // groupOrderNumber: 3,
   },
   {
     key: "quantity",
     name: "Quantity",
     fieldName: "quantity",
-    minWidth: 130,
-    maxWidth: 150,
-    isResizable: true,
-    data: "number",
+    onRender: (item: SampleSales) => {
+      const quantity = item.quantity;
+      if (quantity > 30) {
+        return <>{quantity}</>;
+      } else {
+        return (
+          <>
+            <span style={{ color: "red" }}>{quantity}</span>
+          </>
+        );
+      }
+    },
   },
   {
     key: "unitPrice",
     name: "Unit Price",
     fieldName: "unitPrice",
-    minWidth: 130,
-    maxWidth: 150,
-    isResizable: true,
-    data: "number",
-    filterType: "number",
   },
   {
     key: "totalPrice",
     name: "Total Price",
     fieldName: "totalPrice",
-    minWidth: 130,
-    maxWidth: 150,
-    isResizable: true,
-    data: "number",
-    filterType: "multiselect",
   },
 ];
 
@@ -116,10 +119,10 @@ const columns2: IDataGridColumn[] = [
 //     onClick: () => console.log("Download"),
 //   },
 // ];
- 
+
 export const DataTableExamplePage1: React.FunctionComponent<{}> = (props) => {
   const [items, setItems] = React.useState<SampleSales[]>([]);
-  // const [selectedItems, setSelectedItems] = React.useState<SampleSales[]>([]); 
+  // const [selectedItems, setSelectedItems] = React.useState<SampleSales[]>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
 
   const columns: IDataGridColumn[] = [
@@ -260,7 +263,7 @@ export const DataTableExamplePage1: React.FunctionComponent<{}> = (props) => {
   React.useEffect(() => {
     callApi();
   }, []);
- 
+
   return (
     <>
       <section>
@@ -269,10 +272,10 @@ export const DataTableExamplePage1: React.FunctionComponent<{}> = (props) => {
           loading={loading}
           items={items}
           columns={columns}
-          pageSize={20}
+          pageSize={100}
           onSelectionChanged={(selectedItems) => {
             console.log(selectedItems);
-          }} 
+          }}
         />
       </section>
     </>
@@ -297,15 +300,57 @@ export const DataTableExamplePage2: React.FunctionComponent<{}> = (props) => {
     callApi();
   }, []);
 
+  const handleGetContextMenuItem = (selecteItems: any[]): ICommandBarItemProps[] => {
+      let commands: ICommandBarItemProps[] = [
+        {
+          key: "newItem",
+          text: "New Task",
+          iconProps: { iconName: "Add" },
+          onClick: () => console.log("/myninds/0/new"),
+        },
+      ];
+
+      if (selecteItems?.length == 1) {
+        commands.push({
+          key: "edit",
+          text: "Edit Task",
+          iconProps: { iconName: "Edit" },
+          disabled: selecteItems?.length !== 1,
+          onClick: () => console.log(`/myninds/${selecteItems?.[0]?.id}/new`),
+        });
+      }
+
+      if (selecteItems?.length == 1) {
+        commands.push({
+          key: "complete",
+          text: "Mark Completed",
+          iconProps: { iconName: "SkypeCircleCheck" },
+          onClick: () => {
+            console.log("completed");
+            // handleCompleteTask(selecteItems?.[0]);
+          },
+        });
+      }
+
+      return commands;
+    };
+
+  const handleItemSelect = (selectedItems: SampleSales[]) => {
+    console.log("From Component", selectedItems);
+  };
+
   return (
     <>
       <section>
-        <DataTableGrid
-          gridKeyField="id"
-          loading={loading}
-          items={items?.slice(0, 34)}
+        <FluentUIDataGrid
+          key="id"
           columns={columns2}
-          pageSize={50} 
+          isLoading={loading}
+          items={items}
+          pageSize={20}
+          expandDefaultGroups={true}
+          onSelectionChange={handleItemSelect}
+          onGetActionMenuItem={handleGetContextMenuItem}
         />
       </section>
     </>

@@ -10,8 +10,7 @@ import SiteAdminEntryPage from "../common/site-admin";
 // import { AwardTypeService } from "./shared/services/AwardTypeService";
 import AdminEntryPage from "./admin";
 import { RequireAuth } from "../common/context/AuthContext";
-import { ROLES } from "../common/types/auth.types"; 
-import MyNINDSEntryPage from "./myninds";
+import { ROLES } from "../common/types/auth.types";  
 // import { DocuSignService } from "../common/services/DocuSignService";
 // import { DocuSignService } from "../common/services/DocuSignService";
 
@@ -54,6 +53,7 @@ const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
       <section className="body">
         <Routes>
           <Route path="/">
+
             {/* public routes */}
             <Route
               index
@@ -69,17 +69,13 @@ const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
                     <li>
                       <button onClick={openPropertyPane}>Open Setting</button>
                     </li>
-                    <li></li>
                   </ul>
                 </>
               }
             />
             <Route element={<RequireAuth requiredRoles={[ROLES.Admin]} />}>
               <Route path="/admin/*" element={<AdminEntryPage />} />
-            </Route>
-            <Route element={<RequireAuth requiredRoles={[ROLES.User]} />}>
-              <Route path="/myninds/*" element={<MyNINDSEntryPage />} />
-            </Route>
+            </Route> 
             <Route element={<RequireAuth requiredRoles={[ROLES.Admin]} />}>
               <Route path="/admin/*" element={<AdminEntryPage />} />
             </Route>
@@ -89,13 +85,11 @@ const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
                 <RequireAuth requiredRoles={[ROLES.User]} requiredAll={false} />
               }
             >
-              <Route path="/examples/*" element={<ExampleEntryPage />} />
+            <Route path="/examples/*" element={<ExampleEntryPage />} />
             </Route>
-
             <Route element={<RequireAuth requiredRoles={[ROLES.Admin]} />}>
-              <Route path="/s-admin/*" element={<SiteAdminEntryPage />} />
+            <Route path="/s-admin/*" element={<SiteAdminEntryPage />} />
             </Route>
-
             {/* catch all */}
             <Route path="/unauthorized" element={<AccessDenied />} />
             <Route path="/page-not-found" element={<PageNotFound />} />
@@ -111,7 +105,6 @@ const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
               <Route path="/admin/*" element={<PageNotFound />} />
             </Route>
           </Route> */}
-
           {/* catch all */}
           {/* <Route path="/unauthorized" element={<AccessDenied />} /> */}
           {/* <Route path='/page-not-found' element={<PageNotFound />} />
@@ -121,5 +114,4 @@ const ApplicationEntry: React.FunctionComponent<{}> = (props) => {
     </>
   );
 };
-
 export default ApplicationEntry;

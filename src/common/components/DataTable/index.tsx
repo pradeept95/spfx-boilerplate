@@ -8,16 +8,6 @@ import { IDatagridType } from "./types/DataTableProps";
 export const DataTableGrid: React.FunctionComponent<IDatagridType<any>> = React.forwardRef((
   props, ref
 ) => {
-  // const { width } = useWindowDimensions();
-
-  // const stackItemStyles: IStackItemStyles = {
-  //   root: {
-  //     width: width,
-  //   },
-  // };
-
-  
-
   return (
     <Stack>
       <DataTableContextProvider {...props}>

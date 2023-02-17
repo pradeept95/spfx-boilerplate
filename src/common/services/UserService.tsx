@@ -84,7 +84,7 @@ export const UserService = () => {
     });
   };
 
-  const mapUserFromSPList = async (user: any): Promise<IPersonaProps> => {
+  const mapUserFromSPList = async (user: any): Promise<IPersonaProps[]> => {
     return new Promise((resolve, reject) => {
       try {
         const mappedUser = {
@@ -92,7 +92,7 @@ export const UserService = () => {
           secondaryText: user.EMail,
           tertiaryText: user.Username,
         } as IPersonaProps;
-        resolve(mappedUser);
+        resolve([mappedUser]);
       } catch (error) {
         reject(error);
       }

@@ -12,7 +12,7 @@ const OUT = "out";
 const ESignature: React.FunctionComponent<{ onUseSignature : (signatureData : string) => void }> = (props) => {
 
     const { onUseSignature } = props;
-
+ 
     let canvas: any,
         drawingContext: any,
         isMouseDownOrTouchStart = false,
