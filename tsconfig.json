@@ -13,7 +13,7 @@
     "outDir": "lib",
     "inlineSources": false,
     "strictNullChecks": false,
-    "noImplicitAny": true, 
+    "noImplicitAny": false, 
     "allowSyntheticDefaultImports" : true, 
 
     "typeRoots": [
@@ -26,6 +26,7 @@
     "lib": [
       "es5",
       "dom",
+      "es2015",
       "es2015.collection",
       "es2015.promise"
     ]

@@ -39,12 +39,37 @@ This application could be use to create a new solution. It already has some pre-
 
 ## Features
 
-Following features are already build.
+Following features are already in place.
 
 - Routing
-- pnp-sp, pnp-graph configuration
-- people picker
+- pnp-sp, pnp-graph config, getSP() and getGraphi() function
+- formik and yup for form state management and validation
+- Built-In Components
+  - People Picker
+  - Alert (default, success, error, info, warning)
+  - Loading (hide, show)
+  - Rich Text Editor & Viewer
+  - E-Signature
+
+- Built-In Services
+  - UserService - searchUser [In AD], getUserProfile, ensureUser, mapUserFromSPList etc.
+
+- Built-In hooks
+  - useAlert 
+  - useLoading etc
+
+- Multiple Layouts
+  - Layout Available Components  (Footer, SideNav, TopNav)
+
+- Application wide Setting
+  - Site Name 
+  - Enable/Disable Notification
+  - Enable/Disable App Debug Mode
+  - FullScreen Layout 
+
+- SP Theme Support!
  
+
 
 ## For details about the spfx and other sharepoint solution, please follow following links
 
