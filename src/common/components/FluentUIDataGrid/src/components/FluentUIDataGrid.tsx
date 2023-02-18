@@ -1,71 +1,75 @@
 /* eslint-disable */
-import { 
-  CommandBar,
-  DefaultButton,
-  Dropdown,
-  IButtonProps,
+import {
   ICommandBarItemProps,
-  IGroup,
-  IStackStyles,
   IStackTokens,
-  SearchBox,
   Stack,
 } from "@fluentui/react";
 import { useObservableState } from "observable-hooks";
 import * as React from "react";
-import { DEFAULT_PAGE_SIZE } from "../defaults/constants";
-import { DEFAULT_PAGE_OPTIONS } from "../defaults/page-size-options";
 import { useDataTableGrid } from "../hooks/useDataGrid";
-import { DataGridColumn, DataGridProps } from "../types/DataGridProps";
-import GridPaginationComponent from "./Pagination/GridPaginationComponent";
-import TableHeader from "./Table/Header/TableHeader";
+import { IDataGridColumn, IDataGridProps } from "../types/DataGridProps";
 import * as gridStyle from "./../styles/DataGrid.module.scss";
-import { clearFilterIcon } from "../defaults/icons";
-import { LoadingItems } from "./Table/Body/LoadingItems"; 
-import { NoItem } from "./Table/Body/NoItem";
-import { NoItemFound } from "./Table/Body/NoItemFound"; 
-import { TableBody } from "./Table/Body/TableBody";
-import { TableBodyGrouped } from "./Table/Body/TableBodyGrouped";
+import { GridHeader } from "./GridSections/GridHeader";
+import { GridFooter } from "./GridSections/GridFooter";
+import { GridBody } from "./GridSections/GridBody";
+import { GetExportData } from "../helpers/ExportHelper";
+import { ExportService } from "../../../../services/ExportService";
 
 // Tokens definition
 const stackTokens: IStackTokens = {
   childrenGap: 5,
 };
-const overflowProps: IButtonProps = { ariaLabel: "More commands" };
 
-const footerStackStyles: IStackStyles = { root: { margin: "0.6rem 0rem" } };
+const { exportToCSV, exportToExcel } = ExportService();
 
 function FluentUIDataGridContainer<T extends {}>(
-  props: DataGridProps<T>
+  props: IDataGridProps<T>
 ): JSX.Element {
-  const { 
+  const {
     gridKey$,
-    groups$,
-    columns$,
-    globalFilter$,
     items$,
-    pagedItems$,
     selectedItems$,
-    pageSize$,
-    currentPage$,
+    columns$,
   } = useDataTableGrid();
 
-  const gridKey = useObservableState(gridKey$, ""); 
-  const columns = useObservableState<DataGridColumn<any>[]>(columns$, []);
-  const groups = useObservableState<IGroup[]>(groups$, []);
+  const gridKey = useObservableState(gridKey$, "");
   const items = useObservableState(items$, []);
-  const pagedItems = useObservableState(pagedItems$, []);
+  const columns = useObservableState(columns$, []);
   const selectedItems = useObservableState(selectedItems$, []);
-  const globalFilter = useObservableState<string>(globalFilter$, ""); 
 
   const [actionMenuItems, setActionMenuItems] = React.useState<
+    ICommandBarItemProps[]
+  >([]);
+  const [actionOverflowMenuItems, setActionOverflowMenuItems] = React.useState<
     ICommandBarItemProps[]
   >([]);
   const [actionFarMenuItems, setActionFarMenuItems] = React.useState<
     ICommandBarItemProps[]
   >([]);
 
-  React.useEffect(() => { 
+  const handleSelectUnselectAll = (isSelect: boolean) => {
+    if (isSelect) {
+      const selectedKeys = items?.map(x => x?.[gridKey]);
+      selectedItems$.next([...selectedKeys]);
+    } else {
+      selectedItems$.next([]);
+    }
+  }
+
+  const handleExport = async  (items: T[], cols: IDataGridColumn<T>[], exportType: "excel" | "csv") => {
+    const exportData = props?.onGetExportItems ? props.onGetExportItems(items) : GetExportData(items, cols);
+    switch (exportType) {
+      case "excel":
+        await exportToExcel("download_excel", exportData)
+        break;
+
+      case "csv":
+        await exportToCSV("download_csv", exportData)
+        break;
+    }
+  }
+
+  React.useEffect(() => {
     const newSelectedItems = [...items]?.filter(
       (item) => selectedItems?.indexOf(item?.[gridKey]) > -1
     );
@@ -79,125 +83,59 @@ function FluentUIDataGridContainer<T extends {}>(
         ...props?.onGetActionMenuItem(newSelectedItems),
       ];
       setActionMenuItems(newActionMenuItems);
-
-      setActionFarMenuItems([
-        {
-          key: "selectionCount",
-          text: `${newSelectedItems?.length} Item(s) Selected`,
-        },
-      ]);
-      console.log(actionFarMenuItems);
     }
-  }, [selectedItems]);
-  
+
+    setActionOverflowMenuItems([
+      {
+        key: "select_all",
+        text: "Select All Items",
+        onClick: () => handleSelectUnselectAll(true),
+        disabled: newSelectedItems?.length == items?.length && items.length !== 0
+      },
+      {
+        key: "unselect_all",
+        text: "Remove Selection",
+        onClick: () => handleSelectUnselectAll(false),
+        disabled: newSelectedItems?.length == 0
+      },
+      {
+        key: "export_excel",
+        text: "Export to Excel",
+        onClick: () => {
+           handleExport(newSelectedItems.length > 0 ? newSelectedItems : items, columns, "excel")
+        }
+      },
+      {
+        key: "export csv",
+        text: "Export to CSV",
+        onClick: () => {
+          handleExport(newSelectedItems.length > 0 ? newSelectedItems : items, columns, "csv")
+        }
+      }
+    ])
+
+    setActionFarMenuItems([
+      {
+        key: "selectionCount",
+        text: `${newSelectedItems?.length} Item(s) Selected`,
+      },
+    ]);
+
+  }, [columns, items, selectedItems]);
+
   return (
     <Stack tokens={stackTokens}>
       <Stack.Item className={gridStyle.default.topCommandActionMenu}>
-        <Stack
-          horizontal
-          horizontalAlign="space-between"
-          verticalAlign="center"
-        >
-          <Stack.Item styles={{ root: { width: "100%" } }}>
-            <CommandBar
-              items={actionMenuItems}
-              //overflowItems={contextOverflowMenuItems}
-              farItems={actionFarMenuItems}
-              overflowButtonProps={overflowProps}
-              ariaLabel="Grid Actions"
-              role={"navigation"}
-            />
-          </Stack.Item>
-          <Stack.Item>
-            <Stack horizontal horizontalAlign="end">
-              <SearchBox
-                styles={{ root: { width: 300 } }}
-                placeholder="Search Keywords"
-                aria-label="Search in Grid"
-                value={globalFilter}
-                onChange={(_, searchTerm: string) => {
-                  globalFilter$.next(searchTerm);
-                  currentPage$.next(1);
-                }}
-              />
-              <DefaultButton
-                styles={{ root: { minWidth: 15, width: 24 } }}
-                iconProps={clearFilterIcon}
-                onClick={() => {
-                  const newColumns = columns?.splice(0)?.map(
-                    (col: DataGridColumn<any>) => {
-                      return {
-                        ...col,
-                        isFiltered: false,
-                        filterExpression: undefined,
-                      };
-                    }
-                  );
-                  globalFilter$.next("");
-                  currentPage$.next(1);
-                  columns$.next([...newColumns]); 
-                }}
-                ariaLabel="Clear Filter"
-                title="Clear Filter"
-              />
-            </Stack>
-          </Stack.Item>
-        </Stack>
+        <GridHeader
+          actionMenuItems={actionMenuItems}
+          actionOverflowMenuItems={actionOverflowMenuItems}
+          actionFarMenuItems={actionFarMenuItems} />
       </Stack.Item>
       <Stack.Item>
-        <div style={{ overflowX: props?.isLoading ? "hidden" : "auto" }}>
-          <table className={gridStyle.default.tableMainGrid}>
-            <thead>
-              <tr className={gridStyle.default.tableHeaderRow}>
-                <TableHeader hasGroup={groups?.length > 0} />
-              </tr>
-            </thead>
-            {!groups?.length ? (
-              <TableBody items={pagedItems} isLoading={props?.isLoading} />
-            ) : (
-              <TableBodyGrouped
-                items={pagedItems}
-                groups={groups}
-                isLoading={props?.isLoading}
-              />
-            )}
-            <tfoot></tfoot>
-          </table>
-          <LoadingItems loading={props.isLoading} />
-          <NoItem noItems={!props.isLoading && !items?.length} />
-          <NoItemFound
-            itemNotFound={
-              !props.isLoading && items?.length && !pagedItems?.length
-            }
-          />
-        </div>
+        <GridBody isLoading={props?.isLoading} />
       </Stack.Item>
       <Stack.Item>
-        <Stack
-          enableScopedSelectors
-          horizontal
-          horizontalAlign="space-between"
-          tokens={stackTokens}
-          styles={footerStackStyles}
-        >
-          <Stack.Item>
-            <Dropdown
-              styles={{ root: { maxWidth: 100 } }}
-              ariaLabel="Select Page Size"
-              role={"combobox"}
-              defaultSelectedKey={props?.pageSize ?? DEFAULT_PAGE_SIZE}
-              options={DEFAULT_PAGE_OPTIONS}
-              onChange={(_, pageOption) => {
-                console.log(pageOption);
-                pageSize$.next(pageOption?.key);
-                currentPage$.next(1);
-              }}
-            />
-          </Stack.Item>
-          <Stack.Item>
-            <GridPaginationComponent />
-          </Stack.Item>
-        </Stack>
+        <GridFooter pageSize={props?.pageSize} pageOptions={props?.pageOptions} />
       </Stack.Item>
     </Stack>
   );
