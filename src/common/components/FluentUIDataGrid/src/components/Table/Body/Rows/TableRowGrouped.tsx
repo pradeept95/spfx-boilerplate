@@ -6,7 +6,7 @@ import { collapseGroupIcon, expandGroupIcon } from "../../../../defaults/icons";
 import { onlyUnique } from "../../../../helpers/FilterHelper";
 import { useDataTableGrid } from "../../../../hooks/useDataGrid";
 import * as gridStyle from "../../../../styles/DataGrid.module.scss";
-import { DataGridColumn } from "../../../../types/DataGridProps";
+import { IDataGridColumn } from "../../../../types/DataGridProps";
 import { TableRow } from "./TableRow";
 
 export const TableRowGrouped: React.FunctionComponent<{
@@ -15,7 +15,7 @@ export const TableRowGrouped: React.FunctionComponent<{
 }> = ({ items, group }): JSX.Element => {
   const { gridKey$, columns$, groups$, selectedItems$ } = useDataTableGrid();
 
-  const columns = useObservableState<DataGridColumn<any>[]>(columns$, []);
+  const columns = useObservableState<IDataGridColumn<any>[]>(columns$, []);
   const selectedItems = useObservableState(selectedItems$, []);
   const groups = useObservableState<IGroup[]>(groups$, []);
   const gridKey = useObservableState<string>(gridKey$, "");

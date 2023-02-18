@@ -13,7 +13,6 @@ export const useLoading = () => {
         loadingText: loadingText,
       } as LoadingPros);
     } catch (error) {
-      console.log("showLoader -> error", error);
       throw error;
     }
   };
@@ -24,7 +23,6 @@ export const useLoading = () => {
         loading: false,
       } as LoadingPros);
     } catch (error) {
-      console.log("showLoader -> error", error);
       throw error;
     }
   };

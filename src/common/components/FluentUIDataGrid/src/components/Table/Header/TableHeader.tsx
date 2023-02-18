@@ -53,7 +53,6 @@ const TableHeader: React.FunctionComponent<{hasGroup : boolean}> = ({hasGroup}) 
  const toggleGropExpand = () => {
     const isAllCollapsed = groups?.every((x) => x.isCollapsed);
     const newGroup = toggleGroupExpandForGroups(groups, isAllCollapsed);
-
     groups$.next(newGroup);
  }
 
@@ -61,7 +60,7 @@ const TableHeader: React.FunctionComponent<{hasGroup : boolean}> = ({hasGroup}) 
     <>
       <th
         className={gridStyle.default.tableMainGridth}
-        style={{ width: "10px" }}
+        style={{ width: "15px" }}
       >
         <Checkbox
           name="Select All or DeSelect All Rows"
@@ -73,6 +72,13 @@ const TableHeader: React.FunctionComponent<{hasGroup : boolean}> = ({hasGroup}) 
           }
           checked={pagedItems?.length && pagedItems?.every((x) => x.isSelected)}
           onChange={(_, checked) => handleOnItemSelect(pagedItems, checked)}
+          styles = {
+            {              
+              checkbox : {
+                border : "1px solid white"
+              } 
+            }
+          }
         />
         {hasGroup ? (
           <ActionButton
@@ -112,7 +118,7 @@ const TableHeader: React.FunctionComponent<{hasGroup : boolean}> = ({hasGroup}) 
           <></>
         )}
       </th>
-      {columns?.map((column) => (
+      {columns?.filter(x => !x.hideInDefaultView)?.map((column) => (
         <th className={gridStyle.default.tableMainGridth}>
           <HeaderCell column={column} />
         </th>

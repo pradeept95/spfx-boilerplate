@@ -25,8 +25,7 @@ export const DocuSignService = () => {
       .then((res: HttpClientResponse): Promise<any> => {
         return res.json();
       })
-      .then(async (response: any) => {
-        console.log(response); 
+      .then(async (response: any) => { 
         return response;
       });
   };
@@ -49,7 +48,7 @@ export const DocuSignService = () => {
         return res.json();
       })
       .then((response: any): void => {
-        console.log("Users ",response);
+        return response;
       });
   };
 

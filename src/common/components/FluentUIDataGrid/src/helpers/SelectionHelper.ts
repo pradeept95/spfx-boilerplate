@@ -15,6 +15,5 @@ export function markSelectedItems(
     };
   });
 
-  console.log("Selection Completed", items);
   return items;
 }

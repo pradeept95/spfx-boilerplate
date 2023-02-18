@@ -9,7 +9,7 @@ import {
   Stack,
 } from "@fluentui/react";
 import * as React from "react";
-import { DataGridColumn } from "../../types/DataGridProps";
+import { IDataGridColumn } from "../../types/DataGridProps";
 import {
   BasicExpression,
   DateFilterTypeOptions, 
@@ -22,7 +22,7 @@ const innerStackTokens: IStackTokens = {
 };
 
 const DateFilter: React.FunctionComponent<{
-  column: DataGridColumn<any>;
+  column: IDataGridColumn<any>;
   colFilterExpression: LogicalExpression;
   setColFilterExpression: React.Dispatch<
     React.SetStateAction<LogicalExpression>

@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import { IGroup } from "@fluentui/react";
-import { DataGridColumn } from "../types/DataGridProps";
+import { IDataGridColumn } from "../types/DataGridProps";
 
 function getLeafGroupKey(key: string, separator: string): string {
   let leafKey = key;
@@ -14,7 +14,7 @@ function getLeafGroupKey(key: string, separator: string): string {
 
 function getGroups(
   groupedItems: any[],
-  column: DataGridColumn<any>,
+  column: IDataGridColumn<any>,
   isExpanded: boolean,
   parentGroup?: IGroup
 ): IGroup[] {
@@ -86,7 +86,7 @@ export function createGroups(
 
 export function groupItems(
   sortedItems: any[],
-  columns: DataGridColumn<any>[],
+  columns: IDataGridColumn<any>[],
   isExpanded: boolean,
   parentGroup?: IGroup
 ): IGroup[] {

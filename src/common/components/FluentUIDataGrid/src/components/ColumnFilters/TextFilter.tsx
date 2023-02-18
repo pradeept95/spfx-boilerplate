@@ -8,7 +8,7 @@ import {
   Stack,
 } from "@fluentui/react";
 import * as React from "react";
-import { DataGridColumn } from "../../types/DataGridProps";
+import { IDataGridColumn } from "../../types/DataGridProps";
 import {
   BasicExpression,
   FilterTypeOptions,
@@ -21,7 +21,7 @@ const innerStackTokens: IStackTokens = {
 };
 
 const TextFilter: React.FunctionComponent<{
-  column: DataGridColumn<any>;
+  column: IDataGridColumn<any>;
   colFilterExpression: LogicalExpression;
   setColFilterExpression: React.Dispatch<
     React.SetStateAction<LogicalExpression>

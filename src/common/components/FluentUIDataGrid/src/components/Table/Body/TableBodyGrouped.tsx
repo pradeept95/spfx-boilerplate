@@ -11,7 +11,7 @@ export const TableBodyGrouped: React.FunctionComponent<{
   // const { gridKey$, groups$, columns$, selectedItems$ } = useDataTableGrid();
   // const gridKey = useObservableState<string>(gridKey$, "");
   // const selectedItems = useObservableState(selectedItems$, []);
-  // const columns = useObservableState<DataGridColumn<any>[]>(columns$, []);
+  // const columns = useObservableState<IDataGridColumn<any>[]>(columns$, []);
 
   // const handleOnItemSelect = (newSelectedItems: any[], checked) => {
   //   const currentSelectedKeys = newSelectedItems?.map((x) => x?.[gridKey]);

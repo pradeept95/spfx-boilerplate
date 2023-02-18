@@ -23,7 +23,7 @@ const GridPaginationComponent: React.FunctionComponent<{}> = () => {
     const { filteredItems$, pageSize$, currentPage$ } = useDataTableGrid();
     const pageOptions$ = React.useMemo(() => pageSize$.pipe(
         combineLatestWith(currentPage$, filteredItems$),
-        map(([pSize, cPage, filteredItems]) => {
+        map(([pSize, cPage, [filteredItems, columns]]) => {
             const totalNumberOfPages = filteredItems?.length > 0 ? Math.ceil(filteredItems.length / pSize) : 1;
             const pageOptions = getPageSelectionOptions(cPage, totalNumberOfPages);
             return [pageOptions, totalNumberOfPages] as const;

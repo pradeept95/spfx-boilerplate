@@ -2,7 +2,7 @@
 import { useObservableState } from "observable-hooks";
 import * as React from "react";
 import { useDataTableGrid } from "../../../hooks/useDataGrid";
-import { DataGridColumn } from "../../../types/DataGridProps";
+import { IDataGridColumn } from "../../../types/DataGridProps";
 import { useBoolean, useId } from "@fluentui/react-hooks";
 import {
   ActionButton,
@@ -81,7 +81,7 @@ const iconClass = mergeStyles({
 });
 
 const HeaderCell: React.FunctionComponent<{
-  column: DataGridColumn<any>;
+  column: IDataGridColumn<any>;
 }> = ({ column }) => {
   const [isCalloutVisible, { toggle: toggleIsCalloutVisible }] =
     useBoolean(false);
@@ -95,7 +95,7 @@ const HeaderCell: React.FunctionComponent<{
 
     if(column?.disableSort || column.disableAllColumnAction) return; 
 
-    const newColumns = columns?.splice(0)?.map((col: DataGridColumn<any>) => {
+    const newColumns = columns?.splice(0)?.map((col: IDataGridColumn<any>) => {
       if (col?.fieldName == column?.fieldName) {
         col.isSorted = true;
         col.isSortedDescending = !col?.isSortedDescending;

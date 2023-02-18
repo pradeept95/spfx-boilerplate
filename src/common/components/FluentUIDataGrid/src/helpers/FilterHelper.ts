@@ -1,7 +1,7 @@
 /* eslint-disable */
 
-import { DataGridColumn } from "../types/DataGridProps";
-import { BasicExpression, Expression, FilterValueType, LogicalExpression } from "../types/FilterExpression";
+import { IDataGridColumn } from "../types/DataGridProps";
+import { BasicExpression, FilterValueType, LogicalExpression } from "../types/FilterExpression";
 
 function evaluateLogicalExpression(
   expr: LogicalExpression,
@@ -58,38 +58,7 @@ function evaluateExpression(
         `${propValue}`?.toLocaleLowerCase() == `${value}`?.toLocaleLowerCase()
       );
   }
-}
-
-export function buildExpression(
-  expression: LogicalExpression,
-  currentExpession: Expression
-): LogicalExpression {
-  if ((currentExpession as LogicalExpression)?.condition) {
-    console.log("Logical Expression");
-  } else {
-    console.log("Basic Expression");
-    currentExpession = currentExpession as BasicExpression;
-    const existingExpression = expression?.expressions?.filter(
-      (exp: BasicExpression) =>
-        exp.key == (currentExpession as BasicExpression).key
-    )?.[0];
-
-    if (existingExpression) {
-      (existingExpression as BasicExpression).value = currentExpession.value;
-      (existingExpression as BasicExpression).operation =
-        currentExpession.operation;
-    } else {
-      expression.expressions.push(currentExpession);
-    }
-
-    expression.expressions = expression?.expressions?.filter(
-      (exp: BasicExpression) => !!exp.value
-    );
-  }
-
-  console.log(expression);
-  return expression;
-}
+} 
 
 function compareDates(
   date1: any,
@@ -121,7 +90,7 @@ function compareDates(
 export function filterGrid(
   items: any[],
   searchTerm: string,
-  columns: DataGridColumn<any>[]
+  columns: IDataGridColumn<any>[]
 ) {
   // copy items
   let filteredItems: any[] = [...items];
@@ -156,7 +125,6 @@ export function filterGrid(
       evaluateLogicalExpression(expression, item)
     );
   }
-  console.log("Filter Completed", filteredItems);
   return filteredItems;
 }
 

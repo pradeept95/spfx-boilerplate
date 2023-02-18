@@ -19,7 +19,6 @@ export const useAlert = () => {
         theme: options?.theme ?? DEFAULT_THEME,  
       });
     } catch (error) {
-      console.log("showLoader -> error", error);
       throw error;
     }
   };
@@ -32,7 +31,6 @@ export const useAlert = () => {
         theme: options?.theme ?? DEFAULT_THEME,  
       });
     } catch (error) {
-      console.log("showLoader -> error", error);
       throw error;
     }
   };
@@ -45,7 +43,6 @@ export const useAlert = () => {
         theme: options?.theme ?? DEFAULT_THEME,  
       });
     } catch (error) {
-      console.log("showLoader -> error", error);
       throw error;
     }
   };
@@ -61,7 +58,6 @@ export const useAlert = () => {
         theme: options?.theme ?? DEFAULT_THEME,  
       });
     } catch (error) {
-      console.log("showLoader -> error", error);
       throw error;
     }
   };
@@ -74,7 +70,6 @@ export const useAlert = () => {
         theme: options?.theme ?? DEFAULT_THEME,
       });
     } catch (error) {
-      console.log("showLoader -> error", error);
       throw error;
     }
   };
@@ -91,7 +86,6 @@ export const useAlert = () => {
   //             confirmButtonText: 'Yes, delete it!'
   //           })
   //     } catch (error) {
-  //         console.log("showLoader -> error", error);
   //         throw error;
   //     }
   // };

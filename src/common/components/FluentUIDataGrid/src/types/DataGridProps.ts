@@ -1,19 +1,19 @@
 /* eslint-disable */
-import { ICommandBarItemProps } from '@fluentui/react';
+import { IComboBoxOption, ICommandBarItemProps } from '@fluentui/react';
 import { LogicalExpression } from './FilterExpression';
 
 
-export interface DataGridProps<T> {
+export interface IDataGridProps<T> {
     key: string; 
     isLoading? : boolean;
 
     items: T[];
-    columns: DataGridColumn<T>[];
+    columns: IDataGridColumn<T>[];
 
     selectionMode? : "disable" | "single" | "multiple";
 
     pageSize? : number;
-    pageOptions? : number[];
+    pageOptions? : IComboBoxOption[];
 
     expandDefaultGroups? : boolean,
 
@@ -26,7 +26,7 @@ export interface DataGridProps<T> {
 }
 
 
-export interface DataGridColumn<T> {
+export interface IDataGridColumn<T> {
   name: string;
   key: string;
   fieldName: string;
@@ -51,7 +51,7 @@ export interface DataGridColumn<T> {
   disableSort? : boolean;
 
   // hide show column
-  allowHideShowColumn?: boolean;
+  disableHideShow?: boolean;
   hideInDefaultView?: boolean;
 
   disableAllColumnAction? : boolean;

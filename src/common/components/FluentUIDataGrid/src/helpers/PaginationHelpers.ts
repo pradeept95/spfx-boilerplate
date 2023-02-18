@@ -37,6 +37,5 @@ export function getPagedItems(
       ? filterSorteditems.length
       : calculatedPageSize;
   const pagedItems = filterSorteditems?.splice(firstIndex, lastIndex);
-  console.log("Paged Completed", pagedItems);
   return pagedItems;
 }

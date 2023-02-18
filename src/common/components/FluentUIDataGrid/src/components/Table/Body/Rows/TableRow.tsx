@@ -5,14 +5,14 @@ import * as React from "react";
 import { onlyUnique } from "../../../../helpers/FilterHelper";
 import { useDataTableGrid } from "../../../../hooks/useDataGrid";
 import * as gridStyle from "../../../../styles/DataGrid.module.scss";
-import { DataGridColumn } from "../../../../types/DataGridProps";
+import { IDataGridColumn } from "../../../../types/DataGridProps";
 
 export const TableRow: React.FunctionComponent<{
   item: any;
 }> = ({ item }): JSX.Element => {
   const { gridKey$, columns$, selectedItems$ } = useDataTableGrid();
 
-  const columns = useObservableState<DataGridColumn<any>[]>(columns$, []);
+  const columns = useObservableState<IDataGridColumn<any>[]>(columns$, []);
   const selectedItems = useObservableState(selectedItems$, []);
   const gridKey = useObservableState<string>(gridKey$, "");
 
@@ -53,7 +53,7 @@ export const TableRow: React.FunctionComponent<{
             />
           </span>
         </td>
-        {columns?.map((col) => (
+        {columns?.filter(x => !x.hideInDefaultView)?.map((col) => (
           <>
             {col?.onRender && (
               <td className={gridStyle.default.tableMainGridtd}>

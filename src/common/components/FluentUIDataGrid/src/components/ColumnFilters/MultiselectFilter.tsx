@@ -5,7 +5,7 @@ import * as React from "react";
 import { onlyUnique } from "../../helpers/FilterHelper";
 import { compareValues } from "../../helpers/SortHelpers";
 import { useDataTableGrid } from "../../hooks/useDataGrid";
-import { DataGridColumn } from "../../types/DataGridProps";
+import { IDataGridColumn } from "../../types/DataGridProps";
 import {
   BasicExpression,
   LogicalExpression,
@@ -16,7 +16,7 @@ const stackTokens: IStackTokens = {
 };
 
 const MultiSelectFilter: React.FunctionComponent<{
-  column: DataGridColumn<any>;
+  column: IDataGridColumn<any>;
   colFilterExpression: LogicalExpression;
   setColFilterExpression: React.Dispatch<
     React.SetStateAction<LogicalExpression>

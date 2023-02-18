@@ -20,3 +20,6 @@ export const unsortedIcon: IIconProps = { iconName: "Sort" };
 // grid group icons
 export const expandGroupIcon: IIconProps = { iconName: "ChevronRight" };
 export const collapseGroupIcon: IIconProps = { iconName: "ChevronDown" };
+
+// hide show col action icon
+export const colHideShowIcon: IIconProps = { iconName: "TripleColumn" };

@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { DataGridColumn } from "../types/DataGridProps";
+import { IDataGridColumn } from "../types/DataGridProps";
 import { isValidDate, isValidNumber } from "./utils";
 
 export const compareObjects = (
@@ -86,7 +86,7 @@ export function copyAndSortByMultiple<T>(
 
 export const sortByFieldsInPlace = (
   arr: any[],
-  sortColumns: DataGridColumn<any>[]
+  sortColumns: IDataGridColumn<any>[]
 ) => {
   let allSortedArray = [...arr];
   allSortedArray.sort((a, b) => {
@@ -107,13 +107,13 @@ export const sortByFieldsInPlace = (
   return allSortedArray;
 };
 
-export function sortGrid(items: any[], columns: DataGridColumn<any>[]): any[] {
+export function sortGrid(items: any[], columns: IDataGridColumn<any>[]): any[] {
   const sortColumn = columns?.filter((x) => x.isSorted)?.[0];
   const groupedColumns = columns
     ?.filter((x) => x.isGrouped)
     ?.sort((x, y) => (x.groupOrderNumber > y.groupOrderNumber ? 1 : -1));
 
-  let sortColumns: DataGridColumn<any>[] = [];
+  let sortColumns: IDataGridColumn<any>[] = [];
 
   // is grouped column exists give priority to grouped column before sorting
   if (groupedColumns?.length) {
@@ -125,7 +125,6 @@ export function sortGrid(items: any[], columns: DataGridColumn<any>[]): any[] {
     sortColumns = [...sortColumns, sortColumn];
   }
 
-  console.log("Sort Completed", sortColumns);
   if (sortColumns.length) {
     const sortedItems = sortByFieldsInPlace(items, sortColumns); 
     return [...sortedItems]

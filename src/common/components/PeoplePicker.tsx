@@ -136,13 +136,7 @@ export const PeoplePicker: React.FunctionComponent<PeoplePickerProps> = (
       }, 4000);
     }
   };
-
-  // const resetSelectedUsers = async () => {
-  //   setSelectedPeople([])
-  // }
-
-  //console.log(resetSelectedUsers)
-
+  
   const onRenderSuggestionItem = (
     personaProps: IPersonaProps,
     suggestionsProps: IBasePickerSuggestionsProps
@@ -191,7 +185,7 @@ export const PeoplePicker: React.FunctionComponent<PeoplePickerProps> = (
   };
 
   const peoplePickerProps: IPeoplePickerProps = {
-    key: peoplePickerId,
+    // key: peoplePickerId,
     ["aria-label"]: props?.label ?? "Select User",
     pickerSuggestionsProps: suggestionProps,
     selectionAriaLabel: "Selected Users",

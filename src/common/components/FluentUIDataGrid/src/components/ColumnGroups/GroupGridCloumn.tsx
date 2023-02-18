@@ -3,10 +3,10 @@ import { Checkbox } from "@fluentui/react";
 import { useObservableState } from "observable-hooks";
 import * as React from "react";
 import { useDataTableGrid } from "../../hooks/useDataGrid";
-import { DataGridColumn } from "../../types/DataGridProps";
+import { IDataGridColumn } from "../../types/DataGridProps";
 
 export const GroupGridCloumn: React.FunctionComponent<{
-  column: DataGridColumn<any>;
+  column: IDataGridColumn<any>;
   toggleCallout: () => void;
 }> = ({ column, toggleCallout }): JSX.Element => {
   const { columns$, currentPage$, groups$ } = useDataTableGrid();
@@ -20,7 +20,7 @@ export const GroupGridCloumn: React.FunctionComponent<{
     const lastMaxGroupOrder = Math.max.apply(Math, [
       ...columns.map((col) => col.groupOrderNumber ?? 1),
     ]);
-    const newColumns = columns?.map((col: DataGridColumn<any>) => {
+    const newColumns = columns?.map((col: IDataGridColumn<any>) => {
       if (col?.fieldName == column?.fieldName) {
         col.isGrouped = isGrouped;
         col.groupOrderNumber = isNaN(lastMaxGroupOrder)

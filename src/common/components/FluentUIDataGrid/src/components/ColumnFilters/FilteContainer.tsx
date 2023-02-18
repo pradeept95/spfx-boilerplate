@@ -9,7 +9,7 @@ import { useObservableState } from "observable-hooks";
 import * as React from "react";
 import { hasFilterExpression } from "../../helpers/FilterHelper";
 import { useDataTableGrid } from "../../hooks/useDataGrid";
-import { DataGridColumn } from "../../types/DataGridProps";
+import { IDataGridColumn } from "../../types/DataGridProps";
 import { 
   LogicalExpression,
 } from "../../types/FilterExpression";
@@ -23,7 +23,7 @@ const stackToken: IStackTokens = {
 };
 
 const FilterContainer: React.FunctionComponent<{
-  column: DataGridColumn<any>;
+  column: IDataGridColumn<any>;
   toggleCallout: () => void;
 }> = ({ column, toggleCallout }) => { 
   const [colFilterExpression, setColFilterExpression] =

@@ -11,12 +11,12 @@ import { groupItems } from "../helpers/GroupHelpers";
 import { getPagedItems } from "../helpers/PaginationHelpers";
 import { markSelectedItems } from "../helpers/SelectionHelper";
 import { sortGrid } from "../helpers/SortHelpers";
-import { DataGridColumn, DataGridProps } from "../types/DataGridProps";
+import { IDataGridColumn, IDataGridProps } from "../types/DataGridProps";
 
 const DataTableContext = createContext<any>({});
 export default DataTableContext;
 
-export function DataTableContextProvider<T extends {}>(props: React.PropsWithChildren<DataGridProps<T>>): JSX.Element {
+export function DataTableContextProvider<T extends {}>(props: React.PropsWithChildren<IDataGridProps<T>>): JSX.Element {
 
     const items$ = React.useMemo(
       () => new BehaviorSubject<T[]>([]),
@@ -26,7 +26,7 @@ export function DataTableContextProvider<T extends {}>(props: React.PropsWithChi
     const globalFilter$ = React.useMemo(() => new BehaviorSubject(""), []);
     const columns$ = React.useMemo(
       () =>
-        new BehaviorSubject<DataGridColumn<T>[]>(
+        new BehaviorSubject<IDataGridColumn<T>[]>(
           props.columns?.map((x) => {
             return { ...x, isFiltered: !!x.filterExpression };
           })
@@ -87,7 +87,6 @@ export function DataTableContextProvider<T extends {}>(props: React.PropsWithChi
               props?.expandDefaultGroups
             ); 
 
-            console.log("Grouped Completed", groups, groupedColumns);
             groups$.next(groups);
             return filterSorteditems;
           }),
