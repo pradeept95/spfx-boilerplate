@@ -8,6 +8,56 @@ import { SampleSaleService } from "../../shared/services/SampleSaleService";
 
 const { getAllSalesData } = SampleSaleService();
 
+const columns: IDataGridColumn<SampleSales>[] = [
+  {
+    key: "id",
+    name: "ID",
+    fieldName: "id",
+    isSorted: true,
+    isSortedDescending: true,
+    onRender: (item: any) => {
+      return <>{item?.id}</>;
+    },
+    disableHideShow : true
+  },
+  {
+    key: "region",
+    name: "Region",
+    fieldName: "region" 
+  },
+  {
+    key: "city",
+    name: "City",
+    fieldName: "city",
+     
+  },
+  {
+    key: "category",
+    name: "Category",
+    fieldName: "category" 
+  },
+  {
+    key: "product",
+    name: "Product",
+    fieldName: "product" 
+  },
+  {
+    key: "quantity",
+    name: "Quantity",
+    fieldName: "quantity" 
+  },
+  {
+    key: "unitPrice",
+    name: "Unit Price",
+    fieldName: "unitPrice"  
+  },
+  {
+    key: "totalPrice",
+    name: "Total Price",
+    fieldName: "totalPrice" 
+  },
+];
+
 const columns2: IDataGridColumn<SampleSales>[] = [
   {
     key: "id",
@@ -283,6 +333,83 @@ const columns2: IDataGridColumn<SampleSales>[] = [
 //     </>
 //   );
 // };
+
+export const DataTableExamplePage1: React.FunctionComponent<{}> = (props) => {
+  const [items, setItems] = React.useState<SampleSales[]>([]);
+  const [loading, setLoading] = React.useState<boolean>(false);
+
+  const callApi = async () => {
+    try {
+      setLoading(true);
+      const items = await getAllSalesData();
+      setItems(items);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  React.useEffect(() => {
+    callApi();
+  }, []);
+
+  const handleGetContextMenuItem = (selecteItems: any[]): ICommandBarItemProps[] => {
+      let commands: ICommandBarItemProps[] = [
+        {
+          key: "newItem",
+          text: "New Task",
+          iconProps: { iconName: "Add" },
+          onClick: () => console.log("/myninds/0/new"),
+        },
+      ];
+
+      if (selecteItems?.length == 1) {
+        commands.push({
+          key: "edit",
+          text: "Edit Task",
+          iconProps: { iconName: "Edit" },
+          disabled: selecteItems?.length !== 1,
+          onClick: () => console.log(`/myninds/${selecteItems?.[0]?.id}/new`),
+        });
+      }
+
+      if (selecteItems?.length == 1) {
+        commands.push({
+          key: "complete",
+          text: "Mark Completed",
+          iconProps: { iconName: "SkypeCircleCheck" },
+          onClick: () => {
+            console.log("completed");
+            // handleCompleteTask(selecteItems?.[0]);
+          },
+        });
+      }
+
+      return commands;
+    };
+
+  const handleItemSelect = (selectedItems: SampleSales[]) => {
+    console.log("From Component", selectedItems);
+  };
+
+  return (
+    <>
+      <section>
+        <FluentUIDataGrid
+          key="id"
+          gridTitle="Test Grid Title"
+          gridDescription="Some long description for the grid"
+          columns={columns}
+          isLoading={loading}
+          items={items}
+          pageSize={20}
+          expandDefaultGroups={true}
+          onSelectionChange={handleItemSelect}
+          onGetActionMenuItem={handleGetContextMenuItem}
+        />
+      </section>
+    </>
+  );
+};
 
 export const DataTableExamplePage2: React.FunctionComponent<{}> = (props) => {
   const [items, setItems] = React.useState<SampleSales[]>([]);

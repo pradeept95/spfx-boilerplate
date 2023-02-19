@@ -29,11 +29,10 @@ export const GridBody: React.FunctionComponent<{ isLoading: boolean }> = ({ isLo
         <>
             <div style={{ overflowX: isLoading ? "hidden" : "auto" }}>
                 <table className={gridStyle.default.tableMainGrid}>
-                    <thead>
-                        <tr className={gridStyle.default.tableHeaderRow}>
-                            <TableHeader hasGroup={groups?.length > 0} />
-                        </tr>
-                    </thead>
+                    {/* Table Header section*/}
+                    <TableHeader hasGroup={groups?.length > 0} />
+
+                    {/* table body section */}
                     {!groups?.length ? (
                         <TableBody items={pagedItems} isLoading={isLoading} />
                     ) : (
@@ -42,9 +41,9 @@ export const GridBody: React.FunctionComponent<{ isLoading: boolean }> = ({ isLo
                             groups={groups}
                             isLoading={isLoading}
                         />
-                    )}
-                    <tfoot></tfoot>
+                    )} 
                 </table>
+                {/* table no-item, loading, no filtered item section */}
                 <LoadingItems loading={isLoading} />
                 <NoItem noItems={!isLoading && !items?.length} />
                 <NoItemFound

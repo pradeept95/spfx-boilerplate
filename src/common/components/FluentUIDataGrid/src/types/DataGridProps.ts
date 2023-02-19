@@ -5,6 +5,12 @@ import { LogicalExpression } from './FilterExpression';
 
 export interface IDataGridProps<T> {
     key: string; 
+
+    // title props
+    gridTitle? : string;
+    gridDescription? : string;
+    disableTitleSection? : boolean,
+
     isLoading? : boolean;
 
     items: T[];

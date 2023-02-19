@@ -13,7 +13,7 @@
         text-align: left;
         padding: 8px;
         border: 1px solid;
-        border-color: "[theme: neutralLight, default: white]";
+        border-color: "[theme: neutralLighter, default: white]";
     }
 
     &tr:nth-child(even) {
@@ -27,25 +27,25 @@
 }
 
 .tableHeaderRow {
-    background-color: "[theme: themePrimary, default: blue]";
-    color: "[theme: white, default: white]";
-    cursor: pointer;
+    background-color: "[theme: neutralQuaternaryAlt, default: gray]";
+    color: "[theme: themeDarker, default: black]"; 
     border: 1px solid;
     border-color: "[theme: neutralLight, default: white]";
+    cursor: pointer;
 }
 
 .tableRowSelected {
     background-color: "[theme: neutralLight, default: white]";
     cursor: pointer;
     border: 1px solid;
-    border-color: "[theme: neutralLight, default: white]";
+    border-color: "[theme: neutralLighter, default: white]";
 }
 
 .tableRowGrouped {
-    background-color: "[theme: neutralQuaternaryAlt, default: white]";
+    background-color: "[theme: neutralLight, default: white]";
     cursor: pointer;
     border: 1px solid;
-    border-color: "[theme: neutralLight, default: white]";
+    border-color: "[theme: neutralLighter, default: white]";
 }
 
 .dataGridPageActionBtn {
@@ -65,8 +65,35 @@
     border-radius: 50%;
 }
 
+.gridTitleSection {
+    background-color: "[theme: themeLight, default: blue]"; 
+    padding : 0.5rem 1rem;
+    border-radius: 1rem 0rem;
+}
+
 .topCommandActionMenu {
     border-bottom: 1px;
     border-style: none none solid none;
     border-color: "[theme: themePrimary, default: gray]";
 }
+
+.noItemBody,
+.noItemFoundBody,
+.loadingBody { 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    min-height: 30vh;
+    border: 1px solid;
+    border-color: "[theme: neutralLight, default: white]";
+}
+
+.emptyMsgIcon {
+    font-size: 3rem;
+    height: 4rem;
+    width: 4rem;
+    margin: 0px 25px;
+    padding: 1.2rem;
+}
+

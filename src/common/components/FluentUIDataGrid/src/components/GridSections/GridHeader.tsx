@@ -24,6 +24,25 @@ export const GridHeader: React.FunctionComponent<{
     const columns = useObservableState<IDataGridColumn<any>[]>(columns$, []);
     const globalFilter = useObservableState<string>(globalFilter$, "");
 
+    const handleResetFilter = () => {
+        const newColumns = columns?.splice(0)?.map(
+            (col: IDataGridColumn<any>) => {
+                return {
+                    ...col,
+                    isFiltered: false,
+                    filterExpression: undefined,
+                };
+            }
+        );
+        globalFilter$.next("");
+        currentPage$.next(1);
+        columns$.next([...newColumns]);
+    }
+
+    const handleKeywordSearch = (_, searchTerm: string) => {
+        globalFilter$.next(searchTerm);
+        currentPage$.next(1);
+    }
 
     return (
         <>
@@ -49,28 +68,12 @@ export const GridHeader: React.FunctionComponent<{
                             placeholder="Search Keywords"
                             aria-label="Search in Grid"
                             value={globalFilter}
-                            onChange={(_, searchTerm: string) => {
-                                globalFilter$.next(searchTerm);
-                                currentPage$.next(1);
-                            }}
+                            onChange={handleKeywordSearch}
                         />
                         <DefaultButton
                             styles={{ root: { minWidth: 15, width: 24 } }}
                             iconProps={clearFilterIcon}
-                            onClick={() => {
-                                const newColumns = columns?.splice(0)?.map(
-                                    (col: IDataGridColumn<any>) => {
-                                        return {
-                                            ...col,
-                                            isFiltered: false,
-                                            filterExpression: undefined,
-                                        };
-                                    }
-                                );
-                                globalFilter$.next("");
-                                currentPage$.next(1);
-                                columns$.next([...newColumns]);
-                            }}
+                            onClick={handleResetFilter}
                             ariaLabel="Clear Filter"
                             title="Clear Filter"
                         />

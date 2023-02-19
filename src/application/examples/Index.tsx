@@ -3,7 +3,7 @@ import * as React from "react";
 import { Routes, Route } from "react-router-dom";
 import { PageNotFound } from "../../common/components/PageNotFound";
 import { ExampleLayout } from "./layout/ExampleLayout"; 
-import { DataTableExamplePage2 } from "./pages/DataTableExample";
+import { DataTableExamplePage1, DataTableExamplePage2 } from "./pages/DataTableExample";
 import DocuSignExample from "./pages/DocuSignFlow";
 import EditorExample from "./pages/EditorExample";
 import ESignatureExample from "./pages/ESignatureExample";
@@ -42,10 +42,8 @@ const ExampleEntryPage: React.FunctionComponent<{}> = (props) => {
             <Route
               path="datatable1"
               element={
-                <>
-                example removed
-                  {/* <DataTableExamplePage1 /> */}
-                  {/* <DataTableExamplePage2 /> */}
+                <> 
+                  <DataTableExamplePage1 /> 
                 </>
               }
             />

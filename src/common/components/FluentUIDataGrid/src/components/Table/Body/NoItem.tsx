@@ -1,14 +1,7 @@
 /* eslint-disable */
-import { FontIcon, mergeStyles } from "@fluentui/react";
+import { FontIcon } from "@fluentui/react";
 import * as React from "react";
-
-const emptyMsgIconClass = mergeStyles({
-  fontSize: 50,
-  height: 50,
-  width: 50,
-  margin: "0 25px",
-  padding: 20,
-});
+import * as gridStyle from "./../../../styles/DataGrid.module.scss";
 
 export const NoItem: React.FunctionComponent<{
   noItems: boolean;
@@ -17,18 +10,13 @@ export const NoItem: React.FunctionComponent<{
   return (
     <>
       {noItems ? (
-        <div
-          style={{
-            display: "block",
-            minHeight: "30vh",
-            marginTop: "15vh",
-          }}
+        <div className ={gridStyle.default.noItemBody}
         >
           <FontIcon
             role={"img"}
             aria-label="No Items"
             iconName="WebComponents"
-            className={emptyMsgIconClass}
+            className={gridStyle.default.emptyMsgIcon}
           />
           {message ?? "No Item(s) to Display"}
         </div>

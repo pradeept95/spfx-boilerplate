@@ -19,7 +19,7 @@ import TextFilter from "./TextFilter";
 
 // Tokens definition 
 const stackToken: IStackTokens = {
-  childrenGap: 10,
+  childrenGap: 2,
 };
 
 const FilterContainer: React.FunctionComponent<{

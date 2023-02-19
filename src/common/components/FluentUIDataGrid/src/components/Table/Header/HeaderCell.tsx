@@ -7,8 +7,7 @@ import { useBoolean, useId } from "@fluentui/react-hooks";
 import {
   ActionButton,
   Callout,
-  FontIcon,
-  FontWeights,
+  FontIcon, 
   IStackItemStyles,
   IStackTokens,
   mergeStyles,
@@ -16,7 +15,7 @@ import {
   Separator,
   Stack,
 } from "@fluentui/react";
-import FilterContainer from "../../ColumnFilters/FilteContainer";
+import FilterContainer from "../../ColumnFilters/FilterContainer";
 import {
   ColseCalloutIcon,
   openCalloutIcon,
@@ -31,23 +30,12 @@ const stackTokens: IStackTokens = {
   childrenGap: 5,
 };
 
-const styles = mergeStyleSets({
-  button: {
-    width: 130,
-  },
+const styles = mergeStyleSets({ 
   callout: {
     width: 250,
     maxWidth: "90%",
     padding: "20px 24px",
-  },
-  title: {
-    marginBottom: 12,
-    fontWeight: FontWeights.semilight,
-  },
-  link: {
-    display: "block",
-    marginTop: 20,
-  },
+  } 
 });
 
 const stackItemStyles: IStackItemStyles = {
@@ -147,19 +135,19 @@ const HeaderCell: React.FunctionComponent<{
                 },
                 flexContainer: {
                   flexDirection: "row-reverse",
-                  color: "white",
+                  //color: "white",
                   FontWeight: 700,
                   fontSize: "0.7rem",
                 },
-                iconHovered: {
-                  color: "white",
-                  FontWeight: 700,
-                },
-                icon: {
-                  color: "white",
-                  FontWeight: 700,
-                  fontSize: "0.7rem",
-                },
+                // iconHovered: {
+                //   color: "white",
+                //   FontWeight: 700,
+                // },
+                // icon: {
+                //   color: "white",
+                //   FontWeight: 700,
+                //   fontSize: "0.7rem",
+                // },
               }}
             ></ActionButton>
           </Stack.Item>
@@ -188,17 +176,17 @@ const HeaderCell: React.FunctionComponent<{
               styles={{
                 flexContainer: {
                   flexDirection: "row-reverse",
-                  color: "white",
+                  //color: "white",
                   FontWeight: 700,
                 },
-                iconHovered: {
-                  color: "white",
-                  FontWeight: 700,
-                },
-                icon: {
-                  color: "white",
-                  FontWeight: 700,
-                },
+                // iconHovered: {
+                //   color: "white",
+                //   FontWeight: 700,
+                // },
+                // icon: {
+                //   color: "white",
+                //   FontWeight: 700,
+                // },
               }}
             >
               {column?.isFiltered ? (

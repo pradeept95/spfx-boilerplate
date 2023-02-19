@@ -14,6 +14,7 @@ import { GridFooter } from "./GridSections/GridFooter";
 import { GridBody } from "./GridSections/GridBody";
 import { GetExportData } from "../helpers/ExportHelper";
 import { ExportService } from "../../../../services/ExportService";
+import { GridTitle } from "./GridSections/GridTitle";
 
 // Tokens definition
 const stackTokens: IStackTokens = {
@@ -56,7 +57,7 @@ function FluentUIDataGridContainer<T extends {}>(
     }
   }
 
-  const handleExport = async  (items: T[], cols: IDataGridColumn<T>[], exportType: "excel" | "csv") => {
+  const handleExport = async (items: T[], cols: IDataGridColumn<T>[], exportType: "excel" | "csv") => {
     const exportData = props?.onGetExportItems ? props.onGetExportItems(items) : GetExportData(items, cols);
     switch (exportType) {
       case "excel":
@@ -102,7 +103,7 @@ function FluentUIDataGridContainer<T extends {}>(
         key: "export_excel",
         text: "Export to Excel",
         onClick: () => {
-           handleExport(newSelectedItems.length > 0 ? newSelectedItems : items, columns, "excel")
+          handleExport(newSelectedItems.length > 0 ? newSelectedItems : items, columns, "excel")
         }
       },
       {
@@ -125,6 +126,10 @@ function FluentUIDataGridContainer<T extends {}>(
 
   return (
     <Stack tokens={stackTokens}>
+      {!props?.disableTitleSection ? 
+      <Stack.Item className={gridStyle.default.gridTitleSection}>
+        <GridTitle title={props.gridTitle} description={props.gridDescription} />
+      </Stack.Item> : <></>}
       <Stack.Item className={gridStyle.default.topCommandActionMenu}>
         <GridHeader
           actionMenuItems={actionMenuItems}
