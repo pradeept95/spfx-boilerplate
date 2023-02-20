@@ -59,6 +59,13 @@ export const GridHeader: React.FunctionComponent<{
                         overflowButtonProps={overflowProps}
                         ariaLabel="Grid Actions"
                         role={"navigation"}
+                        styles={
+                            {
+                                root: {
+                                    padding: "0px 15px 0px 0px"
+                                }
+                            }
+                        } 
                     />
                 </Stack.Item>
                 <Stack.Item>

@@ -1,10 +1,11 @@
 /* eslint-disable */
 import { ICommandBarItemProps } from "@fluentui/react";
-import * as React from "react"; 
+import * as React from "react";
 import { FluentUIDataGrid } from "../../../common/components/FluentUIDataGrid";
 import { IDataGridColumn } from "../../../common/components/FluentUIDataGrid/src/types/DataGridProps";
 import { SampleSales } from "../../shared/models/sample-sales.model";
 import { SampleSaleService } from "../../shared/services/SampleSaleService";
+import { ItemCardView } from "../components/CardItem";
 
 const { getAllSalesData } = SampleSaleService();
 
@@ -18,43 +19,43 @@ const columns: IDataGridColumn<SampleSales>[] = [
     onRender: (item: any) => {
       return <>{item?.id}</>;
     },
-    disableHideShow : true
+    disableHideShow: true
   },
   {
     key: "region",
     name: "Region",
-    fieldName: "region" 
+    fieldName: "region"
   },
   {
     key: "city",
     name: "City",
     fieldName: "city",
-     
+
   },
   {
     key: "category",
     name: "Category",
-    fieldName: "category" 
+    fieldName: "category"
   },
   {
     key: "product",
     name: "Product",
-    fieldName: "product" 
+    fieldName: "product"
   },
   {
     key: "quantity",
     name: "Quantity",
-    fieldName: "quantity" 
+    fieldName: "quantity"
   },
   {
     key: "unitPrice",
     name: "Unit Price",
-    fieldName: "unitPrice"  
+    fieldName: "unitPrice"
   },
   {
     key: "totalPrice",
     name: "Total Price",
-    fieldName: "totalPrice" 
+    fieldName: "totalPrice"
   },
 ];
 
@@ -68,7 +69,7 @@ const columns2: IDataGridColumn<SampleSales>[] = [
     onRender: (item: any) => {
       return <>{item?.id}</>;
     },
-    disableHideShow : true
+    disableHideShow: true
   },
   {
     key: "region",
@@ -76,7 +77,7 @@ const columns2: IDataGridColumn<SampleSales>[] = [
     fieldName: "region",
     isGrouped: true,
     groupOrderNumber: 1,
-    disableHideShow : true
+    disableHideShow: true
   },
   {
     key: "city",
@@ -135,25 +136,25 @@ const columns2: IDataGridColumn<SampleSales>[] = [
     key: "unitPrice",
     name: "Unit Price",
     fieldName: "unitPrice",
-    hideInDefaultView : true,    
+    hideInDefaultView: true,
   },
   {
     key: "totalPrice",
     name: "Total Price",
     fieldName: "totalPrice",
-    hideInDefaultView : true
+    hideInDefaultView: true
   },
   {
     key: "created",
     name: "Created Date",
-    fieldName: "created", 
-    dataType : "date"
+    fieldName: "created",
+    dataType: "date"
   },
   {
     key: "updated",
     name: "Updated Date",
-    fieldName: "updated", 
-    dataType : "date"
+    fieldName: "updated",
+    dataType: "date"
   },
 ];
 
@@ -365,43 +366,47 @@ export const DataTableExamplePage1: React.FunctionComponent<{}> = (props) => {
   }, []);
 
   const handleGetContextMenuItem = (selecteItems: any[]): ICommandBarItemProps[] => {
-      let commands: ICommandBarItemProps[] = [
-        {
-          key: "newItem",
-          text: "New Task",
-          iconProps: { iconName: "Add" },
-          onClick: () => console.log("/myninds/0/new"),
+    let commands: ICommandBarItemProps[] = [
+      {
+        key: "newItem",
+        text: "New Task",
+        iconProps: { iconName: "Add" },
+        onClick: () => console.log("/myninds/0/new"),
+      },
+    ];
+
+    if (selecteItems?.length == 1) {
+      commands.push({
+        key: "edit",
+        text: "Edit Task",
+        iconProps: { iconName: "Edit" },
+        disabled: selecteItems?.length !== 1,
+        onClick: () => console.log(`/myninds/${selecteItems?.[0]?.id}/new`),
+      });
+    }
+
+    if (selecteItems?.length == 1) {
+      commands.push({
+        key: "complete",
+        text: "Mark Completed",
+        iconProps: { iconName: "SkypeCircleCheck" },
+        onClick: () => {
+          console.log("completed");
+          // handleCompleteTask(selecteItems?.[0]);
         },
-      ];
+      });
+    }
 
-      if (selecteItems?.length == 1) {
-        commands.push({
-          key: "edit",
-          text: "Edit Task",
-          iconProps: { iconName: "Edit" },
-          disabled: selecteItems?.length !== 1,
-          onClick: () => console.log(`/myninds/${selecteItems?.[0]?.id}/new`),
-        });
-      }
-
-      if (selecteItems?.length == 1) {
-        commands.push({
-          key: "complete",
-          text: "Mark Completed",
-          iconProps: { iconName: "SkypeCircleCheck" },
-          onClick: () => {
-            console.log("completed");
-            // handleCompleteTask(selecteItems?.[0]);
-          },
-        });
-      }
-
-      return commands;
-    };
+    return commands;
+  };
 
   const handleItemSelect = (selectedItems: SampleSales[]) => {
     console.log("From Component", selectedItems);
   };
+
+  const handleCardViewRender = (item: SampleSales, isSelected: boolean, onItemSelect: (selectedItems: any[], isSelected: boolean) => void): JSX.Element => {
+    return (<ItemCardView item={item} isSelected={isSelected} onItemSelect={onItemSelect} />)
+  }
 
   return (
     <>
@@ -417,6 +422,7 @@ export const DataTableExamplePage1: React.FunctionComponent<{}> = (props) => {
           expandDefaultGroups={true}
           onSelectionChange={handleItemSelect}
           onGetActionMenuItem={handleGetContextMenuItem}
+          onCardViewRender={handleCardViewRender}
         />
       </section>
     </>
@@ -442,39 +448,39 @@ export const DataTableExamplePage2: React.FunctionComponent<{}> = (props) => {
   }, []);
 
   const handleGetContextMenuItem = (selecteItems: any[]): ICommandBarItemProps[] => {
-      let commands: ICommandBarItemProps[] = [
-        {
-          key: "newItem",
-          text: "New Task",
-          iconProps: { iconName: "Add" },
-          onClick: () => console.log("/myninds/0/new"),
+    let commands: ICommandBarItemProps[] = [
+      {
+        key: "newItem",
+        text: "New Task",
+        iconProps: { iconName: "Add" },
+        onClick: () => console.log("/myninds/0/new"),
+      },
+    ];
+
+    if (selecteItems?.length == 1) {
+      commands.push({
+        key: "edit",
+        text: "Edit Task",
+        iconProps: { iconName: "Edit" },
+        disabled: selecteItems?.length !== 1,
+        onClick: () => console.log(`/myninds/${selecteItems?.[0]?.id}/new`),
+      });
+    }
+
+    if (selecteItems?.length == 1) {
+      commands.push({
+        key: "complete",
+        text: "Mark Completed",
+        iconProps: { iconName: "SkypeCircleCheck" },
+        onClick: () => {
+          console.log("completed");
+          // handleCompleteTask(selecteItems?.[0]);
         },
-      ];
+      });
+    }
 
-      if (selecteItems?.length == 1) {
-        commands.push({
-          key: "edit",
-          text: "Edit Task",
-          iconProps: { iconName: "Edit" },
-          disabled: selecteItems?.length !== 1,
-          onClick: () => console.log(`/myninds/${selecteItems?.[0]?.id}/new`),
-        });
-      }
-
-      if (selecteItems?.length == 1) {
-        commands.push({
-          key: "complete",
-          text: "Mark Completed",
-          iconProps: { iconName: "SkypeCircleCheck" },
-          onClick: () => {
-            console.log("completed");
-            // handleCompleteTask(selecteItems?.[0]);
-          },
-        });
-      }
-
-      return commands;
-    };
+    return commands;
+  };
 
   const handleItemSelect = (selectedItems: SampleSales[]) => {
     console.log("From Component", selectedItems);
@@ -494,6 +500,37 @@ export const DataTableExamplePage2: React.FunctionComponent<{}> = (props) => {
           expandDefaultGroups={true}
           onSelectionChange={handleItemSelect}
           onGetActionMenuItem={handleGetContextMenuItem}
+        />
+      </section>
+      <section>
+        <FluentUIDataGrid
+          key="id"
+          gridTitle="No Data Example"
+          gridDescription="Grid does not have any data and have custom empty items grid message"
+          columns={columns2}
+          isLoading={loading}
+          items={[]}
+          pageSize={20}
+          expandDefaultGroups={true}
+          onSelectionChange={handleItemSelect}
+          onGetActionMenuItem={handleGetContextMenuItem}
+          emptyGridMessage={"No Item to Show (custom message)"}
+
+        />
+      </section>
+      <section>
+        <FluentUIDataGrid
+          key="id"
+          disableTitleSection={true}
+          columns={columns2}
+          isLoading={loading}
+          items={[]}
+          pageSize={20}
+          expandDefaultGroups={true}
+          onSelectionChange={handleItemSelect}
+          onGetActionMenuItem={handleGetContextMenuItem}
+          emptyGridMessage={"No Item to Show (custom message)"}
+          disableGridMode={true}
         />
       </section>
     </>

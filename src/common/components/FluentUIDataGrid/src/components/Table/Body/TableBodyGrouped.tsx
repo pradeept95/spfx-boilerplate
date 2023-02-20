@@ -1,23 +1,21 @@
-/* eslint-disable */ 
+/* eslint-disable */
 import { IGroup } from "@fluentui/react";
-import * as React from "react"; 
+import * as React from "react";
 import { TableRowGrouped } from "./Rows/TableRowGrouped";
 
 export const TableBodyGrouped: React.FunctionComponent<{
   items: any[];
-  groups: IGroup[];
-  isLoading: boolean;
-}> = ({ items, groups, isLoading }): JSX.Element => {
-   
+  groups: IGroup[]; 
+}> = ({ items, groups }): JSX.Element => {
+
   return (
     <>
       <tbody>
-        {!isLoading &&
-          groups.map((group) => (
-            <>
-              <TableRowGrouped items={items} group={group} />
-            </>
-          ))}
+        {groups.map((group) => (
+          <>
+            <TableRowGrouped items={items} group={group} />
+          </>
+        ))}
       </tbody>
     </>
   );

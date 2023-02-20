@@ -23,12 +23,23 @@ export interface IDataGridProps<T> {
 
     expandDefaultGroups? : boolean,
 
+    // empty messages
+    emptyGridMessage? : string;
+    emptySearchResultMessage? : string;
+
     onSelectionChange?: (selectedItems: T[]) => void;
     onGetActionMenuItem? : (selectedItems: T[]) => ICommandBarItemProps[];
     onGetOverflowActionMenuItem? : (selectedItems: T[]) => ICommandBarItemProps[];
 
     onGetExportItems? : (selectedItems: T[]) => any[];
     onGetExportItem ?: (item: T) => any;
+
+    defalutGridMode? : "table" | "grid";
+    disableGridMode? : boolean;
+    onCardViewRender? : (
+      item : T, 
+      isSelected : boolean, 
+      onItemSelect : (changedItems: T[], isSelected : boolean) => void ) => JSX.Element;
 }
 
 

@@ -4,14 +4,12 @@ import { TableRow } from "./Rows/TableRow";
  
 
 export const TableBody: React.FunctionComponent<{
-  items: any[];
-  isLoading: boolean;
-}> = ({ items, isLoading }): JSX.Element => {
+  items: any[] 
+}> = ({ items }): JSX.Element => {
   return (
     <>
       <tbody>
-        {!isLoading &&
-          items?.map((item) => <TableRow item={item} />)}
+        {items?.map((item) => <TableRow item={item} />)}
       </tbody>
     </>
   );

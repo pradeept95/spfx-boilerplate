@@ -103,7 +103,7 @@ export const TableRowGrouped: React.FunctionComponent<{
         >
           <span
             style={{
-              paddingLeft: 10 * group.level + "px",
+              paddingLeft: 20 * group.level + "px",
             }}
           >
             <ActionButton
