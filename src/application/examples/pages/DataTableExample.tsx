@@ -143,6 +143,18 @@ const columns2: IDataGridColumn<SampleSales>[] = [
     fieldName: "totalPrice",
     hideInDefaultView : true
   },
+  {
+    key: "created",
+    name: "Created Date",
+    fieldName: "created", 
+    dataType : "date"
+  },
+  {
+    key: "updated",
+    name: "Updated Date",
+    fieldName: "updated", 
+    dataType : "date"
+  },
 ];
 
 // const dataTableContextMenu: ICommandBarItemProps[] = [
@@ -473,6 +485,8 @@ export const DataTableExamplePage2: React.FunctionComponent<{}> = (props) => {
       <section>
         <FluentUIDataGrid
           key="id"
+          gridTitle="Test Grid Title"
+          gridDescription="Some long description for the grid"
           columns={columns2}
           isLoading={loading}
           items={items}

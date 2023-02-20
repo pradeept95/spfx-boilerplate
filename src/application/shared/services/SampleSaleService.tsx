@@ -10,7 +10,7 @@ export const SampleSaleService = () => {
     try {
       const sp = await getSP();
       const items: SampleSales[] = (
-        await sp.web.lists.getByTitle("SampleSalesList").items.top(93)()
+        await sp.web.lists.getByTitle("SampleSalesList").items.top(10000)()
       )?.map((item) => {
         const createdDate = getRandomDate(new Date("01/01/2010"), new Date());
         const updatedDate = getRandomDate(createdDate, new Date());

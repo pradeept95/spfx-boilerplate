@@ -32,6 +32,7 @@
     border: 1px solid;
     border-color: "[theme: neutralLight, default: white]";
     cursor: pointer;
+    box-shadow: 0 3px 2px -2px "[theme: neutralQuaternaryAlt, default: gray]";
 }
 
 .tableRowSelected {

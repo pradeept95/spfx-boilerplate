@@ -86,39 +86,53 @@ function FluentUIDataGridContainer<T extends {}>(
       setActionMenuItems(newActionMenuItems);
     }
 
-    setActionOverflowMenuItems([
-      {
-        key: "select_all",
-        text: "Select All Items",
-        onClick: () => handleSelectUnselectAll(true),
-        disabled: newSelectedItems?.length == items?.length && items.length !== 0
-      },
-      {
-        key: "unselect_all",
-        text: "Remove Selection",
-        onClick: () => handleSelectUnselectAll(false),
-        disabled: newSelectedItems?.length == 0
-      },
-      {
-        key: "export_excel",
-        text: "Export to Excel",
-        onClick: () => {
-          handleExport(newSelectedItems.length > 0 ? newSelectedItems : items, columns, "excel")
-        }
-      },
-      {
-        key: "export csv",
-        text: "Export to CSV",
-        onClick: () => {
-          handleExport(newSelectedItems.length > 0 ? newSelectedItems : items, columns, "csv")
-        }
-      }
-    ])
+    setActionOverflowMenuItems([])
 
     setActionFarMenuItems([
       {
+        key: 'export_data', 
+        ariaLabel: 'Export Data',
+        iconOnly: true,
+        iconProps: { iconName: 'Download' },
+        subMenuProps : {
+          items : [ 
+            {
+              key: "export_excel",
+              text: "Export to Excel",
+              onClick: () => {
+                handleExport(newSelectedItems.length > 0 ? newSelectedItems : items, columns, "excel")
+              }
+            },
+            {
+              key: "export csv",
+              text: "Export to CSV",
+              onClick: () => {
+                handleExport(newSelectedItems.length > 0 ? newSelectedItems : items, columns, "csv")
+              }
+            }
+          ]
+        }
+      },
+      {
         key: "selectionCount",
         text: `${newSelectedItems?.length} Item(s) Selected`,
+        ariaLabel: `${newSelectedItems?.length} Item(s) Selected`,
+        subMenuProps : {
+          items : [
+            {
+              key: "select_all",
+              text: "Select All Items",
+              onClick: () => handleSelectUnselectAll(true),
+              disabled: newSelectedItems?.length == items?.length && items.length !== 0
+            },
+            {
+              key: "unselect_all",
+              text: "Remove Selection",
+              onClick: () => handleSelectUnselectAll(false),
+              disabled: newSelectedItems?.length == 0
+            },
+           ]
+        }
       },
     ]);
 
@@ -134,7 +148,8 @@ function FluentUIDataGridContainer<T extends {}>(
         <GridHeader
           actionMenuItems={actionMenuItems}
           actionOverflowMenuItems={actionOverflowMenuItems}
-          actionFarMenuItems={actionFarMenuItems} />
+          actionFarMenuItems={actionFarMenuItems} 
+        />
       </Stack.Item>
       <Stack.Item>
         <GridBody isLoading={props?.isLoading} />

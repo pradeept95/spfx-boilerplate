@@ -157,7 +157,7 @@ const ESignature: React.FunctionComponent<{ onUseSignature : (signatureData : st
       <>
         <canvas
           className="sig-canvas"
-          style={{ minWidth: "300px", width: "100%", height: "160px" }}
+          style={{ minWidth: "350px", width: "100%", height: "160px" }}
           ref={canvasRef}
         />
         {/* <button className="signature-action-btn" onClick={handleSave}>

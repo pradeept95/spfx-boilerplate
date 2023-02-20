@@ -101,7 +101,7 @@ export const TableRowGrouped: React.FunctionComponent<{
           className={gridStyle.default.tableMainGridtd}
           colSpan={columns.length}
         >
-          <strong
+          <span
             style={{
               paddingLeft: 10 * group.level + "px",
             }}
@@ -113,29 +113,11 @@ export const TableRowGrouped: React.FunctionComponent<{
                 group.isCollapsed ? expandGroupIcon : collapseGroupIcon
               }
               allowDisabledFocus
-              onClick={() => expandOrCollapseGroup(group)}
-              styles={{
-                root: {
-                  padding: 0,
-                  margin: 0,
-                  height: "1rem",
-                },
-                flexContainer: {
-                  flexDirection: "row-reverse",
-                  FontWeight: 700,
-                  fontSize: "0.7rem",
-                },
-                iconHovered: {
-                  FontWeight: 700,
-                },
-                icon: {
-                  FontWeight: 700,
-                  fontSize: "0.7rem",
-                },
-              }}
-            ></ActionButton>
-            {group?.name + ` (${group.count})`}
-          </strong>
+              onClick={() => expandOrCollapseGroup(group)} 
+            >
+            <strong> {`${group?.name} (${group.count})`}</strong>
+            </ActionButton>            
+          </span>
         </td>
       </tr>
       {group?.isCollapsed ? (
