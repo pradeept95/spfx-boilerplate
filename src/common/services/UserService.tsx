@@ -1,16 +1,19 @@
 /* eslint-disable */
-import { getGraphFi, getSP } from "../config/pnpjs.config";
+import { getGraphFi, getSP } from "@common/pnp";
 import "@pnp/graph/users";
 import "@pnp/sp/profiles";
 import { IPersonaProps } from "@fluentui/react";
 import { IWebEnsureUserResult } from "@pnp/sp/site-users";
+import { IPagedResult } from "@pnp/graph";
 
 export const UserService = () => {
   (async () => {})();
 
   async function searchUsers(
     usernameOrEmailOrName: string,
-    selectedUsers: IPersonaProps[] = []
+    excludedUsers: IPersonaProps[] = [],
+    orgUserType: "user-only" | "group-only" | "user-and-group" = "user-only",
+    userClassification: "internal" | "external" | "all" = "internal",
   ): Promise<IPersonaProps[]> {
     return new Promise<IPersonaProps[]>(async (resolve, reject) => {
       try {
@@ -18,35 +21,85 @@ export const UserService = () => {
 
         const userName = usernameOrEmailOrName?.toLocaleLowerCase();
         const graphi = await getGraphFi();
-        const users = await graphi.users
-          .top(10 + selectedUsers?.length)
-          .filter(
-            `(startswith('${encodeURIComponent(userName)}', displayName) ` +
-              ` or startswith('${encodeURIComponent(userName)}', mail) ` +
-              ` or startswith('${encodeURIComponent(
-                userName
-              )}', userPrincipalName) ` +
-              ` or startswith('${encodeURIComponent(userName)}', surname) ` +
-              ` or startswith('${encodeURIComponent(userName)}', givenName)) ` +
-              ` and endswith(mail, 'nih.gov')`
-          )
-          .paged();
+        // pradeep.thapaliya@nih.gov -- email
+        // thapaliaypr ---------------- username
+        // thapaliya  ----------------- different variation of names:
+        // pradeep
+        // pradeep thapaliya
+        // thapaliya pradeep
+        // thapaliya, pradeep
 
-        const selecteUserEmails = selectedUsers?.map((x) => x.secondaryText);
+        let users: IPagedResult = {
+          value: [],
+        } as IPagedResult;
 
-        const mappedUsers = users?.value
-          ?.map((user) => {
+        let groups: IPagedResult = {
+          value: [],
+        } as IPagedResult;
+
+        const filterString = userClassification == "internal"
+          ? `endswith(mail, 'nih.gov')`
+          : "";
+
+        if (orgUserType == "user-and-group" || orgUserType == "user-only") {
+          users = await graphi.users
+            .top(10 + excludedUsers?.length)
+            .search(
+              `
+            "displayName:${encodeURIComponent(userName)}" 
+             OR "mail:${encodeURIComponent(userName)}" 
+             OR "userPrincipalName:${encodeURIComponent(userName)}" 
+            `
+            )
+            .filter(filterString)
+            .paged();
+        }
+
+        if (orgUserType == "user-and-group" || orgUserType == "group-only") {
+          groups = await graphi.groups
+            .top(10 + excludedUsers?.length)
+            .search(
+              `
+            "displayName:${encodeURIComponent(userName)}"
+             OR "mail:${encodeURIComponent(userName)}"
+             OR "mailNickname:${encodeURIComponent(userName)}"
+            `
+            )
+            .filter(filterString)
+            .paged();
+        }
+
+        const selectedUserEmails = excludedUsers?.map((x) => x.secondaryText);
+        const allGroupAndUser = [
+          ...users?.value?.map((user) => {
             {
               return {
+                //id: user.Id, // don't use id, react will complain -- instead use optionalText
                 text: user.displayName,
                 secondaryText: user.mail,
                 tertiaryText: user.userPrincipalName,
+                optionalText: user.id,
+                itemType: "user",
               } as IPersonaProps;
             }
-          })
-          .filter(
-            (user) => selecteUserEmails?.indexOf(user.secondaryText) === -1
-          );
+          }),
+          ...groups?.value?.map((user) => {
+            {
+              return {
+                //id: user.Id, // don't use id, react will complain -- instead use optionalText
+                text: user.displayName,
+                secondaryText: user.mail,
+                tertiaryText: user.mailNickname,
+                optionalText: user.id,
+                itemType: "group",
+              } as IPersonaProps;
+            }
+          }),
+        ];
+
+        const mappedUsers = allGroupAndUser.filter(
+          (user) => selectedUserEmails?.indexOf(user.secondaryText) === -1
+        );
         resolve(mappedUsers);
       } catch (error) {
         reject(error);
@@ -54,16 +107,38 @@ export const UserService = () => {
     });
   }
 
-  const ensureUser = async (
-    userPrincipalName: string
-  ): Promise<IWebEnsureUserResult> => {
+  const getCurrentUserGroups = async (): Promise<any> => {
+    return new Promise<any>(async (resolve, reject) => {
+      try {
+        const sp = await getSP();
+        const groups = await sp.web.currentUser.groups();
+        resolve(groups);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  };
+
+  const ensureUser = async (userPrincipalName: string): Promise<SiteUser> => {
     return new Promise<any>(async (resolve, reject) => {
       try {
         const sp = await getSP();
         const result: IWebEnsureUserResult = await sp.web.ensureUser(
           `i:0#.f|membership|${userPrincipalName}`
         );
-        resolve(result);
+
+        console.log(result);
+
+        const siteUser: SiteUser = {
+          Id: result.data.Id,
+          Title: result.data.Title,
+          Email: result.data.Email,
+          LoginName: result.data.LoginName,
+          Username: ((result.data as any)?.UserPrincipalName || "").replace("@nih.gov", ""),
+          UserPrincipalName: (result.data as any)?.UserPrincipalName,
+        } as SiteUser; 
+
+        resolve(siteUser);
       } catch (error) {
         reject(error);
       }
@@ -120,9 +195,20 @@ export const UserService = () => {
 
   return {
     searchUsers,
+    getCurrentUserGroups,
     ensureUser,
     getUserProfile,
     mapUserFromSPList,
     mapUsersFromSPList,
   };
 };
+
+export type SiteUser = {
+  Id: number;
+  Title: string;
+  Email: string;
+  Username: string;
+  LoginName: string;
+  UserPrincipalName: string;
+};
+

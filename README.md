@@ -1,5 +1,9 @@
 # SPFx Startup Boilerplate
 
+## Additional Packages need to be installed
+
+    npm install --save @fluentui/react @fluentui/react-components @fluentui/react-hooks @pnp/core @pnp/graph @pnp/logging @pnp/sp @prt-ts/export-helpers @prt-ts/fluentui-react-datatable @prt-ts/pdf-json-helpers formik react-dropzone react-quill react-router-dom react-toastify  yup
+
 ## Summary
 
 This application could be use to create a new solution. It already has some pre-build features like pnp-js configuration, default grid view, formik and yup setup for form validation, people picker and user profile details services etc

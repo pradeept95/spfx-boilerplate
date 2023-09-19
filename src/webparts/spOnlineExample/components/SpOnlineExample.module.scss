@@ -1,34 +1,46 @@
 @import '~@fluentui/react/dist/sass/References.scss';
+// :global * {
+//   font-size: 1rem !important;
+// }
+// :global html,
+// :global body {
+//   font-size: 70% !important;
+// }
+:global {
+    #workbenchPageContent,
+    .CanvasZoneContainer.LCS .CanvasZone {
+        max-width: 100% !important;
+    }
+}
 
 .spOnlineExample {
-  overflow: hidden;
-  padding: 1em;
-  color: "[theme:bodyText, default: #323130]";
-  color: var(--bodyText);
-  &.teams {
-    font-family: $ms-font-family-fallbacks;
-  }
+    overflow: hidden;
+    padding: 1em;
+    color: "[theme:bodyText, default: #323130]";
+    color: var(--bodyText);
+    &.teams {
+        font-family: "Segoe UI WestEuropean", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+    }
 }
 
 .welcome {
-  text-align: center;
+    text-align: center;
 }
 
 .welcomeImage {
-  width: 100%;
-  max-width: 420px;
+    width: 100%;
+    max-width: 420px;
 }
 
 .links {
-  a {
-    text-decoration: none;
-    color: "[theme:link, default:#03787c]";
-    color: var(--link); // note: CSS Custom Properties support is limited to modern browsers only
-
-    &:hover {
-      text-decoration: underline;
-      color: "[theme:linkHovered, default: #014446]";
-      color: var(--linkHovered); // note: CSS Custom Properties support is limited to modern browsers only
+    a {
+        text-decoration: none;
+        color: "[theme:link, default:#03787c]";
+        color: var(--link); // note: CSS Custom Properties support is limited to modern browsers only
+        &:hover {
+            text-decoration: underline;
+            color: "[theme:linkHovered, default: #014446]";
+            color: var(--linkHovered); // note: CSS Custom Properties support is limited to modern browsers only
+        }
     }
-  }
 }

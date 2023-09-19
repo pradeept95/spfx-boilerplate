@@ -1,8 +1,8 @@
 /* eslint-disable */
 import { IconButton, IIconProps, Stack } from '@fluentui/react';
-import * as React from 'react';
-import AppContext from '../../config/app-context.config';
+import * as React from 'react'; 
 import * as topNavStyle from "../styles/TopNavStyle.module.scss"
+import AppContext from "@common/root/app-context";
 
 const expandedIcon: IIconProps = { iconName: "GlobalNavButton" };
 const collapsedIcon: IIconProps = { iconName: "GlobalNavButtonActive" }; 
@@ -30,7 +30,7 @@ export const TopNav: React.FunctionComponent<{ collapsed: boolean, setCollapsed:
               title={collapsed ? 'Open Side Menu' : 'Close Side Menu'}
               iconProps={collapsed ? collapsedIcon : expandedIcon}
               onClick={() => {
-                setCollapsed(!collapsed)
+                setCollapsed((isCollapsed : boolean) => !isCollapsed);
               }}
             />
           </Stack.Item>
@@ -45,3 +45,46 @@ export const TopNav: React.FunctionComponent<{ collapsed: boolean, setCollapsed:
     </>
   )
 };
+
+
+// const _items: ICommandBarItemProps[] = [
+//   {
+//     key: 'newItem',
+//     text: 'New',
+//     cacheKey: 'myCacheKey', // changing this key will invalidate this item's cache
+//     iconProps: { iconName: 'Add' },
+//     subMenuProps: {
+//       items: [
+//         {
+//           key: 'emailMessage',
+//           text: 'Email message',
+//           iconProps: { iconName: 'Mail' },
+//           ['data-automation-id']: 'newEmailButton', // optional
+//         },
+//         {
+//           key: 'calendarEvent',
+//           text: 'Calendar event',
+//           iconProps: { iconName: 'Calendar' },
+//         },
+//       ],
+//     },
+//   },
+//   {
+//     key: 'share',
+//     text: 'Share',
+//     iconProps: { iconName: 'Share' },
+//     onClick: () => console.log('Share'),
+//   },
+//   {
+//     key: 'download',
+//     text: 'Download',
+//     iconProps: { iconName: 'Download' },
+//     onClick: () => console.log('Download'),
+//   },
+// ];
+
+// const _overflowItems: ICommandBarItemProps[] = [
+//   { key: 'move', text: 'Move to...', onClick: () => console.log('Move to'), iconProps: { iconName: 'MoveToFolder' } },
+//   { key: 'copy', text: 'Copy to...', onClick: () => console.log('Copy to'), iconProps: { iconName: 'Copy' } },
+//   { key: 'rename', text: 'Rename...', onClick: () => console.log('Rename'), iconProps: { iconName: 'Edit' } },
+// ];

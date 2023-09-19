@@ -1,4 +1,4 @@
-import { SiteSettings } from "../../../common/types/site-settings.types";
+import { SiteSettings } from "../../../common/types/SiteSettingType";
 
 export interface ISpOnlineExampleProps {
   description: string;
@@ -6,5 +6,7 @@ export interface ISpOnlineExampleProps {
   environmentMessage: string;
   hasTeamsContext: boolean;
   userDisplayName: string;
-  settings: SiteSettings;
+  settings: SiteSettings<{
+    isTeamsMessagingExtension: boolean;
+  }>;
 }

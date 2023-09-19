@@ -2,7 +2,7 @@
 import * as React from "react";
 import { Nav, INavLinkGroup, INavLink, INavStyles } from "@fluentui/react/lib/Nav";
 import { CommandBarButton, DirectionalHint, IButtonStyles, IOverflowSetItemProps, OverflowSet, TooltipHost } from "@fluentui/react";
-import { useNavigate } from "react-router-dom"; 
+import { useLocation, useNavigate } from "react-router-dom"; 
 import * as sideNavStyles from "../styles/SideNavStyle.module.scss"
 
 const navStyles: Partial<INavStyles> = { 
@@ -41,12 +41,15 @@ export const SideNav: React.FunctionComponent<{ collapsed: boolean, navLinkGroup
 
   const { collapsed, navLinkGroups } = props;
   const navigate = useNavigate()
+  const location = useLocation();
 
   const [navLinks, setNavLinks] = React.useState<INavLinkGroup[]>([]);
   const [overflowLinks, setOverflowLinks] = React.useState<IOverflowSetItemProps[]>([]);
 
-  const [selectedKey, setSelectedKey] = React.useState<string>(props.selectedKey ?? "Home")
-
+  const [selectedKey, setSelectedKey] = React.useState<string>(
+    props.selectedKey 
+  ); 
+   
   React.useEffect(() => {
     setNavLinks(navLinkGroups);
     const allLinks = navLinkGroups.map(x => x.links).reduce((accumulator: INavLink[], value: INavLink[]) => [...accumulator, ...value], []);
@@ -60,6 +63,16 @@ export const SideNav: React.FunctionComponent<{ collapsed: boolean, navLinkGroup
       } as IOverflowSetItemProps)
     }))
   }, [navLinkGroups]);
+
+   React.useEffect(() => { 
+     const selectedRoute = overflowLinks.filter(
+       (nav) =>
+         nav.link
+           ?.toLowerCase()
+           ?.localeCompare(location.pathname?.toLowerCase()) == 0
+     )?.[0]?.key;
+     setSelectedKey(selectedRoute);
+   }, [location, overflowLinks]);
 
   const onRenderItem = (item: IOverflowSetItemProps): JSX.Element => {    
     return (
@@ -86,16 +99,19 @@ export const SideNav: React.FunctionComponent<{ collapsed: boolean, navLinkGroup
           ariaLabel="Site Side Navigation"
           groups={navLinks}
           onLinkClick={(e: any, item: INavLink) => {
-            setSelectedKey(item.key);
+            // setSelectedKey(item.key);
           }}
         />
         : <OverflowSet
           vertical
           className={sideNavStyles.default.minimizedSideNavStyles}
-          items={overflowLinks?.length > 10? overflowLinks?.splice(0, 10) : overflowLinks}
-          overflowItems={overflowLinks?.length > 10? overflowLinks?.splice(10) : []} 
+          items={overflowLinks}
+          overflowItems={[]} 
           onRenderItem={onRenderItem} 
-          onRenderOverflowButton={onRenderOverflowButton} />
+          onRenderOverflowButton={onRenderOverflowButton} 
+          
+        />
+          
       }
     </>
   );

@@ -1,21 +1,12 @@
-
 /* eslint-disable */
-import * as React from 'react';
-import * as ReactDom from 'react-dom';
-import { Version } from '@microsoft/sp-core-library';
-import {
-  IPropertyPaneConfiguration,
-  PropertyPaneTextField,
-  PropertyPaneToggle
-} from '@microsoft/sp-property-pane';
-import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
-import { IReadonlyTheme } from '@microsoft/sp-component-base';
+import * as React from "react";
+import * as ReactDom from "react-dom";  
+import { BaseClientSideWebPart } from "@microsoft/sp-webpart-base";
+import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle} from "@microsoft/sp-property-pane";
+import { IReadonlyTheme } from "@microsoft/sp-component-base";
 
-import * as strings from 'SpOnlineExampleWebPartStrings';
-import SpOnlineExample from './components/SpOnlineExample';
-import { ISpOnlineExampleProps } from './components/ISpOnlineExampleProps';
-import AppContext from '../../common/config/app-context.config';
-
+import * as strings from "SpOnlineExampleWebPartStrings"; 
+import { ISpOnlineExampleProps } from "./components/ISpOnlineExampleProps"; 
 export interface ISpOnlineExampleWebPartProps {
   description: string;
   sitePrefix: string;
@@ -23,14 +14,35 @@ export interface ISpOnlineExampleWebPartProps {
   isNotificationEnabled: boolean;
   enableLayoutStyle: boolean;
   enableDebugMode: boolean;
-  notificationDeligateEmail: string;
+  notificationDelegateEmail: string;
 }
+// import { SPComponentLoader } from "@microsoft/sp-loader";
+import {
+  FluentProvider,
+  FluentProviderProps,
+  teamsDarkTheme,
+  teamsLightTheme,
+  webLightTheme,
+  webDarkTheme,
+  Theme,
+} from "@fluentui/react-components";
+// import { createV9Theme } from "@common/theme/V9ThemeShim";
+import { SpOnlineExample } from "./components/SpOnlineExample";
+import { ThemeService } from "@prt-ts/fluent-theme";
+import { setSubscriptionFactory } from "@common/list-subscriptions";
 
+export enum AppMode {
+  SharePoint, SharePointLocal, Teams, TeamsLocal, Office, OfficeLocal, Outlook, OutlookLocal
+}
+const { getTheme } = ThemeService();
 export default class SpOnlineExampleWebPart extends BaseClientSideWebPart<ISpOnlineExampleWebPartProps> {
   private _isDarkTheme: boolean = false;
   private _environmentMessage: string = "";
 
-  public render(): void {
+  private _appMode: AppMode = AppMode.SharePoint;
+  private _theme: Theme = webLightTheme;
+
+  public async render(): Promise<void> { 
     const element: React.ReactElement<ISpOnlineExampleProps> =
       React.createElement(SpOnlineExample, {
         description: this.properties.description,
@@ -44,22 +56,67 @@ export default class SpOnlineExampleWebPart extends BaseClientSideWebPart<ISpOnl
           isNotificationEnabled: this.properties.isNotificationEnabled,
           enableLayoutStyle: this.properties.enableLayoutStyle,
           enableDebugMode: this.properties.enableDebugMode,
-          notificationDeligateEmail: "",
-        },
-      });
+          notificationDelegateEmail: "",
+          context: this.context,
 
-    ReactDom.render(element, this.domElement);
+          isTeamsMessagingExtension: false,
+        },
+      });  
+
+    //wrap the component with the Fluent UI 9 Provider.
+    const fluentElement: React.ReactElement<FluentProviderProps> =
+      React.createElement(
+        FluentProvider,
+        {
+          theme:
+            this._appMode === AppMode.Teams ||
+            this._appMode === AppMode.TeamsLocal
+              ? this._isDarkTheme
+                ? teamsDarkTheme
+                : teamsLightTheme
+              : this._appMode === AppMode.SharePoint ||
+                this._appMode === AppMode.SharePointLocal
+              ? this._isDarkTheme
+                ? webDarkTheme
+                : this._theme
+              : this._isDarkTheme
+              ? webDarkTheme
+              : webLightTheme,
+        },
+        element
+      );
+
+    ReactDom.render(fluentElement, this.domElement);
   }
 
-  protected onInit(): Promise<void> {
-    (async()=>{
-      const appContext = AppContext.getInstance();
-      await appContext.initialize(this.context);
-    })(); 
-
-    return this._getEnvironmentMessage().then((message) => {
+  protected async onInit(): Promise<void> {
+    const _l = this.context.isServedFromLocalhost;
+    if (!!this.context.sdks.microsoftTeams) {
+      const teamsContext =
+        await this.context.sdks.microsoftTeams.teamsJs.app.getContext();
+      switch (teamsContext.app.host.name.toLowerCase()) {
+        case "teams":
+          this._appMode = _l ? AppMode.TeamsLocal : AppMode.Teams;
+          break;
+        case "office":
+          this._appMode = _l ? AppMode.OfficeLocal : AppMode.Office;
+          break;
+        case "outlook":
+          this._appMode = _l ? AppMode.OutlookLocal : AppMode.Outlook;
+          break;
+        default:
+          throw new Error("Unknown host");
+      }
+    } else this._appMode = _l ? AppMode.SharePointLocal : AppMode.SharePoint;
+  
+    this._getEnvironmentMessage().then((message) => {
       this._environmentMessage = message;
     });
+
+     setSubscriptionFactory(this);
+
+
+    return super.onInit();
   }
 
   private _getEnvironmentMessage(): Promise<string> {
@@ -100,34 +157,27 @@ export default class SpOnlineExampleWebPart extends BaseClientSideWebPart<ISpOnl
     );
   }
 
-  protected onThemeChanged(currentTheme: IReadonlyTheme | undefined): void {
-    if (!currentTheme) {
-      return;
-    }
-
+  protected async onThemeChanged(currentTheme: IReadonlyTheme | undefined): Promise<void> {
+    console.log("onThemeChanged", currentTheme);
+    console.log("primary color", currentTheme?.semanticColors?.primaryButtonBackground);
+    if (!currentTheme) return;
     this._isDarkTheme = !!currentTheme.isInverted;
-    const { semanticColors } = currentTheme;
-
-    if (semanticColors) {
-      this.domElement.style.setProperty(
-        "--bodyText",
-        semanticColors.bodyText || null
-      );
-      this.domElement.style.setProperty("--link", semanticColors.link || null);
-      this.domElement.style.setProperty(
-        "--linkHovered",
-        semanticColors.linkHovered || null
-      );
-    }
-  }
+    // if the app mode is sharepoint, adjust the fluent ui 9 web light theme 
+    // to use the sharepoint theme color, teams / dark mode should be fine on default
+    if (
+      this._appMode === AppMode.SharePoint ||
+      this._appMode === AppMode.SharePointLocal
+    ) {
+       this._theme = await getTheme(
+         currentTheme?.semanticColors?.primaryButtonBackground,
+         !!currentTheme.isInverted
+       );
+    } 
+  } 
 
   protected onDispose(): void {
     ReactDom.unmountComponentAtNode(this.domElement);
-  }
-
-  protected get dataVersion(): Version {
-    return Version.parse("1.0");
-  }
+  } 
 
   protected get disableReactivePropertyChanges(): boolean {
     return true;
@@ -141,7 +191,7 @@ export default class SpOnlineExampleWebPart extends BaseClientSideWebPart<ISpOnl
       'button[name="Save"]'
     ) as HTMLElement;
     if (saveBtn) saveBtn?.click();
-    
+
     this.render();
   }
 
@@ -155,7 +205,7 @@ export default class SpOnlineExampleWebPart extends BaseClientSideWebPart<ISpOnl
               groupFields: [
                 PropertyPaneTextField("siteName", {
                   label: "Site Name",
-                  description : "Name of the Site"
+                  description: "Name of the Site",
                 }),
                 PropertyPaneToggle("enableDebugMode", {
                   label: "Enable App Debug Mode",

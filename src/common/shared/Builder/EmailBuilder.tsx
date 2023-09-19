@@ -1,10 +1,10 @@
 /* eslint-disable */
-import { IEmailProperties } from "@pnp/sp/sputilities";
-import AppContext from "../../config/app-context.config";
-import { getSP } from "../../config/pnpjs.config";
+import { IEmailProperties } from "@pnp/sp/sputilities"; 
+import { getSP } from "@common/pnp";
+import AppContext from "@common/root/app-context";
 
 export interface IEmailProps {
-  from: string;
+  from?: string;
   to: string[];
   cc: string[];
   bcc: string[];
@@ -90,14 +90,13 @@ export class EmailBuilder implements IEmailProperties {
         this.appendBody("CC Emails: " + this.CC?.join(",") + "<br/>");
         this.appendBody("BCC Emails: " + this.BCC?.join(",") + "<br/>");
 
-        const deligatedEmails =
-          currentContext?.siteSettings?.notificationDeligateEmail?.split(";");
-        this.To = deligatedEmails;
+        //const delegatedEmails = currentContext?.siteSettings?.notificationDelegateEmail?.split(";");
+        //this.To = delegatedEmails;
         this.CC = [];
         this.BCC = [];
       }
 
-      this.From = "drivenindsevents@ninds.nih.gov";
+      //this.From = "drivenindsevents@ninds.nih.gov";
       // get sp configuration
       const sp = await getSP();
       // send email

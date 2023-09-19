@@ -2,5 +2,53 @@
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/spfx-serve.schema.json",
   "port": 4321,
   "https": true,
-  "initialPage": "https://280vrx.sharepoint.com/sites/Council/_layouts/15/workbench.aspx"
+  "initialPage": "https://nih.sharepoint.com/sites/NINDS-OD-DEAATEAM/SitePages/SPFx-Template.aspx?debug=true&noredir=true&debugManifestsFile=https://localhost:4321/temp/manifests.js",
+  "serveConfigurations": {
+    "default": {
+      "pageUrl": "https://nih.sharepoint.com/sites/NINDS-OD-DEAATEAM/SitePages/SPFx-Template.aspx?debug=true&noredir=true&debugManifestsFile=https://localhost:4321/temp/manifests.js",
+      // "formCustomizer": {
+      //   "componentId": "5ca62cd8-da49-4161-99b2-e159ca05250c",
+      //   "PageType": 8,
+      //   "RootFolder": "/sites/NINDS-OD-DEAATEAM/Lists/EmailTemplates",
+      //   "properties": {
+      //     "sampleText": "Value"
+      //   }
+      // }
+    },
+    "formCustomizerExample_NewForm": {
+      "pageUrl": "https://nih.sharepoint.com/sites/NINDS-OD-DEAATEAM/_layouts/15/SPListForm.aspx",
+      "formCustomizer": {
+        "componentId": "5ca62cd8-da49-4161-99b2-e159ca05250c",
+        "PageType": 8,
+        "RootFolder": "/sites/NINDS-OD-DEAATEAM/Lists/EmailTemplates",
+        "properties": {
+          "sampleText": "Value"
+        }
+      }
+    },
+    "formCustomizerExample_EditForm": {
+      "pageUrl": "https://nih.sharepoint.com/sites/NINDS-OD-DEAATEAM/_layouts/15/SPListForm.aspx",
+      "formCustomizer": {
+        "componentId": "5ca62cd8-da49-4161-99b2-e159ca05250c",
+        "PageType": 6,
+        "RootFolder": "/sites/NINDS-OD-DEAATEAM/Lists/EmailTemplates",
+        "ID": 1,
+        "properties": {
+          "sampleText": "Value"
+        }
+      }
+    },
+    "formCustomizerExample_ViewForm": {
+      "pageUrl": "https://nih.sharepoint.com/sites/NINDS-OD-DEAATEAM/_layouts/15/SPListForm.aspx",
+      "formCustomizer": {
+        "componentId": "5ca62cd8-da49-4161-99b2-e159ca05250c",
+        "PageType": 4,
+        "RootFolder": "/sites/NINDS-OD-DEAATEAM/Lists/EmailTemplates",
+        "ID": 1,
+        "properties": {
+          "sampleText": "Value"
+        }
+      }
+    }
+  }
 }

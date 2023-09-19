@@ -9,10 +9,19 @@
           "manifest": "./src/webparts/spOnlineExample/SpOnlineExampleWebPart.manifest.json"
         }
       ]
-    }
+    },
+    "form-customizer-example-form-customizer": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/formCustomizerExample/FormCustomizerExampleFormCustomizer.js",
+          "manifest": "./src/extensions/formCustomizerExample/FormCustomizerExampleFormCustomizer.manifest.json"
+        }
+      ]
+    } 
   },
   "externals": {},
   "localizedResources": {
-    "SpOnlineExampleWebPartStrings": "lib/webparts/spOnlineExample/loc/{locale}.js"
+    "SpOnlineExampleWebPartStrings": "lib/webparts/spOnlineExample/loc/{locale}.js",
+    "FormCustomizerExampleFormCustomizerStrings": "lib/extensions/formCustomizerExample/loc/{locale}.js", 
   }
 }

@@ -1,5 +1,5 @@
-/* eslint-disable */
-import AppContext from "../config/app-context.config";
+/* eslint-disable */ 
+import AppContext from "@common/root/app-context";
 import {
   HttpClient,
   IHttpClientOptions,
@@ -10,7 +10,7 @@ const authFunctionURL =
   "https://docusignfunctions.azurewebsites.net/api/DocuSignAuth?code=ltHFqutjIU4w_pZs_3vdbJFAf9YJjQXHNdfCy5PIxBwMAzFuFQh8qw==";
  
 
-const currrentContext = AppContext.getInstance();
+const currentContext = AppContext.getInstance();
 export const DocuSignService = () => {
   (async () => {})();
 
@@ -21,11 +21,12 @@ export const DocuSignService = () => {
       }),
     };
 
-    return currrentContext.context.httpClient.get(authFunctionURL, HttpClient.configurations.v1, httpClientOptions)
+    return currentContext.context.httpClient.get(authFunctionURL, HttpClient.configurations.v1, httpClientOptions)
       .then((res: HttpClientResponse): Promise<any> => {
         return res.json();
       })
-      .then(async (response: any) => { 
+      .then(async (response: any) => {
+        console.log(response); 
         return response;
       });
   };
@@ -38,7 +39,7 @@ export const DocuSignService = () => {
       }),
     };
 
-    currrentContext.context.httpClient
+    currentContext.context.httpClient
       .get(
         "https://account-d.docusign.com/oauth/userinfo",
         HttpClient.configurations.v1,
@@ -48,7 +49,7 @@ export const DocuSignService = () => {
         return res.json();
       })
       .then((response: any): void => {
-        return response;
+        console.log("Users ",response);
       });
   };
 
@@ -63,7 +64,7 @@ export const DocuSignService = () => {
             body: JSON.stringify(envelope),
           };
 
-          const response = await currrentContext.context.httpClient.post(
+          const response = await currentContext.context.httpClient.post(
             `https://docusignfunctions.azurewebsites.net/api/CreateEnvelope?code=jLIPmCsp5lnVyvdhkMdK9ckNL0qMZI9R8pKqaAmM7LWPAzFui7GZGA==&token=${userToken}`,
             HttpClient.configurations.v1,
             httpClientOptions

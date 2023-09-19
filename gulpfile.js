@@ -14,3 +14,33 @@ build.rig.getTasks = function () {
 };
 
 build.initialize(require('gulp'));
+
+const path = require("path");
+
+build.configureWebpack.mergeConfig({
+  additionalConfiguration: (generatedConfiguration) => {
+    if (!generatedConfiguration.resolve.alias) {
+      generatedConfiguration.resolve.alias = {};
+    } 
+
+    // common setup for all projects
+    generatedConfiguration.resolve.alias["@common"] = path.resolve(
+      __dirname,
+      "lib/common/"
+    );
+
+    // application setup for all projects
+    generatedConfiguration.resolve.alias["@app"] = path.resolve(
+      __dirname,
+      "lib/apps/"
+    );
+
+    // asset setup for all projects
+    generatedConfiguration.resolve.alias["@assets"] = path.resolve(
+      __dirname,
+      "lib/assets/"
+    );
+
+    return generatedConfiguration;
+  },
+});

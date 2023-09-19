@@ -5,7 +5,7 @@
     "nodeVersion": "16.18.1",
     "sdksVersions": {
       "@microsoft/microsoft-graph-client": "3.0.2",
-      "@microsoft/teams-js": "2.4.1"
+      "@microsoft/teams-js": "2.9.1"
     },
     "version": "1.16.0",
     "libraryName": "sp-online-sp-fx-template",
