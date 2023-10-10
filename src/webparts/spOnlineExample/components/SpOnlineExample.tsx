@@ -2,7 +2,7 @@
 import * as React from "react";
 import { ISpOnlineExampleProps } from "./ISpOnlineExampleProps";
 
-import ApplicationEntry from "@app/ApplicationEntry";
+import AppRoot from "@app/AppRoot";
 
 // import styles from './CdeAssessment.module.scss'; 
 import { AppContainer } from "@common/root";
@@ -54,7 +54,7 @@ export const SpOnlineExample: React.FunctionComponent<ISpOnlineExampleProps> = (
       {initialized ? (
         <>
           <AppContainer>
-            <ApplicationEntry />
+            <AppRoot />
           </AppContainer>
         </>
       ) : (

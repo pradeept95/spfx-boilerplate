@@ -11,9 +11,16 @@
   },
   "typescript.tsdk": ".\\node_modules\\typescript\\lib",
   "cSpell.words": [
+    "compat",
     "Customizer",
+    "datepicker",
     "formik",
+    "hookform",
     "listview",
-    "toastify"
+    "pdfmake",
+    "rushstack",
+    "spfx",
+    "toastify",
+    "zustand"
   ]
 }

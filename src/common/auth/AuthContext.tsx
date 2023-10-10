@@ -31,6 +31,7 @@ export const AuthProvider: React.FunctionComponent<{}> = ({ children }) => {
 export const RequireRoleAuth: React.FunctionComponent<RouteRoleType> = ({
   requiredRoles,
   requiredAll,
+  additionalItemAccessContext = [],
 }) => {
   const [allowAccess, setAllowAccess] = useState<boolean>(false);
   const [waitResolve, setWaitResolve] = useState<boolean>(true);
@@ -39,15 +40,19 @@ export const RequireRoleAuth: React.FunctionComponent<RouteRoleType> = ({
 
   const user = currentContext.context.pageContext.user;
 
+  const allRoles = React.useMemo(() => {
+    return [...auth?.roles, ...additionalItemAccessContext];
+  }, [auth, additionalItemAccessContext]);
+
   React.useEffect(() => {
     const isAllowAccess = !requiredAll
-      ? auth?.roles?.some((role: number) => requiredRoles?.indexOf(role) > -1)
-      : auth?.roles?.every((role: number) => requiredRoles?.indexOf(role) > -1);
+      ? allRoles?.some((role: number) => requiredRoles?.indexOf(role) > -1)
+      : allRoles?.every((role: number) => requiredRoles?.indexOf(role) > -1);
 
-    // set allowed access 
+    // set allowed access
     setAllowAccess(isAllowAccess);
-    setWaitResolve(false); 
-  }, [auth]); 
+    setWaitResolve(false);
+  }, [auth]);
 
   return waitResolve ? (
     // <PageLoading />
@@ -69,6 +74,7 @@ export const RequireRoleAuth: React.FunctionComponent<RouteRoleType> = ({
 export const RequireResourceAuth: React.FunctionComponent<ResourceType> = ({
   requiredResources,
   requiredAll,
+  additionalItemAccessContext = []
 }) => {
   const [allowAccess, setAllowAccess] = useState<boolean>(false);
   const [waitResolve, setWaitResolve] = useState<boolean>(true);
@@ -77,8 +83,13 @@ export const RequireResourceAuth: React.FunctionComponent<ResourceType> = ({
 
   const user = currentContext.context.pageContext.user;
 
-  const cResources = requiredResources?.map((x) => x?.toLowerCase());
-  const allResources = auth?.resources?.map((x) => x?.toLowerCase());
+  const cResources = requiredResources?.map((x) => x?.toLowerCase()); 
+
+  const allResources = React.useMemo(() => {
+    return [...auth?.roles, ...additionalItemAccessContext]?.map((x) =>
+      x?.toLowerCase()
+    );
+  }, [auth, additionalItemAccessContext]);
 
   React.useEffect(() => {
     const isAllowAccess = !requiredAll
@@ -116,8 +127,11 @@ export const VerifyRoleAccess: React.FunctionComponent<RouteRoleType> = ({
   requiredRoles,
   requiredAll,
   children,
+  additionalItemAccessContext = [],
 }) => {
-  const [hasAccess, verifyAccess] = useVerifyUserRoles();
+  const [hasAccess, verifyAccess] = useVerifyUserRoles(
+    additionalItemAccessContext
+  );
   React.useEffect(() => {
     verifyAccess(requiredRoles, requiredAll);
   }, [requiredRoles, requiredAll]);
@@ -134,9 +148,12 @@ export const VerifyResourceAccess: React.FunctionComponent<ResourceType> = ({
   requiredResources,
   requiredAll,
   renderNoAccess,
-  children, 
+  children,
+  additionalItemAccessContext = [],
 }) => {
-  const [hasAccess, verifyAccess] = useVerifyResourceAccess();
+  const [hasAccess, verifyAccess] = useVerifyResourceAccess(
+    additionalItemAccessContext
+  );
   React.useEffect(() => {
     verifyAccess(requiredResources, requiredAll);
   }, [requiredResources, requiredAll]);

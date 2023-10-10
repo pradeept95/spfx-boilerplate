@@ -1,9 +1,9 @@
 /* eslint-disable */ 
 import * as React from "react"; 
-import { PeoplePicker } from "../../../common/components/PeoplePicker";
-import { useAlert } from "../../../common/features/alert/useAlert";
+import { PeoplePicker } from "../../../common/components/PeoplePicker"; 
 import { DocuSignService } from "../../../common/services/DocuSignService";
 import { Button, Input } from "@fluentui/react-components";
+import { useAlert } from "@prt-ts/fluent-common-features";
 const { authorizeApp, createEnvelope } = DocuSignService();
 
 export const useDocuSign = () => {

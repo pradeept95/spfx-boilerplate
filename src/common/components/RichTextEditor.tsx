@@ -2,12 +2,7 @@
 import * as React from "react";
 import ReactQuill, { ReactQuillProps } from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import {
-  FieldControlProps,
-  makeStyles,
-  shorthands,
-  tokens,
-} from "@fluentui/react-components";
+import { FieldControlProps, makeStyles, shorthands, tokens } from "@fluentui/react-components";
 
 const modules = {
   toolbar: [

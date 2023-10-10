@@ -4,11 +4,14 @@ import { useState } from "react";
 
 const currentContext = AppContext.getInstance();
 
-export function useVerifyUserRoles() {
+export function useVerifyUserRoles(additionalItemAccessContext: number[]) {
   const [hasRoles, setHasRoles] = useState(false);
 
   const verifyRoles = (requiredRoles: number[], requiredAll?: boolean) => {
-    const userRoles = currentContext.currentUserRoles;
+    const userRoles = [
+      ...currentContext.currentUserRoles,
+      ...additionalItemAccessContext,
+    ];
     const isAccessAllowed = !requiredAll
       ? userRoles?.some((role: number) => requiredRoles?.indexOf(role) > -1)
       : userRoles?.every((role: number) => requiredRoles?.indexOf(role) > -1);
@@ -20,11 +23,15 @@ export function useVerifyUserRoles() {
   return [hasRoles, verifyRoles] as const;
 }
 
-export function useVerifyResourceAccess() {
+export function useVerifyResourceAccess(additionalItemAccessContext: string[] = []) {
   const [hasAccess, setHasResourceAccess] = useState(false);
 
-  const verifyAccess = (currentResources: string[], requiredAll?: boolean) => {
-    const isAccessAllowed = confirmAccess(currentResources, requiredAll);
+  const verifyAccess = (requiredResources: string[], requiredAll?: boolean) => {
+    const isAccessAllowed = confirmAccess(
+      requiredResources,
+      requiredAll,
+      additionalItemAccessContext
+    );
     // set allowed access
     setHasResourceAccess(isAccessAllowed);
   };
@@ -33,20 +40,23 @@ export function useVerifyResourceAccess() {
 }
 
 export const confirmAccess = (
-  currentResources: string[],
-  requiredAll: boolean = false
+  requiredResources: string[],
+  requiredAll: boolean = false,
+  additionalItemAccessContext: string[] = []
 ): boolean => {
   const userResources = currentContext.currentUserResourceAccess;
 
-  const cResources = currentResources?.map((x) => x.toLowerCase());
-  const allResources = userResources?.map((x) => x.toLowerCase());
+  const rResources = requiredResources?.map((x) => x.toLowerCase());
+  const currentUserResources = [...userResources, ...additionalItemAccessContext]?.map(
+    (x) => x.toLowerCase()
+  );
 
   const isAccessAllowed = !requiredAll
-    ? allResources?.some(
-        (resource: string) => cResources?.indexOf(resource?.toLowerCase()) > -1
+    ? currentUserResources?.some(
+        (resource: string) => rResources?.indexOf(resource?.toLowerCase()) > -1
       )
-    : allResources?.every(
-        (resource: string) => cResources?.indexOf(resource?.toLowerCase()) > -1
+    : currentUserResources?.every(
+        (resource: string) => rResources?.indexOf(resource?.toLowerCase()) > -1
       );
 
   return isAccessAllowed;

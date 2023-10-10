@@ -1,118 +1,110 @@
 /* eslint-disable */
 import * as React from "react";
-import { Nav, INavLinkGroup, INavLink, INavStyles } from "@fluentui/react/lib/Nav";
-import { CommandBarButton, DirectionalHint, IButtonStyles, IOverflowSetItemProps, OverflowSet, TooltipHost } from "@fluentui/react";
 import { useLocation, useNavigate } from "react-router-dom"; 
-import * as sideNavStyles from "../styles/SideNavStyle.module.scss"
+import { Button, Caption1Stronger, Divider, SelectTabData, SelectTabEvent, Tab, TabList, Tooltip, Body1Stronger } from "@fluentui/react-components";
+import useWindowDimensions from "@common/hooks/useWindowsSize";
+import { useSideNavStyle } from "./useSideNavStyle";
+import { GroupFilled, GroupRegular, bundleIcon } from "@fluentui/react-icons";
 
-const navStyles: Partial<INavStyles> = { 
-  groupContent: {
-    marginBottom: 4
-  }
+const GroupIcon = bundleIcon(GroupFilled, GroupRegular)
+  
+export type NavLink = {
+  key: string;
+  name: string;
+  url: string;
+  icon: React.ReactNode;
+  onActionRender?: () => React.ReactNode;
 };
 
-const onRenderItemStyles: IButtonStyles = {
-  root: {
-    padding: "10px",
-    background: "transparent",
-    backgroundColor: "transparent",
-  },
+export type NavLinkGroup = {
+  links: NavLink[];
+  title: string;
+  isExpanded: boolean;
 };
 
-const onRenderOverflowButtonStyles = {
-  root: { padding: '10px' },
-  menuIcon: { fontSize: '16px' },
-};
-
-const onRenderOverflowButton = (overflowItems: any[] | undefined): JSX.Element => {
-  return (
-    <TooltipHost content="More items" directionalHint={DirectionalHint.rightCenter}>
-      <CommandBarButton
-        aria-label="More items"
-        styles={onRenderOverflowButtonStyles}
-        menuIconProps={{ iconName: 'More' }}
-        menuProps={{ items: overflowItems! }}
-      />
-    </TooltipHost>
-  );
-};
-
-export const SideNav: React.FunctionComponent<{ collapsed: boolean, navLinkGroups: INavLinkGroup[], selectedKey? : string }> = (props) => {
-
-  const { collapsed, navLinkGroups } = props;
-  const navigate = useNavigate()
-  const location = useLocation();
-
-  const [navLinks, setNavLinks] = React.useState<INavLinkGroup[]>([]);
-  const [overflowLinks, setOverflowLinks] = React.useState<IOverflowSetItemProps[]>([]);
+export const SideNav: React.FunctionComponent<{
+  navLinkGroups: NavLinkGroup[];
+  selectedKey?: string;
+}> = (props) => {
+  const { navLinkGroups } = props;
+  const { width } = useWindowDimensions();
+  const iconOnly = React.useMemo(() => width < 1024, [width]);
 
   const [selectedKey, setSelectedKey] = React.useState<string>(
-    props.selectedKey 
-  ); 
-   
-  React.useEffect(() => {
-    setNavLinks(navLinkGroups);
-    const allLinks = navLinkGroups.map(x => x.links).reduce((accumulator: INavLink[], value: INavLink[]) => [...accumulator, ...value], []);
-    setOverflowLinks(allLinks.map(navLink => {
+    props.selectedKey || ""
+  );
 
-      return ({
-        key: navLink.key,
-        title: navLink.name,
-        icon : navLink.icon,
-        link : navLink.url?.replace("#", "")
-      } as IOverflowSetItemProps)
-    }))
-  }, [navLinkGroups]);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-   React.useEffect(() => { 
-     const selectedRoute = overflowLinks.filter(
-       (nav) =>
-         nav.link
-           ?.toLowerCase()
-           ?.localeCompare(location.pathname?.toLowerCase()) == 0
-     )?.[0]?.key;
-     setSelectedKey(selectedRoute);
-   }, [location, overflowLinks]);
+  React.useEffect(() => { 
+    setSelectedKey(location.pathname);
+  }, [location]); 
 
-  const onRenderItem = (item: IOverflowSetItemProps): JSX.Element => {    
-    return (
-      <TooltipHost content={item.title} directionalHint={DirectionalHint.rightCenter}>
-        <CommandBarButton
-          aria-label={item.name}
-          styles={onRenderItemStyles}
-          title={item.name}
-          iconProps={{ iconName: item.icon }}
-          onClick={()=> { navigate(item.link); }}
-        />
-      </TooltipHost>
-    );
+  const onTabSelect = (event: SelectTabEvent, data: SelectTabData) => {
+    navigate(data.value);
   };
 
+  const classes = useSideNavStyle();
+
+  const renderMenuItems = (
+    groupIndex: number,
+    links: NavLink[]
+  ): React.ReactNode => (
+    <TabList
+      key={groupIndex}
+      selectedValue={selectedKey}
+      onTabSelect={onTabSelect}
+      vertical
+    >
+      {links?.map((link) => {
+        return (
+          <Tooltip
+            withArrow
+            content={{
+              children: link.name,
+              className: classes.tooltip,
+            }}
+            relationship="label"
+            positioning={"after"}
+          >
+            <div className={classes.menuItem}>
+              <Tab key={link.key} value={link.url} icon={<>{link.icon}</>}>
+                {iconOnly ? (
+                  <></>
+                ) : (
+                  <Caption1Stronger>{link.name}</Caption1Stronger>
+                )}
+              </Tab>
+              <div className="menu-action">{link.onActionRender && link.onActionRender()}</div>
+            </div>
+          </Tooltip>
+        );
+      })}
+    </TabList>
+  );
 
   return (
-    <>
-      {!collapsed ?
-        <Nav
-          styles={navStyles}
-          className={sideNavStyles.default.mainNavStyle} 
-          selectedKey={selectedKey}
-          ariaLabel="Site Side Navigation"
-          groups={navLinks}
-          onLinkClick={(e: any, item: INavLink) => {
-            // setSelectedKey(item.key);
-          }}
-        />
-        : <OverflowSet
-          vertical
-          className={sideNavStyles.default.minimizedSideNavStyles}
-          items={overflowLinks}
-          overflowItems={[]} 
-          onRenderItem={onRenderItem} 
-          onRenderOverflowButton={onRenderOverflowButton} 
-          
-        />
-          
-      }
+    <> 
+      {navLinkGroups.map((group, index) => {
+        return (
+          <>
+            {!group.title && renderMenuItems(index, group.links)}
+            {group.title && (
+              <div key={index}>
+                {iconOnly ? null : (
+                  <Button appearance="transparent" icon={<GroupIcon />}>
+                    <Body1Stronger>{group.title}</Body1Stronger>
+                  </Button>
+                )}
+
+                <Divider />
+                {renderMenuItems(index, group.links)}
+              </div>
+            )}
+          </>
+        );
+      })}
     </>
   );
 };

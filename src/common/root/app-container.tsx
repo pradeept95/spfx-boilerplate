@@ -2,12 +2,11 @@
 import * as React from "react";
 import { initializeIcons } from "@fluentui/react";
 import { setIconOptions } from "@fluentui/react/lib/Styling";
-import { HashRouter as Router } from "react-router-dom";
+// import { HashRouter as Router } from "react-router-dom";
 import { useAuthInitialization } from "../auth/useAuth";
-import { AuthProvider } from "@common/auth/AuthContext";
-import { LoadingProvider } from "@common/features/loading/LoadingContext";
-import { AlertProvider } from "@common/features/alert/AlertContext";
+import { AuthProvider } from "@common/auth/AuthContext"; 
 import { Spinner } from "@fluentui/react-components";
+import { AlertProvider, ConfirmProvider, LoadingProvider } from "@prt-ts/fluent-common-features";
 
 export const AppContainer = (props) => {
   React.useEffect(() => {
@@ -20,15 +19,17 @@ export const AppContainer = (props) => {
 
   return (
     <>
-      <Router>
+      {/* <Router> */}
         <AuthProvider>
           <LoadingProvider>
-            <AlertProvider>
+          <AlertProvider>
+            <ConfirmProvider>
               <AppContextInitializer>{props.children}</AppContextInitializer>
+            </ConfirmProvider>
             </AlertProvider>
           </LoadingProvider>
         </AuthProvider>
-      </Router>
+      {/* </Router> */}
     </>
   );
 };

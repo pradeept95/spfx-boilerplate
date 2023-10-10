@@ -1,14 +1,18 @@
 /* eslint-disable  */
 import { getSP } from "@common/pnp";
-import { DropdownOption } from "@prt-ts/fluent-formik";
- 
+
+export type ChoiceFieldOption = {
+  value: string;
+  label: string;
+};
+
 export const ChoiceFieldService = () => {
   (async () => {})();
 
   const getChoiceFieldOptions = async (
     listName: string,
     fieldName: string
-  ): Promise<DropdownOption[]> => {
+  ): Promise<ChoiceFieldOption[]> => {
     return new Promise(async (resolve, reject) => {
       try {
         const sp = await getSP();
@@ -21,7 +25,7 @@ export const ChoiceFieldService = () => {
           return {
             value: choice,
             label: choice,
-          } as DropdownOption;
+          };
         });
         resolve(options);
       } catch (error) {
@@ -37,7 +41,7 @@ export const ChoiceFieldService = () => {
       labelField: string;
       filterContext?: string;
     }
-  ): Promise<DropdownOption[]> => {
+  ): Promise<ChoiceFieldOption[]> => {
     return new Promise(async (resolve, reject) => {
       try {
         const sp = await getSP();
@@ -49,7 +53,7 @@ export const ChoiceFieldService = () => {
           return {
             value: choice[config.valueField],
             label: choice[config.labelField],
-          } as DropdownOption;
+          };
         });
         resolve(options);
       } catch (error) {

@@ -6,7 +6,7 @@ import { Guid } from "@microsoft/sp-core-library";
 import { getSP } from "@common/pnp";
 import AppContext from "@common/root/app-context";
 
-let _listSubscriptionFactory: ListSubscriptionFactory;
+var _listSubscriptionFactory: ListSubscriptionFactory;
 
 export function setSubscriptionFactory(context: any) {
   _listSubscriptionFactory = new ListSubscriptionFactory(context);

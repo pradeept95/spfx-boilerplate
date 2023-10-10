@@ -31,9 +31,11 @@ export type ResourceType = {
   requiredResources: string[];
   requiredAll?: boolean;
   renderNoAccess?: JSX.Element;
+  additionalItemAccessContext?: string[];
 };
 
 export type RouteRoleType = {
   requiredRoles: number[];
   requiredAll?: boolean;
+  additionalItemAccessContext?: number[];
 };

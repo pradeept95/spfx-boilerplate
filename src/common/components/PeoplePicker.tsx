@@ -12,11 +12,12 @@ import {
   PeoplePickerItem,
   IPeoplePickerProps,
   IInputProps,
-} from "@fluentui/react/lib/Pickers"; 
+} from "@fluentui/react/lib/Pickers";
+import { useId } from "@fluentui/react-hooks";
 import { IRenderFunction, ITextFieldProps, mergeStyles } from "@fluentui/react";
-import { UserService } from "../services/UserService"; 
+import { UserService } from "../services/UserService";  
+import { tokens } from "@fluentui/react-components";
 import { debounceAsync } from "@prt-ts/debounce";
-import { tokens, useId } from "@fluentui/react-components"; 
 
 export enum PrincipalType {
   User = 1,

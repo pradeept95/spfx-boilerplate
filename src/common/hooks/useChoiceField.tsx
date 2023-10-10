@@ -1,14 +1,14 @@
 /* eslint-disable */
 import {
-  ChoiceFieldService, 
+  ChoiceFieldService,
+  type ChoiceFieldOption,
 } from "@common/services/ChoiceFieldService";
-import { DropdownOption } from "@prt-ts/fluent-formik";
 import { useState, useEffect } from "react";
 
 const { getChoiceFieldOptions } = ChoiceFieldService();
 
 export default function useChoiceField(listName: string, fieldName: string) {
-  const [options, setOptions] = useState<DropdownOption[]>([]);
+  const [options, setOptions] = useState<ChoiceFieldOption[]>([]);
 
   useEffect(() => {
     if (listName && fieldName) {

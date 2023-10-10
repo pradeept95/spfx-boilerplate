@@ -1,16 +1,17 @@
 /* eslint-disable */
-import { WebPartContext } from "@microsoft/sp-webpart-base";
+import { WebPartContext } from "@microsoft/sp-webpart-base"; 
 import { AccessGroupUsers, AppResource, ROLES } from "@common/auth/AuthType";
 import { SiteSettings } from "../types/SiteSettingType";
-import { getGraphFi, getSP } from "@common/pnp";
-import { FormCustomizerContext } from "@microsoft/sp-listview-extensibility";
+import { getGraphFi, getSP } from "@common/pnp"; 
 
 export default class AppContext {
   private static instance: AppContext;
 
   public isDarkTheme: boolean = false;
-  public context: WebPartContext | FormCustomizerContext;
-  public siteSettings?: SiteSettings<{}>;
+  public context: WebPartContext;
+  public siteSettings?: SiteSettings<{
+    [key: string]: any;
+  }>;
   public accessGroupUsers?: Partial<AccessGroupUsers>;
   public currentUserRoles?: number[];
   public currentUserResourceAccess?: string[];
@@ -25,13 +26,10 @@ export default class AppContext {
     return AppContext.instance;
   }
 
-  public async initialize(
-    context: WebPartContext | FormCustomizerContext,
-    siteName: string = null
-  ) {
+  public async initialize(context: WebPartContext, siteName?: string) {
     this.context = context;
     await getSP(this.context, siteName);
-    await getGraphFi(this.context);
+    await getGraphFi(this.context); 
   }
 
   public async registerResources(newAppResources: AppResource[]) {
@@ -68,8 +66,16 @@ export default class AppContext {
   }
 
   public async setDebugMode(enableDebugMode: boolean) {
+    if (sessionStorage.getItem("debugMode") === null) {
+      console.log("set debug mode");
+      sessionStorage.setItem("debugMode", (enableDebugMode || false).toString());
+    }
+
+    const debugMode = sessionStorage.getItem("debugMode") === "true";
+
     if (this.siteSettings) {
-      this.siteSettings.enableDebugMode = enableDebugMode;
+       console.log("set debug mode");
+      this.siteSettings.enableDebugMode = debugMode;
     }
   }
 
@@ -90,4 +96,4 @@ export default class AppContext {
   public async getAccessGrouUsersByRoles(roleKey: keyof typeof ROLES) {
     return this.accessGroupUsers;
   }
-}
+} 

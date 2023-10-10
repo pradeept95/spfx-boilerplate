@@ -1,7 +1,7 @@
 /* eslint-disable */
 import * as React from "react";
 import { Routes, Route } from "react-router-dom";
-import { PageNotFound } from "../../common/components/PageNotFound";
+import { PageNotFound } from "@prt-ts/fluent-common-features";
 import { Layout } from "./layout/ExampleLayout"; 
 import { DataTableExamplePage1, DataTableExamplePage2 } from "./pages/DataTableExample";
 import DocuSignExample from "./pages/DocuSignFlow";

@@ -122,7 +122,7 @@ export const EmailTemplateForm = (props) => {
                     label="TemplateKey1"
                     required={true}
                     placeholder="Enter a template key"
-                    options={options}
+                    options={options as any[]}
                     multiselect={true}
                   />
 
@@ -147,7 +147,7 @@ export const EmailTemplateForm = (props) => {
                     label="TemplateKey2"
                     required={true}
                     placeholder="Enter a template key"
-                    options={options2}
+                    options={options2 as any[]}
                   />
                   <DatePicker
                     name="Date"

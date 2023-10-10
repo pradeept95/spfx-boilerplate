@@ -1,15 +1,15 @@
 /* eslint-disable */
-import * as React from "react";
-import { useAlert } from "@common/features/alert";
-import { Link } from "@fluentui/react-components";
+import * as React from "react"; 
+import { Link } from "@fluentui/react-components"; 
+import { useAlert, useConfirm } from "@prt-ts/fluent-common-features";
 
-const NotifyExample: React.FunctionComponent<{}> = (props) => { 
+const NotifyExample: React.FunctionComponent<{}> = (props) => {
   const { success, error, info, warning, update, progress } = useAlert();
 
   const longProcess = () => {
     const progressToastId = progress({
       title: "Action in Progress",
-      body: "Please Wait..." 
+      body: "Please Wait...",
     });
 
     return new Promise((resolve, reject) => {
@@ -78,6 +78,15 @@ const NotifyExample: React.FunctionComponent<{}> = (props) => {
     });
   };
 
+  const { confirm } = useConfirm();
+  const onConfirm = () => {
+    console.log("Confirmed!"); 
+  };
+
+  const onCancel = () => {
+    console.log("Cancelled!"); 
+  };
+
   return (
     <>
       <section>
@@ -102,40 +111,44 @@ const NotifyExample: React.FunctionComponent<{}> = (props) => {
         <button onClick={longProcess}>Update With Promise</button>
         <button
           onClick={() =>
-            error(
-              {
-                title: "Error",
-                body: "This is a toast body",
-                footer: (
-                  <>
-                    <Link>Action</Link>
-                    <Link>Action</Link>
-                  </>
-                ),
-              } 
-            )
+            error({
+              title: "Error",
+              body: "This is a toast body",
+              footer: (
+                <>
+                  <Link>Action</Link>
+                  <Link>Action</Link>
+                </>
+              ),
+            })
           }
         >
           Alert Error for Update!
         </button>
         <button
-          onClick={() => 
-            update(
-              {
-                title: "Success",
-                body: "Updated Content",
-                footer: (
-                  <>
-                    <Link>Action</Link>
-                    <Link>Action</Link>
-                  </>
-                ),
-              } 
-            )
+          onClick={() =>
+            update({
+              title: "Success",
+              body: "Updated Content",
+              footer: (
+                <>
+                  <Link>Action</Link>
+                  <Link>Action</Link>
+                </>
+              ),
+            })
           }
         >
           Update Alert
         </button>
+        <button onClick={() => {
+          confirm({
+            title: "Confirm Example",
+            message: <div>Are you sure you want to delete this item?</div>,
+            onConfirm,
+            onCancel,
+          });
+        }}>Confirm</button>
       </section>
     </>
   );

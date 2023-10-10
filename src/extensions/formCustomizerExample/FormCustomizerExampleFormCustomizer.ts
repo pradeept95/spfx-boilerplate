@@ -32,7 +32,7 @@ export default class FormCustomizerExampleFormCustomizer extends BaseFormCustomi
     Log.info(LOG_SOURCE, 'Activated FormCustomizerExampleFormCustomizer with properties:');
     Log.info(LOG_SOURCE, JSON.stringify(this.properties, undefined, 2));
 
-    await appContext.initialize(this.context); 
+    await appContext.initialize(this.context as any); 
 
     //  await appContext.addSetting(props.settings);
      await appContext.setIsDarkTheme(false);

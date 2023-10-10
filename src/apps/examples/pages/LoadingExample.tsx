@@ -1,6 +1,6 @@
 /* eslint-disable */
-import * as React from "react"; 
-import { useLoading } from "../../../common/features/loading/useLoading";
+import { useLoading } from "@prt-ts/fluent-common-features";
+import * as React from "react";  
 
 const LoadingExample: React.FunctionComponent<{}> = (props) => {
 

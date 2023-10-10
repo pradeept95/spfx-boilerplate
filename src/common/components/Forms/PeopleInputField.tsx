@@ -71,7 +71,7 @@ const debouncedSearchUser = debounceAsync(searchUsers, 300);
 
 export const PeopleInput: React.FunctionComponent<
   Partial<
-      Omit<PeoplePickerProps, "onChange"> &
+    PeoplePickerProps &
       InfoLabelProps &
       FieldProps & {
         peopleSize?: "small" | "medium" | "large";

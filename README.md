@@ -24,7 +24,7 @@ This application could be use to create a new solution. It already has some pre-
 ---
  
 ## Development Environment
-- Node Version : >=16.13.0 <17.0.0
+- Node Version : ">=16.13.0 <17.0.0 || >=18.17.1 <19.0.0"
 - ├── @microsoft/generator-sharepoint@1.16.0
 - ├── corepack@0.14.1
 - ├── gulp-cli@2.3.0

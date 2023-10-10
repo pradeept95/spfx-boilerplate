@@ -8,17 +8,19 @@ const EditorExample: React.FunctionComponent<{}> = (props) => {
     const [value, setValue] = React.useState("")
 
     return (
-        <>
-            <section>
-                <h3>Rich Text Editor Example</h3> <hr />
-                <RichTextEditor value={value} onChange={(v)=> { 
-                    setValue(v);
-                }}/>
-
-                <br/> 
-                <RichTextViewer value={value}/>
-            </section>
-        </>
+      <>
+        <section>
+          <h3>Rich Text Editor Example</h3> <hr />
+          <RichTextEditor
+            value={value}
+            onChange={(v) => {
+              setValue(v);
+            }}
+          />
+          <br />
+          <RichTextViewer>{value}</RichTextViewer>
+        </section>
+      </>
     );
 };
 
