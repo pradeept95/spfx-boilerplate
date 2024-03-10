@@ -29,7 +29,7 @@ export const useLayoutStyle = makeStyles({
     flexDirection: "column",
     ...shorthands.gap("0.4rem"),
     backgroundColor: tokens.colorNeutralBackground3,
-    height: "calc(100vh - 95px)",
+    // height: "calc(100vh - 95px)",
     width: "100%",
   },
 
@@ -50,7 +50,7 @@ export const useLayoutStyle = makeStyles({
 
   sideBarContainer: {
     width: "14rem",
-    maxHeight: "calc(100vh - 165px)",
+    // maxHeight: "calc(100vh - 165px)",
 
     backgroundColor: tokens.colorNeutralBackground1,
     ...shorthands.borderRadius(tokens.borderRadiusMedium),
@@ -76,7 +76,7 @@ export const useLayoutStyle = makeStyles({
     ...shorthands.padding("0.2rem", "0.8rem"),
     ...shorthands.margin("0px", "10px", "0px", "0px"),
 
-    maxHeight: "calc(100vh - 165px)",
+    // maxHeight: "calc(100vh - 165px)",
     ...shorthands.overflow("hidden", "auto"),
     ...CustomScrollBar,
     ":hover": {

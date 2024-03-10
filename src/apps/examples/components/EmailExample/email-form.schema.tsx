@@ -1,5 +1,6 @@
 import * as Yup from "yup";
 
+// email validation schema
 export const emailValidationSchema = Yup.object().shape({
   from: Yup.string()
     .required("From Email is Required.")

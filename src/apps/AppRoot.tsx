@@ -1,11 +1,11 @@
 /* eslint-disable */
 import * as React from "react";
 import { 
-  Route,
-  NavLink,
+  Route, 
   createRoutesFromElements,
   createHashRouter,
   RouterProvider,
+  Navigate,
 } from "react-router-dom";
 import { PageNotFound, AccessDenied } from "@prt-ts/fluent-common-features";
 import ExampleEntryPage from "./examples/Index"; 
@@ -14,32 +14,44 @@ import { RequireRoleAuth } from "../common/auth/AuthContext";
 import LayoutExampleApp from "./fullpage-layout";
 import AwardRoot from "./awards";
 
+// this component is used to redirect to the correct route
+// if the user is coming from an external link like email
+const decodeAppRoute = (uri: string | undefined) => {
+  if (uri) {
+    return uri
+      .replace(/%2F/g, "/")
+      .replace(/%3F/g, "?")
+      .replace(/%3D/g, "=")
+      .replace(/%26/g, "&")
+      .replace(/%23/g, "#")
+      .replace(`?appRoute=`, "#")
+      .replace(/%2B/g, "+")
+      .replace(/%2C/g, ",")
+      .replace(/%3A/g, ":")
+      .replace(/%3B/g, ";");
+  }
+  return uri;
+};
+
+const AppNavigator: React.FC = () => {
+  const currentLocation = window.location.href;
+  let params = new URL(currentLocation).searchParams;
+  let appRoute = params.get("appRoute");
+
+  if (appRoute) {   
+    window.location.href = decodeAppRoute(currentLocation);
+  }
+  // default route to example
+  return <Navigate to={"/examples"} />;
+};
+
 const router = createHashRouter(
   createRoutesFromElements(
     <Route path="/">
       {/* public routes */}
       <Route
         index
-        element={
-          <>
-            <ul>
-              <li>
-                <NavLink to={"/admin"}>Go to Admin Layout</NavLink>
-              </li>
-              <li>
-                <NavLink to={"/layout-example"}>
-                  Go to Full Page Layout Example
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to={"/examples"}>Go to Example Layout</NavLink>
-              </li>
-              <li>
-                {/* <button onClick={openPropertyPane}>Open Setting</button> */}
-              </li>
-            </ul>
-          </>
-        }
+        element={<AppNavigator />}
       />
 
       <Route

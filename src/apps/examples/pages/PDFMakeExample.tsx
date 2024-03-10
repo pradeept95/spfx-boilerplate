@@ -21,7 +21,8 @@ import {
   CheckboxInput,
   RadioInput,
 } from "@prt-ts/pdf-json-helpers";
-import { exportToPDF } from "@prt-ts/export-helpers";
+import { exportToFile } from "@prt-ts/export-helpers";
+import { useTrackPageView } from "@common/hooks/useTrackPageView";
 
 const testHTML = `<h3>Value in H3 Html Tag</h3><p>first paragraph with <i>Italics</i> <b>Bold<b> and more</p><p>second paragraph</p><p>third paragraph</p>`;
 
@@ -147,12 +148,17 @@ var exampleDocumentDefination: any = {
 };
 
 const PDFMakeExample: React.FunctionComponent<{}> = (props) => {
+
+  useTrackPageView({
+    name: "PDF Make Example",
+  });
+
   const inputElement = TextInput("Hello", "test");
   console.log(inputElement);
 
   const handlePdfMake = () => {
     let docDef: any = { ...exampleDocumentDefination };
-    exportToPDF(docDef, "Test Spfx download");
+    exportToFile(docDef, "Test Spfx download");
   };
 
   return (

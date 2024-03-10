@@ -2,8 +2,13 @@
 import * as React from "react"; 
 import { RichTextEditor } from "../../../common/components/RichTextEditor";
 import { RichTextViewer } from "../../../common/components/RichTextViewer";
+import { useTrackPageView } from "@common/hooks/useTrackPageView";
 
 const EditorExample: React.FunctionComponent<{}> = (props) => { 
+
+  useTrackPageView({
+    name: "Editor Example",
+  });
 
     const [value, setValue] = React.useState("")
 

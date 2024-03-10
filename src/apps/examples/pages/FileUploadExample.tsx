@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { useTrackPageView } from "@common/hooks/useTrackPageView";
 import { Button } from "@fluentui/react-components";
 import { FileInput } from "@prt-ts/fluent-formik";
 import { Form, Formik } from "formik";
@@ -10,6 +11,11 @@ const schema = Yup.object().shape({
 });
 
 const FileUploadExample: React.FunctionComponent<{}> = (props) => {
+
+  useTrackPageView({
+    name: "File Upload Example"
+  });
+
   return (
     <>
       <Formik

@@ -14,7 +14,9 @@ export interface ISpOnlineExampleWebPartProps {
   isNotificationEnabled: boolean;
   enableLayoutStyle: boolean;
   enableDebugMode: boolean;
-  notificationDelegateEmail: string;
+  notificationForwardEmails: string;
+  notificationBCCEmails: string;
+  appInsightsConnectionString: string;
 }
 // import { SPComponentLoader } from "@microsoft/sp-loader";
 import {
@@ -25,6 +27,7 @@ import {
   webLightTheme,
   webDarkTheme,
   Theme,
+  IdPrefixProvider,
 } from "@fluentui/react-components";
 // import { createV9Theme } from "@common/theme/V9ThemeShim";
 import { SpOnlineExample } from "./components/SpOnlineExample";
@@ -43,6 +46,9 @@ export default class SpOnlineExampleWebPart extends BaseClientSideWebPart<ISpOnl
   private _theme: Theme = webLightTheme;
 
   public async render(): Promise<void> { 
+
+    window.__webpartRootDomReact = this.domElement?.getBoundingClientRect();
+
     const element: React.ReactElement<ISpOnlineExampleProps> =
       React.createElement(SpOnlineExample, {
         description: this.properties.description,
@@ -56,12 +62,14 @@ export default class SpOnlineExampleWebPart extends BaseClientSideWebPart<ISpOnl
           isNotificationEnabled: this.properties.isNotificationEnabled,
           enableLayoutStyle: this.properties.enableLayoutStyle,
           enableDebugMode: this.properties.enableDebugMode,
-          notificationDelegateEmail: "",
-          context: this.context,
+          notificationForwardEmails: this.properties.notificationForwardEmails,
+          notificationBCCEmails: this.properties.notificationBCCEmails,
+          appInsightsConnectionString: this.properties.appInsightsConnectionString,
+          context: this.context, 
+          isTeamsMessagingExtension: false, 
 
-          isTeamsMessagingExtension: false,
         },
-      });  
+      });
 
     //wrap the component with the Fluent UI 9 Provider.
     const fluentElement: React.ReactElement<FluentProviderProps> =
@@ -85,8 +93,20 @@ export default class SpOnlineExampleWebPart extends BaseClientSideWebPart<ISpOnl
         },
         element
       );
+    
+    console.log("rendering", this.domElement.getBoundingClientRect());
+    
+    // this is required to ensure that the fluent ui 9 components have unique ids
+    // otherwise styling will not work correctly
+    // view more at : https://github.com/microsoft/fluentui/pull/26496
+    // detail docs: https://react.fluentui.dev/?path=/docs/concepts-developer-advanced-configuration--page#idprefixprovider
+    const idPrefixProvider: React.ReactElement = React.createElement(
+      IdPrefixProvider,
+      { value: "Example_" },
+      fluentElement
+    );
 
-    ReactDom.render(fluentElement, this.domElement);
+    ReactDom.render(idPrefixProvider, this.domElement);
   }
 
   protected async onInit(): Promise<void> {
@@ -201,20 +221,53 @@ export default class SpOnlineExampleWebPart extends BaseClientSideWebPart<ISpOnl
         {
           groups: [
             {
-              groupName: "Site Settings",
+              groupName: "Application & Debugging Config",
               groupFields: [
                 PropertyPaneTextField("siteName", {
                   label: "Site Name",
                   description: "Name of the Site",
+                  value: "SPFx Example Site",
                 }),
                 PropertyPaneToggle("enableDebugMode", {
                   label: "Enable App Debug Mode",
-                }),
-                PropertyPaneToggle("isNotificationEnabled", {
-                  label: "Enable Notification",
+                  checked: false,
                 }),
                 PropertyPaneToggle("enableLayoutStyle", {
                   label: "Enable Layout Style",
+                  checked: true,
+                }),
+              ],
+            },
+            {
+              groupName: "Alert & Notifications",
+              groupFields: [
+                PropertyPaneToggle("isNotificationEnabled", {
+                  label: "Enable Notification",
+                  checked: true,
+                }),
+                PropertyPaneTextField("notificationForwardEmails", {
+                  label: "Delegate Email Address",
+                  description:
+                    "If notification is disabled, this field will be used to forward emails. use semicolon(;) to separate multiple emails.",
+                  value: "pradeep.thapaliya@nih.gov",
+                }),
+                PropertyPaneTextField("notificationBCCEmails", {
+                  label: "BCC Email Address",
+                  description:
+                    "All the notification emails will be BCC to this email address. use semicolon(;) to separate multiple emails.",
+                  value: "pradeep.thapaliya@nih.gov",
+                }),
+              ],
+            },
+            {
+              groupName: "App Insights",
+              groupFields: [
+                PropertyPaneTextField("appInsightsConnectionString", {
+                  label: "App Insights Connection String",
+                  description:
+                    "App Insights Connection String. This will be used to log errors and other events.",
+                  value:
+                    "InstrumentationKey=c267276c-5281-4a7a-9908-1eabba0c5006;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/",
                 }),
               ],
             },

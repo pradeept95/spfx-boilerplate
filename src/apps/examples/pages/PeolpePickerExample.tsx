@@ -7,10 +7,16 @@ import {
 } from "../../../common/components/PeoplePicker"; 
 import { UserService } from "../../../common/services/UserService";
 import AppContext from "@common/root/app-context";
+import { useTrackPageView } from "@common/hooks/useTrackPageView";
 
 const { getUserProfile } = UserService();
 
 const PeoplePickerExample: React.FunctionComponent<{}> = (props) => {
+
+  useTrackPageView({
+    name: "People Picker Example",
+  });
+
   const [defaultUsers, setDefaultUser] = React.useState<IPersonaProps[]>([]);
 
   React.useEffect(() => {

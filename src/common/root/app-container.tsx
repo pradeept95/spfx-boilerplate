@@ -5,7 +5,7 @@ import { setIconOptions } from "@fluentui/react/lib/Styling";
 // import { HashRouter as Router } from "react-router-dom";
 import { useAuthInitialization } from "../auth/useAuth";
 import { AuthProvider } from "@common/auth/AuthContext"; 
-import { Spinner } from "@fluentui/react-components";
+import { Spinner, makeStyles } from "@fluentui/react-components";
 import { AlertProvider, ConfirmProvider, LoadingProvider } from "@prt-ts/fluent-common-features";
 
 export const AppContainer = (props) => {
@@ -41,15 +41,24 @@ const AppContextInitializer = (props) => {
     initializeAuth();
   }, []);
 
+  const styles = useInitializerStyles();
+
   return (
     <>
       {!isAuthInitializing ? (
         <>{props.children}</>
       ) : (
-        <div style={{ minHeight: "60vh", marginTop: "20vh" }}>
+        <div className={styles.loadingContinuer}>
           <Spinner label="Loading, Please Wait..." />
         </div>
       )}
     </>
   );
 };
+
+const useInitializerStyles = makeStyles({
+  loadingContinuer: {
+    minHeight: "60vh",
+    marginTop: "20vh",
+  },
+})

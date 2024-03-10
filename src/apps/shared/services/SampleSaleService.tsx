@@ -1,10 +1,12 @@
 /* eslint-disable */
 
-import { getSP } from "@common/pnp";
+import { getSP, handleError } from "@common/pnp";
 import { SampleSales } from "../models/sample-sales.model";
+import AppContext from "@common/root/app-context";
+import { SeverityLevel } from "@microsoft/applicationinsights-web";
 
 export const SampleSaleService = () => {
-  (async () => {})();
+  (async () => { })();  
 
   const getAllSalesData = async () => {
     try {
@@ -28,11 +30,35 @@ export const SampleSaleService = () => {
         } as SampleSales;
       });
 
-      console.log(items);
+      console.log(items); 
+
+      const { appInsights, context } = AppContext.getInstance();
+      console.log(appInsights)
+
+      appInsights?.trackException({
+        exception: new Error("Test"),
+        severityLevel: 3,
+        properties: {
+          error: JSON.stringify("Test"),
+          function: "getAllSalesData",
+          user: context?.pageContext?.user,
+        },
+      });
+
       return items;
-    } catch (error) {
-      console.log("showLoader -> error", error);
-      throw error;
+    } catch (error) { 
+      handleError(error);
+      const { appInsights, context } = AppContext.getInstance();
+      appInsights?.trackException({
+        exception: error,
+        properties: {
+          error: JSON.stringify(error),
+          function: "getAllSalesData", 
+          user: context?.pageContext?.user,
+        },
+        severityLevel: SeverityLevel.Error,
+      });
+      return [];
     }
   };
 

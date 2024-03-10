@@ -23,16 +23,14 @@ export const getSP = async (
   siteName?: string
 ): Promise<SPFI> => {
   // initialize if _SP is null and Context is provided
-  if (!window._SP && (context !== null || context !== undefined)) {
+  if (context) {
     // Set sp as the global variable so we don't have to pass webpartcontext deep down to the child component
     // initialize once at init
-    const siteUrl = siteName
-      ? createSiteUrl(siteName)?.toString()
-      : context.pageContext.web.absoluteUrl;
+    const siteUrl = siteName ? createSiteUrl(siteName)?.toString() : context.pageContext.web.absoluteUrl;
 
     window._SP = await spfi(siteUrl)
       .using(SPFx(context))
-      .using(PnPLogging(LogLevel.Error));
+      .using(PnPLogging(LogLevel.Warning));
     
     window.__SPFxContext = context;
   }
@@ -47,7 +45,7 @@ export const getGraphFi = async (
   context?: WebPartContext
 ): Promise<GraphFI> => {
   // initialize if _SP is null and Context is provided
-  if (!window._GraphFI && (context !== null || context !== undefined)) {
+  if (context) {
     // Set sp as the global variable so we don't have to pass webpartcontext deep down to the child component
     // initialize once at init
     window._GraphFI = await graphfi()

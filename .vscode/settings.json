@@ -22,5 +22,10 @@
     "spfx",
     "toastify",
     "zustand"
+  ],
+  "cSpell.enableFiletypes": [
+    "!asciidoc",
+    "bat",
+    "code-referencing"
   ]
 }

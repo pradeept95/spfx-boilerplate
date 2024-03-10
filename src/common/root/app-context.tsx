@@ -4,11 +4,15 @@ import { AccessGroupUsers, AppResource, ROLES } from "@common/auth/AuthType";
 import { SiteSettings } from "../types/SiteSettingType";
 import { getGraphFi, getSP } from "@common/pnp"; 
 
+import { ApplicationInsights } from "@microsoft/applicationinsights-web";
+
+
 export default class AppContext {
   private static instance: AppContext;
 
   public isDarkTheme: boolean = false;
   public context: WebPartContext;
+  public appInsights: ApplicationInsights = null;
   public siteSettings?: SiteSettings<{
     [key: string]: any;
   }>;
@@ -26,18 +30,46 @@ export default class AppContext {
     return AppContext.instance;
   }
 
-  public async initialize(context: WebPartContext, siteName?: string) {
+  public async initialize( 
+    appSettings: SiteSettings<{}>,
+    siteName?: string
+  ) {
+    // get context from settings
+    const { context, appInsightsConnectionString } = appSettings;
+
+    if (appInsightsConnectionString) {
+      // initialize app insights
+      console.log("initialize app insights");
+      this.appInsights = new ApplicationInsights({
+        config: {
+          connectionString: appInsightsConnectionString,
+          /* ...Other Configuration Options... */
+        },
+      });
+
+      await this.appInsights.loadAppInsights();
+      await this.appInsights.addTelemetryInitializer((envelope) => {
+        envelope.tags["siteName"] = appSettings.siteName;
+        envelope.tags["userName"] = context.pageContext.user.loginName;
+        envelope.tags["userEmail"] = context.pageContext.user.email;
+        envelope.tags["userDisplayName"] = context.pageContext.user.displayName;
+      });
+      this.appInsights.trackPageView();
+    }
+
+    // save context
     this.context = context;
+
+    // set site settings
+    this.siteSettings = appSettings;
+
+    // initialize sp
     await getSP(this.context, siteName);
-    await getGraphFi(this.context); 
+    await getGraphFi(this.context);
   }
 
   public async registerResources(newAppResources: AppResource[]) {
     this.appResources = [...this.appResources, ...newAppResources];
-  }
-
-  public async addSetting(siteSettings: SiteSettings<{}>) {
-    this.siteSettings = siteSettings;
   }
 
   public async setIsDarkTheme(isDark: boolean) {
@@ -58,7 +90,7 @@ export default class AppContext {
     if (enableFullScreenLayout) {
       const commandBar = document.getElementById("spCommandBar");
       // const topNavigation = document.getElementById("spSiteHeader");
-      if (commandBar) {
+      if (commandBar && commandBar.style.display !== "none") {
         commandBar.style.display = "none";
         // topNavigation.style.display = "none";
       }
@@ -68,13 +100,16 @@ export default class AppContext {
   public async setDebugMode(enableDebugMode: boolean) {
     if (sessionStorage.getItem("debugMode") === null) {
       console.log("set debug mode");
-      sessionStorage.setItem("debugMode", (enableDebugMode || false).toString());
+      sessionStorage.setItem(
+        "debugMode",
+        (enableDebugMode || false).toString()
+      );
     }
 
     const debugMode = sessionStorage.getItem("debugMode") === "true";
 
     if (this.siteSettings) {
-       console.log("set debug mode");
+      console.log("set debug mode");
       this.siteSettings.enableDebugMode = debugMode;
     }
   }

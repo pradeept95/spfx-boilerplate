@@ -1,8 +1,13 @@
 /* eslint-disable */
 import * as React from "react";   
 import ESignature from "../../../common/components/ESignature";
+import { useTrackPageView } from "@common/hooks/useTrackPageView";
 
 const ESignatureExample: React.FunctionComponent<{}> = (props) => { 
+
+    useTrackPageView({
+        name: "E-Signature Example",
+    });
 
     const [signature, setSignature] = React.useState("")
 

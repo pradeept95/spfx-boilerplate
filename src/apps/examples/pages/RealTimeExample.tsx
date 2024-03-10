@@ -1,18 +1,23 @@
 /* eslint-disable */
+import { useTrackPageView } from "@common/hooks/useTrackPageView";
 import { useListSubscription } from "@common/list-subscriptions";
 import { getSP } from "@common/pnp";
 import AppContext from "@common/root/app-context";
 import React from "react";
 
 const currentContext = AppContext.getInstance();
-function useRealTimeExample(){
+function useRealTimeExample() {
+  useTrackPageView({
+    name: "Realtime Example",
+  });
+  
   const [et, setEmailTemplates] = React.useState<any[]>([]);
 
   const loadEmailTemplates = async () => {
     console.log("loadEmailTemplates");
 
     try {
-      const sp = await getSP(currentContext.context, "Council");
+      const sp = await getSP(currentContext.context);
       const items: any[] = await sp.web.lists
         .getByTitle("EmailTemplates")
         .items();
@@ -27,8 +32,7 @@ function useRealTimeExample(){
 
   useListSubscription({
     listIdOrListName: "EmailTemplates",
-    onChange: loadEmailTemplates,
-    
+    onChange: loadEmailTemplates, 
   });
 
   React.useEffect(() => {

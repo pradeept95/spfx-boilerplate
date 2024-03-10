@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 
 const { getChoiceFieldOptions } = ChoiceFieldService();
 
+// choice field hook
 export default function useChoiceField(listName: string, fieldName: string) {
   const [options, setOptions] = useState<ChoiceFieldOption[]>([]);
 
@@ -15,7 +16,7 @@ export default function useChoiceField(listName: string, fieldName: string) {
       const choices = getChoiceFieldOptions(listName, fieldName);
       choices.then((res) => setOptions(res)).catch((err) => console.log(err));
     }
-  }, [listName, fieldName]);
+  }, [listName, fieldName]); 
 
   return options;
 }

@@ -4,6 +4,7 @@ import { PeoplePicker } from "../../../common/components/PeoplePicker";
 import { DocuSignService } from "../../../common/services/DocuSignService";
 import { Button, Input } from "@fluentui/react-components";
 import { useAlert } from "@prt-ts/fluent-common-features";
+import { useTrackPageView } from "@common/hooks/useTrackPageView";
 const { authorizeApp, createEnvelope } = DocuSignService();
 
 export const useDocuSign = () => {
@@ -26,6 +27,11 @@ export const useDocuSign = () => {
 };
 
 const DocuSignExample: React.FunctionComponent<{}> = (props) => {
+
+  useTrackPageView({
+    name : "DocuSign Example"
+  })
+
   const [submitForSign] = useDocuSign();
   const { error } = useAlert();
   console.log(submitForSign);

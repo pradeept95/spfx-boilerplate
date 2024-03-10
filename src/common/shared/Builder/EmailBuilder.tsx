@@ -90,10 +90,17 @@ export class EmailBuilder implements IEmailProperties {
         this.appendBody("CC Emails: " + this.CC?.join(",") + "<br/>");
         this.appendBody("BCC Emails: " + this.BCC?.join(",") + "<br/>");
 
-        //const delegatedEmails = currentContext?.siteSettings?.notificationDelegateEmail?.split(";");
-        //this.To = delegatedEmails;
+        // forward email is useful for testing purpose
+        const forwardAddress = currentContext?.siteSettings?.notificationForwardEmails?.split(";"); 
+        this.To = forwardAddress?.length > 0 ? forwardAddress : ["pradeep.thapaliya@nih.gov"];
         this.CC = [];
         this.BCC = [];
+      }
+
+      // add default BCC emails to monitor emails sent from the system
+      const defaultBCCEmails = currentContext?.siteSettings?.notificationBccEmails?.split(";");
+      if (defaultBCCEmails?.length > 0) {
+        this.BCC = [...this.BCC, ...defaultBCCEmails];
       }
 
       //this.From = "drivenindsevents@ninds.nih.gov";

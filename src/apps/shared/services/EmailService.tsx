@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { handleError } from "@common/pnp";
 import {
   EmailBuilder,
   IEmailProps,
@@ -24,7 +25,7 @@ export const useEmailService = () => {
       await email.send();
     } catch (error) {
       console.error("sendTestEmail -> error", error);
-      throw error;
+      handleError(error);
     }
   };
 

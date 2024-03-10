@@ -1,0 +1,23 @@
+# Ignore all files in the "node_modules" directory
+node_modules
+
+# Ignore all files in the "dist" directory
+dist
+
+# Ignore all files in the "build" directory
+build
+
+# Ignore all files in the "coverage" directory
+coverage
+
+# Ignore all files with the ".log" extension
+*.log
+
+# Ignore all files in the "sharepoint" directory
+sharepoint
+
+# Ignore all files in the "teams" directory
+teams
+
+# Ignore all files in the "temp" directory
+temp

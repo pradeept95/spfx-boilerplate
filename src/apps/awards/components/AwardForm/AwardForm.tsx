@@ -33,6 +33,7 @@ import { UserInfo } from "@common/components/PeoplePicker/PeoplePickerTypes";
 import { POMUserService } from "@common/services/POMUserService";
 import { InfoLabel } from "@fluentui/react-components/unstable";
 import { Col, Row } from "react-grid-system";
+import { usePrompt } from "@common/hooks/usePrompt";
 
 // import { unstable_usePrompt as usePrompt } from "react-router-dom";
 
@@ -109,6 +110,10 @@ export const AwardForm: React.FC<ContractFormProps> = (props) => {
   };
 
   const classes = useFormStyle();
+
+  usePrompt({
+    when: true,
+  });
 
   return (
     <>

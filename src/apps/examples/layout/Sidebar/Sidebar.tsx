@@ -1,211 +1,150 @@
 /* eslint-disable */
-import * as React from "react";
-import {
-  Tree,
-  TreeItem,
-  TreeItemLayout,
-  TreeItemPersonaLayout,
-} from "@fluentui/react-components/unstable";
-import {
-  CalendarMonthRegular,
-  LockClosedRegular,
-  LinkSquareRegular,
-  Important16Regular,
-  // MoreHorizontal20Regular,
-  FlagRegular,
-} from "@fluentui/react-icons";
-import {
-  Avatar,
-  Button,
-  CounterBadge,
-  Menu,
-  MenuItem,
-  MenuList,
-  MenuPopover,
-  // MenuTrigger,
-  Text,
-  tokens,
-} from "@fluentui/react-components";
+import * as React from 'react';
+import { NavLinkGroup, SideNav } from '@common/layout/components/SideNav';
+
+const navigation: NavLinkGroup[] = [
+   {
+      title: 'Basic Examples',
+      isExpanded: true,
+      links: [
+         {
+            key: 'home',
+            name: 'Home',
+            url: '/examples',
+            icon: null,
+         },
+         {
+            key: 'form',
+            name: 'Form',
+            url: '/examples/form',
+            icon: null,
+         },
+         // people picker
+         {
+            key: 'people-picker',
+            name: 'People Picker',
+            url: '/examples/people',
+            icon: null,
+         },
+         // file upload
+         {
+            key: 'file-upload',
+            name: 'File Upload',
+            url: '/examples/file',
+            icon: null,
+         },
+         // send email
+         {
+            key: 'send-email',
+            name: 'Send Email',
+            url: '/examples/email',
+            icon: null,
+         },
+         {
+            key: 'editor',
+            name: 'Editor',
+            url: '/examples/editor',
+            icon: null,
+         },
+         {
+            key: 'e-signature',
+            name: 'E-Signature',
+            url: '/examples/esignature',
+            icon: null,
+         },
+         //pdf
+         {
+            key: 'pdf',
+            name: 'PDF',
+            url: '/examples/pdf',
+            icon: null,
+         },
+         // chart
+         {
+            key: 'chart',
+            name: 'Chart',
+            url: '/examples/chart',
+            icon: null,
+         },
+         // docusign
+         {
+            key: 'docusign',
+            name: 'DocuSign',
+            url: '/examples/docusign',
+            icon: null,
+         },
+         // notify
+
+         // real time
+         {
+            key: 'real-time',
+            name: 'Real Time',
+            url: '/examples/real-time',
+            icon: null,
+         },
+         // loading
+      ],
+   },
+   {
+      title: 'Table Examples',
+      isExpanded: true,
+      links: [
+         {
+            key: 'table2',
+            name: 'Basic Table',
+            url: '/examples/table2',
+            icon: null,
+         },
+         {
+            key: 'table',
+            name: 'Advanced Table',
+            url: '/examples/table',
+            icon: null,
+         },
+      ],
+   },
+   {
+      title: 'Common Features Example',
+      isExpanded: true,
+      links: [
+         {
+            key: 'loading',
+            name: 'Loading',
+            url: '/examples/loading',
+            icon: null,
+         },
+         {
+            key: 'notify',
+            name: 'Notify',
+            url: '/examples/notify',
+            icon: null,
+         },
+         {
+            key: 'confirm',
+            name: 'Confirm',
+            url: '/examples/confirm',
+            icon: null,
+         },
+         {
+            key: 'all-features',
+            name: 'All Features',
+            url: '/examples/all-features',
+            icon: null,
+         },
+         {
+            key: 'controls',
+            name: 'Flow Controls',
+            url: '/examples/controls',
+            icon: null,
+         },
+      ],
+   },
+];
 
 export const SideBar: React.FunctionComponent<{}> = () => {
-  return (
-    <div>
-      <Tree aria-label="Tree">
-        <TreeItem itemType="branch">
-          <TreeItemLayout
-            aside={
-              <>
-                <Important16Regular primaryFill="red" />
-                <CounterBadge count={1} color="danger" size="small" />
-              </>
-            }
-            actions={{
-              visible: true,
-              children: (
-                <>
-                  <Button
-                    aria-label="Edit"
-                    appearance="subtle"
-                    icon={<FlagRegular />}
-                  />
-                  <Menu>
-                    {/* <MenuTrigger disableButtonEnhancement>
-                                            <Button
-                                                aria-label="More options"
-                                                appearance="subtle"
-                                                icon={<MoreHorizontal20Regular />}
-                                            />
-                                        </MenuTrigger> */}
-                    <MenuPopover>
-                      <MenuList>
-                        <MenuItem>New </MenuItem>
-                        <MenuItem>New Window</MenuItem>
-                        <MenuItem disabled>Open File</MenuItem>
-                        <MenuItem>Open Folder</MenuItem>
-                      </MenuList>
-                    </MenuPopover>
-                  </Menu>
-                </>
-              ),
-            }}
-            iconBefore={<CalendarMonthRegular />}
-            iconAfter={
-              <>
-                <LockClosedRegular />
-                <LinkSquareRegular />
-              </>
-            }
-          >
-            Content
-          </TreeItemLayout>
-          <Tree>
-            <TreeItem itemType="leaf">
-              <TreeItemLayout>level 2, item 1</TreeItemLayout>
-            </TreeItem>
-            <TreeItem itemType="leaf">
-              <TreeItemLayout>level 2, item 2</TreeItemLayout>
-            </TreeItem>
-            <TreeItem itemType="leaf">
-              <TreeItemLayout>level 2, item 3</TreeItemLayout>
-            </TreeItem>
-          </Tree>
-        </TreeItem>
-        <TreeItem itemType="branch">
-          <TreeItemLayout
-            actions={
-              <>
-                <Button
-                  aria-label="Edit"
-                  appearance="subtle"
-                  icon={<FlagRegular />}
-                />
-                <Menu>
-                  {/* <MenuTrigger disableButtonEnhancement>
-                                        <Button
-                                            aria-label="More options"
-                                            appearance="subtle"
-                                            icon={<MoreHorizontal20Regular />}
-                                        />
-                                    </MenuTrigger> */}
-
-                  <MenuPopover>
-                    <MenuList>
-                      <MenuItem>New </MenuItem>
-                      <MenuItem>New Window</MenuItem>
-                      <MenuItem disabled>Open File</MenuItem>
-                      <MenuItem>Open Folder</MenuItem>
-                    </MenuList>
-                  </MenuPopover>
-                </Menu>
-              </>
-            }
-            iconBefore={<CalendarMonthRegular />}
-            iconAfter={
-              <>
-                <LockClosedRegular />
-                <LinkSquareRegular />
-              </>
-            }
-          >
-            Content
-          </TreeItemLayout>
-          <Tree>
-            <TreeItem itemType="branch">
-              <TreeItemLayout>level 2, item 1</TreeItemLayout>
-              <Tree>
-                <TreeItem itemType="leaf">
-                  <TreeItemLayout>level 3, item 1</TreeItemLayout>
-                </TreeItem>
-              </Tree>
-            </TreeItem>
-          </Tree>
-        </TreeItem>
-        <TreeItem itemType="leaf">
-          <TreeItemPersonaLayout
-            aside={{
-              style: { flexDirection: "column" },
-              children: (
-                <>
-                  <Text
-                    font="numeric"
-                    as="span"
-                    style={{ whiteSpace: "nowrap" }}
-                  >
-                    00:00 AM
-                  </Text>
-                  <div
-                    style={{
-                      display: "flex",
-                      marginLeft: "auto",
-                      gap: tokens.spacingHorizontalXS,
-                    }}
-                  >
-                    <Important16Regular primaryFill="red" />
-                    <CounterBadge count={1} color="danger" size="small" />
-                  </div>
-                </>
-              ),
-            }}
-            description="description"
-            media={<Avatar />}
-          >
-            Content
-          </TreeItemPersonaLayout>
-          <Tree>
-            <TreeItem itemType="branch">
-              <TreeItemLayout>level 2, item 1</TreeItemLayout>
-              <Tree>
-                <TreeItem itemType="leaf">
-                  <TreeItemLayout>level 3, item 1</TreeItemLayout>
-                </TreeItem>
-              </Tree>
-            </TreeItem>
-          </Tree>
-        </TreeItem>
-        <TreeItem itemType="branch">
-          <TreeItemPersonaLayout
-            aside={
-              <>
-                <Important16Regular primaryFill="red" />
-                <CounterBadge count={1} color="danger" size="small" />
-              </>
-            }
-            media={<Avatar shape="square" />}
-          >
-            Content
-          </TreeItemPersonaLayout>
-          <Tree>
-            <TreeItem itemType="branch">
-              <TreeItemLayout>level 2, item 1</TreeItemLayout>
-              <Tree>
-                <TreeItem itemType="leaf">
-                  <TreeItemLayout>level 3, item 1</TreeItemLayout>
-                </TreeItem>
-              </Tree>
-            </TreeItem>
-          </Tree>
-        </TreeItem>
-      </Tree>
-    </div>
-  );
+   return (
+      <div>
+         <SideNav navLinkGroups={navigation} />
+      </div>
+   );
 };

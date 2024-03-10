@@ -11,6 +11,7 @@ import {
   DrawerHeaderTitle,
   DrawerFooter,
 } from "@fluentui/react-components/unstable";
+import { useNavigate } from "react-router-dom";
 
 const { ensureUser } = UserService();
 const { getUserDetails } = POMUserService();
@@ -25,12 +26,13 @@ const AwardSubmissionPage: React.FunctionComponent<{}> = () => {
   }, []);
 
 
+  const navigate = useNavigate();
 
   const classes = useStyles();
   return (
     <div className={classes.root}>
       <div className={classes.left}>
-        <AwardForm id={0} mode="new" onCancel={() => { }}  />
+        <AwardForm id={0} mode="new" onCancel={() => { navigate("/awards"); }}  />
       </div>
       <div className={classes.right}>
         <DrawerInline className={classes.drawer} open>

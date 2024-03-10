@@ -2,8 +2,14 @@
 import * as React from "react"; 
 import { Link } from "@fluentui/react-components"; 
 import { useAlert, useConfirm } from "@prt-ts/fluent-common-features";
+import { useTrackPageView } from "@common/hooks/useTrackPageView";
 
 const NotifyExample: React.FunctionComponent<{}> = (props) => {
+
+  useTrackPageView({
+    name: "Notify Example",
+  })
+
   const { success, error, info, warning, update, progress } = useAlert();
 
   const longProcess = () => {

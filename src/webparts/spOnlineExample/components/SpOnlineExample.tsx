@@ -17,12 +17,9 @@ export const SpOnlineExample: React.FunctionComponent<ISpOnlineExampleProps> = (
 
   const initializeApp = () => {
     try {
-      const appContext = AppContext.getInstance();
-      const siteName = !!props.settings.context.sdks.microsoftTeams ? "Council" : null;
-      appContext.initialize(props.settings.context, siteName).then(async () => {
+      const appContext = AppContext.getInstance(); 
+      appContext.initialize(props.settings).then(async () => {
         if (_isMounted.current) {
-          console.log("app initialized");
-          await appContext.addSetting(props.settings);
           await appContext.setIsDarkTheme(props.isDarkTheme);
           await appContext.setLayoutStyle(props.settings?.enableLayoutStyle);
           await appContext.setSiteName(
@@ -30,6 +27,7 @@ export const SpOnlineExample: React.FunctionComponent<ISpOnlineExampleProps> = (
               ? props.settings?.siteName
               : "SPFx Test App"
           );
+          console.log("app initialized");
           setInitialized(true);
         }
       });
